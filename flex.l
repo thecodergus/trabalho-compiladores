@@ -20,9 +20,9 @@ string    \"([^\\"]|\\")*\"
 "-"           { return ARITIMETICA_SUB; }
 "*"           { return ARITIMETICA_MUL; }
 "/"           { return ARITIMETICA_DIV; }
-"("           { return TAPAR; }
-")"           { return TFPAR; }
-"\n"          { return TFIM; }
+/* "("           { return TAPAR; } */
+/* ")"           { return TFPAR; } */
+/* "\n"          { return TFIM; } */
 {num}         { yylval = atof(yytext); return TNUM; }
 {id}          { yylval = strdup(yytext); return TID; }
 {string}      { yylval = strdup(yytext + 1); yylval_len = strlen(yylval) - 1; return TSTRING; }
@@ -35,11 +35,11 @@ string    \"([^\\"]|\\")*\"
 "&&"          { return LOGICA_AND; }
 "||"          { return LOGICA_OR; }
 "!"           { return LOGICA_NOT; }
-";"           { return TSEMICOLON; }
-","           { return TCOMMA; }
-"="           { return TASSIGN; }
-"{"           { return TLCURLY; }
-"}"           { return TRCURLY; }
+/* ";"           { return TSEMICOLON; } */
+/* ","           { return TCOMMA; } */
+/* "="           { return TASSIGN; } */
+/* "{"           { return TLCURLY; } */
+/* "}"           { return TRCURLY; } */
 "if"          { return COMANDO_IF; }
 "else"        { return COMANDO_ELSE; }
 "while"       { return COMANDO_WHILE; }
