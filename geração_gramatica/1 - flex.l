@@ -10,7 +10,7 @@ delim     [ \t]
 ws        {delim}+
 digito    [0-9]
 num       {digito}+("."{digito}*)?("e"[+-]?{digito}+)?
-id        [a-zA-Z][a-zA-Z0-9]*
+id        [a-zA-Z_][a-zA-Z0-9_]*
 string    \"([^\\"]|\\")*\"
 
 %%
