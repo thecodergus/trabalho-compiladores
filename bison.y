@@ -13,10 +13,11 @@ int yylex();
 
 %define parse.error verbose
 
-%token ARITIMETICA_ADD ARITIMETICA_SUB ARITIMETICA_MUL ARITIMETICA_DIV TNUM COMANDO_PRINT COMANDO_READ TID TSTRING
+%token ARITIMETICA_ADD ARITIMETICA_SUB ARITIMETICA_MUL ARITIMETICA_DIV NUM COMANDO_PRINT COMANDO_READ ID TSTRING
 %token LOGICA_EQ LOGICA_NE LOGICA_LE LOGICA_GE LOGICA_LT LOGICA_GT LOGICA_AND LOGICA_OR LOGICA_NOT
-%token COMANDO_IF COMANDO_ELSE COMANDO_WHILE COMANDO_RETURN 
+%token COMANDO_IF COMANDO_ELSE COMANDO_WHILE COMANDO_RETURN
 %token TIPO_VOID TIPO_INT TIPO_FLOAT TIPO_STRING
+%token SIMBOLO_PARENTESES_INICIO SIMBOLO_PARENTESES_FIM SIMBOLO_PONTO_VIRGULA SIMBOLO_VIRGULA SIMBOLO_IGUAL SIMBOLO_ABRE_CHAVES SIMBOLO_FECHA_CHAVES
 %left ARITIMETICA_ADD ARITIMETICA_SUB ARITIMETICA_MUL ARITIMETICA_DIV
 %left LOGICA_LT LOGICA_LE LOGICA_GT LOGICA_GE LOGICA_EQ LOGICA_NE LOGICA_AND LOGICA_OR
 %right LOGICA_NOT
@@ -27,56 +28,84 @@ programa: lista_funcoes bloco_principal | bloco_principal
 
 lista_funcoes: lista_funcoes funcao | funcao
 
-funcao: tipo_retorno TID TAPAR decl_parametros TFPAR bloco_principal | tipo_retorno TID TAPAR TFPAR bloco_principal
+funcao: tipo_retorno ID SIMBOLO_PARENTESES_INICIO decl_parametros SIMBOLO_PARENTESES_FIM bloco_principal | tipo_retorno ID SIMBOLO_PARENTESES_INICIO SIMBOLO_PARENTESES_FIM bloco_principal
 
-tipo_retorno: TIPO_VOID | TIPO_INT | TIPO_FLOAT
+tipo_retorno: TIPO_VOID 
+            | TIPO_INT 
+            | TIPO_FLOAT
 
-decl_parametros: decl_parametros TCOMMA parametro | parametro
+decl_parametros: decl_parametros SIMBOLO_VIRGULA parametro 
+                | parametro
 
-parametro: tipo TID
+parametro: tipo ID
 
-bloco_principal: TLCURLY declaracoes lista_comando TRCURLY | TLCURLY lista_comando TRCURLY
+bloco_principal: SIMBOLO_ABRE_CHAVES declaracoes lista_comando SIMBOLO_FECHA_CHAVES 
+                | SIMBOLO_ABRE_CHAVES lista_comando SIMBOLO_FECHA_CHAVES
 
-declaracoes: declaracoes declaracao | declaracao
+declaracoes: declaracoes declaracao 
+            | declaracao
 
-declaracao: tipo lista_id TSEMICOLON
+declaracao: tipo lista_id SIMBOLO_PONTO_VIRGULA
 
-tipo: TIPO_INT | TIPO_FLOAT | TIPO_STRING
+tipo: TIPO_INT 
+    | TIPO_FLOAT 
+    | TIPO_STRING
 
-lista_id: lista_id TCOMMA TID | TID
+lista_id: lista_id SIMBOLO_VIRGULA ID 
+        | ID
 
-bloco: TLCURLY lista_comando TRCURLY
+bloco: SIMBOLO_ABRE_CHAVES lista_comando SIMBOLO_FECHA_CHAVES
 
-lista_comando: lista_comando comando TSEMICOLON | comando TSEMICOLON
+lista_comando: lista_comando comando SIMBOLO_PONTO_VIRGULA 
+            | comando SIMBOLO_PONTO_VIRGULA
 
-comando: comando_if | comando_while | comando_atribuicao | comando_escrita | comando_leitura | chamada_funcao | comando_return
+comando: comando_if 
+        | comando_while 
+        | comando_atribuicao 
+        | comando_escrita 
+        | comando_leitura 
+        | chamada_funcao 
+        | comando_return
 
-comando_if: COMANDO_IF TAPAR expressao_logica TFPAR bloco %prec COMANDO_IF
-           | COMANDO_IF TAPAR expressao_logica TFPAR bloco COMANDO_ELSE bloco %prec COMANDO_ELSE
+comando_if: COMANDO_IF SIMBOLO_PARENTESES_INICIO expressao_logica SIMBOLO_PARENTESES_FIM bloco %prec COMANDO_IF
+           | COMANDO_IF SIMBOLO_PARENTESES_INICIO expressao_logica SIMBOLO_PARENTESES_FIM bloco COMANDO_ELSE bloco %prec COMANDO_ELSE
 
-comando_while: COMANDO_WHILE TAPAR expressao_logica TFPAR bloco
+comando_while: COMANDO_WHILE SIMBOLO_PARENTESES_INICIO expressao_logica SIMBOLO_PARENTESES_FIM bloco
 
-comando_atribuicao: TID TASSIGN expressao_aritmetica
+comando_atribuicao: ID SIMBOLO_IGUAL expressao_aritmetica
 
-comando_escrita: COMANDO_PRINT TAPAR expressao_aritmetica TFPAR
+comando_escrita: COMANDO_PRINT SIMBOLO_PARENTESES_INICIO expressao_aritmetica SIMBOLO_PARENTESES_FIM
 
-comando_leitura: COMANDO_READ TAPAR TID TFPAR
+comando_leitura: COMANDO_READ SIMBOLO_PARENTESES_INICIO ID SIMBOLO_PARENTESES_FIM
 
-chamada_funcao: TID TAPAR lista_parametros TFPAR
+chamada_funcao: ID SIMBOLO_PARENTESES_INICIO lista_parametros SIMBOLO_PARENTESES_FIM
 
-lista_parametros: lista_parametros TCOMMA expressao_aritmetica | expressao_aritmetica
+lista_parametros: lista_parametros SIMBOLO_VIRGULA expressao_aritmetica | expressao_aritmetica
 
 comando_return: COMANDO_RETURN expressao_aritmetica
 
-expressao_logica: expressao_relacional LOGICA_AND expressao_logica | expressao_relacional
+expressao_logica: expressao_relacional LOGICA_AND expressao_logica 
+                | expressao_relacional
+NUM
+expressao_relacional: expressao_aritmetica LOGICA_EQ expressao_aritmetica 
+                    | expressao_aritmetica LOGICA_NE expressao_aritmetica 
+                    | expressao_aritmetica LOGICA_LT expressao_aritmetica 
+                    | expressao_aritmetica LOGICA_LE expressao_aritmetica 
+                    | expressao_aritmetica LOGICA_GT expressao_aritmetica 
+                    | expressao_aritmetica LOGICA_GE expressao_aritmetica
 
-expressao_relacional: expressao_aritmetica LOGICA_EQ expressao_aritmetica | expressao_aritmetica LOGICA_NE expressao_aritmetica | expressao_aritmetica LOGICA_LT expressao_aritmetica | expressao_aritmetica LOGICA_LE expressao_aritmetica | expressao_aritmetica LOGICA_GT expressao_aritmetica | expressao_aritmetica LOGICA_GE expressao_aritmetica
+expressao_aritmetica: expressao_aritmetica ARITIMETICA_ADD termo 
+                    | expressao_aritmetica ARITIMETICA_SUB termo 
+                    | termo
 
-expressao_aritmetica: expressao_aritmetica ARITIMETICA_ADD termo | expressao_aritmetica ARITIMETICA_SUB termo | termo
+termo: termo ARITIMETICA_MUL fator 
+    | termo ARITIMETICA_DIV fator 
+    | fator
 
-termo: termo ARITIMETICA_MUL fator | termo ARITIMETICA_DIV fator | fator
-
-fator: TNUM | TID | TSTRING | TAPAR expressao_aritmetica TFPAR
+fator: NUM 
+    | ID 
+    | TSTRING 
+    | SIMBOLO_PARENTESES_INICIO expressao_aritmetica SIMBOLO_PARENTESES_FIM
 
 %%
 
