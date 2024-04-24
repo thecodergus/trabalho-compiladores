@@ -18,123 +18,149 @@ int yylex();
 %token TIPO_VOID TIPO_INT TIPO_FLOAT TIPO_STRING
 %token SIMBOLO_PARENTESES_INICIO SIMBOLO_PARENTESES_FIM SIMBOLO_PONTO_VIRGULA SIMBOLO_VIRGULA SIMBOLO_IGUAL SIMBOLO_ABRE_CHAVES SIMBOLO_FECHA_CHAVES
 %left ARITIMETICA_ADD ARITIMETICA_SUB ARITIMETICA_MUL ARITIMETICA_DIV
-%left LOGICA_LT LOGICA_LE LOGICA_GT LOGICA_GE LOGICA_EQ LOGICA_NE LOGICA_AND LOGICA_OR
-%right LOGICA_NOT
+%left LOGICA_LT LOGICA_LE LOGICA_GT LOGICA_GE LOGICA_EQ LOGICA_NE LOGICA_AND LOGICA_OR LOGICA_NOT
 
 %%
 
-programa: lista_funcoes bloco_principal 
-        | bloco_principal
-        ;
+programa: 
+                lista_funcoes bloco_principal 
+                | bloco_principal
+                ;
 
-lista_funcoes: lista_funcoes funcao 
-            | funcao
-            ;
+lista_funcoes: 
+                lista_funcoes funcao 
+                | funcao
+                ;
 
-funcao: tipo_retorno ID SIMBOLO_PARENTESES_INICIO decl_parametros SIMBOLO_PARENTESES_FIM bloco_principal 
-    | tipo_retorno ID SIMBOLO_PARENTESES_INICIO SIMBOLO_PARENTESES_FIM bloco_principal
-    ;
+funcao: 
+                tipo_retorno ID SIMBOLO_PARENTESES_INICIO declaracao_parametros SIMBOLO_PARENTESES_FIM bloco_principal 
+                | tipo_retorno ID SIMBOLO_PARENTESES_INICIO SIMBOLO_PARENTESES_FIM bloco_principal
+                ;
 
-tipo_retorno: TIPO_VOID 
-        | TIPO_INT 
-        | TIPO_FLOAT
-        ;
+tipo_retorno: 
+                TIPO_VOID 
+                | tipo
+                ;
 
-decl_parametros: decl_parametros SIMBOLO_VIRGULA parametro 
+declaracao_parametros: 
+                declaracao_parametros SIMBOLO_VIRGULA parametro 
                 | parametro
                 ;
 
-parametro: tipo ID
+parametro: 
+                tipo ID
 
-bloco_principal: SIMBOLO_ABRE_CHAVES declaracoes lista_comando SIMBOLO_FECHA_CHAVES 
+bloco_principal: 
+                SIMBOLO_ABRE_CHAVES declaracoes lista_comando SIMBOLO_FECHA_CHAVES 
                 | SIMBOLO_ABRE_CHAVES lista_comando SIMBOLO_FECHA_CHAVES
                 ;
 
-declaracoes: declaracoes declaracao 
-            | declaracao
-            ;
-
-declaracao: tipo lista_id SIMBOLO_PONTO_VIRGULA
-            ;
-
-tipo: TIPO_INT 
-    | TIPO_FLOAT 
-    | TIPO_STRING
-    ;
-
-lista_id: lista_id SIMBOLO_VIRGULA ID 
-        | ID
-        ;
-
-bloco: SIMBOLO_ABRE_CHAVES lista_comando SIMBOLO_FECHA_CHAVES
-        ;
-
-lista_comando: lista_comando comando SIMBOLO_PONTO_VIRGULA 
-            | comando SIMBOLO_PONTO_VIRGULA
-            ;
-
-comando: comando_if 
-        | comando_while 
-        | comando_atribuicao 
-        | comando_escrita 
-        | comando_leitura 
-        | chamada_funcao 
-        | comando_return
-        ;
-
-comando_if: COMANDO_IF SIMBOLO_PARENTESES_INICIO expressao_logica SIMBOLO_PARENTESES_FIM bloco %prec COMANDO_IF
-           | COMANDO_IF SIMBOLO_PARENTESES_INICIO expressao_logica SIMBOLO_PARENTESES_FIM bloco COMANDO_ELSE bloco %prec COMANDO_ELSE
-           ;
-
-comando_while: COMANDO_WHILE SIMBOLO_PARENTESES_INICIO expressao_logica SIMBOLO_PARENTESES_FIM bloco
-            ;
-
-comando_atribuicao: ID SIMBOLO_IGUAL expressao_aritmetica
-                    ;
-
-comando_escrita: COMANDO_PRINT SIMBOLO_PARENTESES_INICIO expressao_aritmetica SIMBOLO_PARENTESES_FIM
+declaracoes:
+                declaracoes declaracao 
+                | declaracao
                 ;
 
-comando_leitura: COMANDO_READ SIMBOLO_PARENTESES_INICIO ID SIMBOLO_PARENTESES_FIM
+declaracao: 
+                tipo lista_id SIMBOLO_PONTO_VIRGULA
                 ;
 
-chamada_funcao: ID SIMBOLO_PARENTESES_INICIO lista_parametros SIMBOLO_PARENTESES_FIM
+tipo: 
+                TIPO_INT 
+                | TIPO_FLOAT 
+                | TIPO_STRING
                 ;
 
-lista_parametros: lista_parametros SIMBOLO_VIRGULA expressao_aritmetica 
+lista_id: 
+                lista_id SIMBOLO_VIRGULA ID 
+                | ID
+                ;
+
+bloco: 
+                SIMBOLO_ABRE_CHAVES lista_comando SIMBOLO_FECHA_CHAVES
+                ;
+
+lista_comando: 
+                lista_comando comando SIMBOLO_PONTO_VIRGULA 
+                | comando SIMBOLO_PONTO_VIRGULA
+                ;
+
+comando: 
+                comando_if 
+                | comando_while 
+                | comando_atribuicao 
+                | comando_escrita 
+                | comando_leitura 
+                | chamada_funcao 
+                | comando_return
+                ;
+
+comando_if: 
+                COMANDO_IF SIMBOLO_PARENTESES_INICIO expressao_logica SIMBOLO_PARENTESES_FIM bloco %prec COMANDO_IF
+                | COMANDO_IF SIMBOLO_PARENTESES_INICIO expressao_logica SIMBOLO_PARENTESES_FIM bloco COMANDO_ELSE bloco %prec COMANDO_ELSE
+                ;
+
+comando_while: 
+                COMANDO_WHILE SIMBOLO_PARENTESES_INICIO expressao_logica SIMBOLO_PARENTESES_FIM bloco
+                ;
+
+comando_atribuicao: 
+                ID SIMBOLO_IGUAL expressao_aritmetica
+                ;
+
+comando_escrita: 
+                COMANDO_PRINT SIMBOLO_PARENTESES_INICIO expressao_aritmetica SIMBOLO_PARENTESES_FIM
+                ;
+
+comando_leitura: 
+                COMANDO_READ SIMBOLO_PARENTESES_INICIO ID SIMBOLO_PARENTESES_FIM
+                ;
+
+chamada_funcao: 
+                ID SIMBOLO_PARENTESES_INICIO lista_parametros SIMBOLO_PARENTESES_FIM
+                ;
+
+lista_parametros: 
+                lista_parametros SIMBOLO_VIRGULA expressao_aritmetica 
                 | expressao_aritmetica
                 ;
 
-comando_return: COMANDO_RETURN expressao_aritmetica
+comando_return: 
+                COMANDO_RETURN expressao_aritmetica
                 ;
 
-expressao_logica: expressao_relacional LOGICA_AND expressao_logica 
-                | expressao_relacional
+expressao_logica: 
+                SIMBOLO_PARENTESES_INICIO expressao_logica SIMBOLO_PARENTESES_FIM {$$ = $2;}
+                | expressao_relacional LOGICA_AND expressao_logica {$$ = $1 && $3;}
+                | expressao_relacional LOGICA_OR expressao_logica {$$ = $1 || $3;}
+                | LOGICA_NOT expressao_logica {$$ = !$2;}
+                | expressao_relacional {$$ = $1;}
                 ;
 
-expressao_relacional: expressao_aritmetica LOGICA_EQ expressao_aritmetica 
-                    | expressao_aritmetica LOGICA_NE expressao_aritmetica 
-                    | expressao_aritmetica LOGICA_LT expressao_aritmetica 
-                    | expressao_aritmetica LOGICA_LE expressao_aritmetica 
-                    | expressao_aritmetica LOGICA_GT expressao_aritmetica 
-                    | expressao_aritmetica LOGICA_GE expressao_aritmetica
-                    ;
+expressao_relacional: 
+                expressao_aritmetica LOGICA_EQ expressao_aritmetica  {$$ = $1 == $3;}
+                | expressao_aritmetica LOGICA_NE expressao_aritmetica {$$ = $1 != $3;}
+                | expressao_aritmetica LOGICA_LT expressao_aritmetica {$$ = $1 < $3;}
+                | expressao_aritmetica LOGICA_LE expressao_aritmetica {$$ = $1 <= $3;}
+                | expressao_aritmetica LOGICA_GT expressao_aritmetica {$$ = $1 > $3;}
+                | expressao_aritmetica LOGICA_GE expressao_aritmetica {$$ = $1 >= $3;}
+                | fator LOGICA_EQ fator {$$ = $1 == $3;}
+                ;
 
-expressao_aritmetica: expressao_aritmetica ARITIMETICA_ADD termo 
-                    | expressao_aritmetica ARITIMETICA_SUB termo 
-                    | termo
-                    ;
+expressao_aritmetica: 
+                SIMBOLO_PARENTESES_INICIO expressao_aritmetica SIMBOLO_PARENTESES_FIM {$$ = $2;}
+                | expressao_aritmetica ARITIMETICA_MUL expressao_aritmetica {$$ = $1 * $3;}
+                | expressao_aritmetica ARITIMETICA_DIV expressao_aritmetica  {$$ = $1 / $3;}
+                | expressao_aritmetica ARITIMETICA_ADD expressao_aritmetica {$$ = $1 + $3;}
+                | expressao_aritmetica ARITIMETICA_SUB expressao_aritmetica {$$ = $1 - $3;}
+                | ARITIMETICA_SUB expressao_aritmetica {$$ = -$2;}
+                | fator
+                ;
 
-termo: termo ARITIMETICA_MUL fator 
-    | termo ARITIMETICA_DIV fator 
-    | fator
-    ;
-
-fator: TIPO_NUM 
-    | ID 
-    | TIPO_STRING 
-    | SIMBOLO_PARENTESES_INICIO expressao_aritmetica SIMBOLO_PARENTESES_FIM
-    ;
+fator: 
+                TIPO_NUM 
+                | ID 
+                | TIPO_STRING 
+                ;
 
 %%
 
