@@ -13,7 +13,7 @@ int yylex();
 
 %define parse.error verbose
 
-%token ARITIMETICA_ADD ARITIMETICA_SUB ARITIMETICA_MUL ARITIMETICA_DIV NUM COMANDO_PRINT COMANDO_READ ID TSTRING
+%token ARITIMETICA_ADD ARITIMETICA_SUB ARITIMETICA_MUL ARITIMETICA_DIV TIPO_NUM COMANDO_PRINT COMANDO_READ ID TIPO_STRING
 %token LOGICA_EQ LOGICA_NE LOGICA_LE LOGICA_GE LOGICA_LT LOGICA_GT LOGICA_AND LOGICA_OR LOGICA_NOT
 %token COMANDO_IF COMANDO_ELSE COMANDO_WHILE COMANDO_RETURN
 %token TIPO_VOID TIPO_INT TIPO_FLOAT TIPO_STRING
@@ -34,8 +34,8 @@ funcao: tipo_retorno ID SIMBOLO_PARENTESES_INICIO decl_parametros SIMBOLO_PARENT
     | tipo_retorno ID SIMBOLO_PARENTESES_INICIO SIMBOLO_PARENTESES_FIM bloco_principal
 
 tipo_retorno: TIPO_VOID 
-            | TIPO_INT 
-            | TIPO_FLOAT
+        | TIPO_INT 
+        | TIPO_FLOAT
 
 decl_parametros: decl_parametros SIMBOLO_VIRGULA parametro 
                 | parametro
@@ -59,8 +59,7 @@ lista_id: lista_id SIMBOLO_VIRGULA ID
 
 bloco: SIMBOLO_ABRE_CHAVES lista_comando SIMBOLO_FECHA_CHAVES
 
-lista_comando: lista_comando comando SIMBOLO_PONTO_VIRGULA 
-            | comando SIMBOLO_PONTO_VIRGULA
+lista_comando: lista_comando comando SIMBOLO_PONTO_VIRGULA | comando SIMBOLO_PONTO_VIRGULA
 
 comando: comando_if 
         | comando_while 
@@ -83,13 +82,14 @@ comando_leitura: COMANDO_READ SIMBOLO_PARENTESES_INICIO ID SIMBOLO_PARENTESES_FI
 
 chamada_funcao: ID SIMBOLO_PARENTESES_INICIO lista_parametros SIMBOLO_PARENTESES_FIM
 
-lista_parametros: lista_parametros SIMBOLO_VIRGULA expressao_aritmetica | expressao_aritmetica
+lista_parametros: lista_parametros SIMBOLO_VIRGULA expressao_aritmetica 
+                | expressao_aritmetica
 
 comando_return: COMANDO_RETURN expressao_aritmetica
 
 expressao_logica: expressao_relacional LOGICA_AND expressao_logica 
                 | expressao_relacional
-NUM
+
 expressao_relacional: expressao_aritmetica LOGICA_EQ expressao_aritmetica 
                     | expressao_aritmetica LOGICA_NE expressao_aritmetica 
                     | expressao_aritmetica LOGICA_LT expressao_aritmetica 
@@ -105,9 +105,9 @@ termo: termo ARITIMETICA_MUL fator
     | termo ARITIMETICA_DIV fator 
     | fator
 
-fator: NUM 
+fator: TIPO_NUM 
     | ID 
-    | TSTRING 
+    | TIPO_STRING 
     | SIMBOLO_PARENTESES_INICIO expressao_aritmetica SIMBOLO_PARENTESES_FIM
 
 %%
