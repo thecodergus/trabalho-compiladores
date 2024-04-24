@@ -8,12 +8,12 @@
 "float"  { return TIPO_FLOAT; }
 "string" { return TIPO_STRING; }
 "void"   { return TIPO_VOID; }
-"if"     { return PALAVRA_IF; }
-"else"   { return PALAVRA_ELSE; }
-"while"  { return PALAVRA_WHILE; }
-"return" { return PALAVRA_RETURN; }
-"print"  { return PALAVRA_PRINT; }
-"read"   { return PALAVRA_READ; }
+"if"     { return COMANDO_IF; }
+"else"   { return COMANDO_ELSE; }
+"while"  { return COMANDO_WHILE; }
+"return" { return COMANDO_RETURN; }
+"print"  { return COMANDO_PRINT; }
+"read"   { return COMANDO_READ; }
 
 [0-9]+    { yylval = atoi(yytext); return CONSTANTE_INTEIRA; }
 [0-9]+\\.[0-9]*|[0-9]*\\.[0-9]+ { yylval = atof(yytext); return CONSTANTE_FLOAT; }

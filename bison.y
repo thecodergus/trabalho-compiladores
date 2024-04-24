@@ -4,7 +4,7 @@
 #include <string.h>
 %}
 
-%token TIPO_INT TIPO_FLOAT TIPO_STRING TIPO_VOID PALAVRA_IF PALAVRA_ELSE PALAVRA_WHILE PALAVRA_RETURN PALAVRA_PRINT PALAVRA_READ
+%token TIPO_INT TIPO_FLOAT TIPO_STRING TIPO_VOID COMANDO_IF COMANDO_ELSE COMANDO_WHILE COMANDO_RETURN COMANDO_PRINT COMANDO_READ
 %token CONSTANTE_INTEIRA CONSTANTE_FLOAT LITERAL ID
 %left '+' '-'
 %left '*' '/'
@@ -41,17 +41,17 @@ lista_comando: lista_comando comando | comando
 
 comando: comando_se | comando_enquanto | comando_atribuicao | comando_escrita | comando_leitura | chamada_proc | retorno
 
-retorno: PALAVRA_RETURN expressao_aritmetica ';' | PALAVRA_RETURN LITERAL ';' | PALAVRA_RETURN ';'
+retorno: COMANDO_RETURN expressao_aritmetica ';' | COMANDO_RETURN LITERAL ';' | COMANDO_RETURN ';'
 
-comando_se: PALAVRA_IF '(' expressao_logica ')' bloco | PALAVRA_IF '(' expressao_logica ')' bloco PALAVRA_ELSE bloco
+comando_se: COMANDO_IF '(' expressao_logica ')' bloco | COMANDO_IF '(' expressao_logica ')' bloco COMANDO_ELSE bloco
 
-comando_enquanto: PALAVRA_WHILE '(' expressao_logica ')' bloco
+comando_enquanto: COMANDO_WHILE '(' expressao_logica ')' bloco
 
 comando_atribuicao: ID '=' expressao_aritmetica ';' | ID '=' LITERAL ';'
 
-comando_escrita: PALAVRA_PRINT '(' expressao_aritmetica ')' ';' | PALAVRA_PRINT '(' LITERAL ')' ';'
+comando_escrita: COMANDO_PRINT '(' expressao_aritmetica ')' ';' | COMANDO_PRINT '(' LITERAL ')' ';'
 
-comando_leitura: PALAVRA_READ '(' ID ')' ';'
+comando_leitura: COMANDO_READ '(' ID ')' ';'
 
 chamada_proc: chamada_funcao ';'
 
