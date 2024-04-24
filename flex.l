@@ -46,10 +46,10 @@ string    \"([^\\"]|\\")*\"
 "print"       { return COMANDO_PRINT; }
 "read"        { return COMANDO_READ; }
 "return"      { return COMANDO_RETURN; }
-"void"        { return COMANDO_VOID; }
-"int"         { return COMANDO_INT; }
-"float"       { return COMANDO_FLOAT; }
-"string"      { return COMANDO_STRING_TYPE; }
+"void"        { return TIPO_VOID; }
+"int"         { return TIPO_INT; }
+"float"       { return TIPO_FLOAT; }
+"string"      { return TIPO_STRING; }
 
 .             { ECHO; }
 

@@ -1,17 +1,29 @@
+%option noyywrap
+
 %{
+#define YYSTYPE double
+#include "expr.tab.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
+
+int yyerror(const char *);
+int yylex();
+
 %}
 
-%token TIPO_INT TIPO_FLOAT TIPO_STRING TIPO_VOID COMANDO_IF COMANDO_ELSE COMANDO_WHILE COMANDO_RETURN COMANDO_PRINT COMANDO_READ
-%token CONSTANTE_INTEIRA CONSTANTE_FLOAT LITERAL ID
-%left '+' '-'
-%left '*' '/'
-%left '<' '>' LE_GE NE_IGUAL
-%left '&&'
-%left '||'
-%right '!'
+%define parse.error verbose
+
+%token ARITIMETICA_ADD ARITIMETICA_SUB ARITIMETICA_MUL ARITIMETICA_DIV TNUM COMANDO_PRINT COMANDO_READ TID TSTRING
+%token LOGICA_EQ LOGICA_NE LOGICA_LE LOGICA_GE LOGICA_LT LOGICA_GT LOGICA_AND LOGICA_OR LOGICA_NOT
+%token COMANDO_IF COMANDO_ELSE COMANDO_WHILE COMANDO_RETURN 
+%token TIPO_VOID TIPO_INT TIPO_FLOAT TIPO_STRING
+%left ARITIMETICA_ADD ARITIMETICA_SUB
+%left ARITIMETICA_MUL ARITIMETICA_DIV
+%left LOGICA_LT LOGICA_LE LOGICA_GT LOGICA_GE
+%left LOGICA_EQ LOGICA_NE
+%left LOGICA_AND
+%left LOGICA_OR
+%right LOGICA_NOT
 
 %%
 
@@ -19,54 +31,65 @@ programa: lista_funcoes bloco_principal | bloco_principal
 
 lista_funcoes: lista_funcoes funcao | funcao
 
-funcao: tipo_retorno ID '(' decl_parametros ')' bloco_principal | tipo_retorno ID '(' ')' bloco_principal
+funcao: tipo_retorno TID TAPAR decl_parametros TFPAR bloco_principal | tipo_retorno TID TAPAR TFPAR bloco_principal
 
-tipo_retorno: tipo | TIPO_VOID
+tipo_retorno: TIPO_VOID | TIPO_INT | TIPO_FLOAT
 
-decl_parametros: decl_parametros ',' parametro | parametro
+decl_parametros: decl_parametros TCOMMA parametro | parametro
 
-parametro: tipo ID
+parametro: tipo TID
 
-bloco_principal: '{' declaracoes lista_comando '}' | '{' lista_comando '}'
+bloco_principal: TLCURLY declaracoes lista_comando TRCURLY | TLCURLY lista_comando TRCURLY
 
 declaracoes: declaracoes declaracao | declaracao
 
-tipo: TIPO_INT | TIPO_STRING | TIPO_FLOAT
+declaracao: tipo lista_id TSEMICOLON
 
-lista_id: lista_id ',' ID | ID
+tipo: TIPO_INT | TIPO_FLOAT | TIPO_STRING
 
-bloco: '{' lista_comando '}'
+lista_id: lista_id TCOMMA TID | TID
 
-lista_comando: lista_comando comando | comando
+bloco: TLCURLY lista_comando TRCURLY
 
-comando: comando_se | comando_enquanto | comando_atribuicao | comando_escrita | comando_leitura | chamada_proc | retorno
+lista_comando: lista_comando comando TSEMICOLON | comando TSEMICOLON
 
-retorno: COMANDO_RETURN expressao_aritmetica ';' | COMANDO_RETURN LITERAL ';' | COMANDO_RETURN ';'
+comando: comando_if | comando_while | comando_atribuicao | comando_escrita | comando_leitura | chamada_funcao | comando_return
 
-comando_se: COMANDO_IF '(' expressao_logica ')' bloco | COMANDO_IF '(' expressao_logica ')' bloco COMANDO_ELSE bloco
+comando_if: COMANDO_IF TAPAR expressao_logica TFPAR bloco %prec COMANDO_IF
+           | COMANDO_IF TAPAR expressao_logica TFPAR bloco COMANDO_ELSE bloco %prec COMANDO_ELSE
 
-comando_enquanto: COMANDO_WHILE '(' expressao_logica ')' bloco
+comando_while: COMANDO_WHILE TAPAR expressao_logica TFPAR bloco
 
-comando_atribuicao: ID '=' expressao_aritmetica ';' | ID '=' LITERAL ';'
+comando_atribuicao: TID TASSIGN expressao_aritmetica
 
-comando_escrita: COMANDO_PRINT '(' expressao_aritmetica ')' ';' | COMANDO_PRINT '(' LITERAL ')' ';'
+comando_escrita: COMANDO_PRINT TAPAR expressao_aritmetica TFPAR
 
-comando_leitura: COMANDO_READ '(' ID ')' ';'
+comando_leitura: COMANDO_READ TAPAR TID TFPAR
 
-chamada_proc: chamada_funcao ';'
+chamada_funcao: TID TAPAR lista_parametros TFPAR
 
-chamada_funcao: ID '(' lista_parametros ')' | ID '(' ')'
+lista_parametros: lista_parametros TCOMMA expressao_aritmetica | expressao_aritmetica
 
-lista_parametros: lista_parametros ',' expressao_aritmetica | lista_parametros ',' LITERAL | LITERAL
+comando_return: COMANDO_RETURN expressao_aritmetica
 
-expressao_logica: expressao_logica '&&' expressao_relacional | expressao_logica '||' expressao_relacional | '!' expressao_relacional | expressao_relacional
+expressao_logica: expressao_relacional LOGICA_AND expressao_logica | expressao_relacional
 
-expressao_relacional: expressao_aritmetica '<' expressao_aritmetica | expressao_aritmetica '>' expressao_aritmetica | expressao_aritmetica LE_GE expressao_aritmetica | expressao_aritmetica NE_IGUAL expressao_aritmetica
+expressao_relacional: expressao_aritmetica LOGICA_EQ expressao_aritmetica | expressao_aritmetica LOGICA_NE expressao_aritmetica | expressao_aritmetica LOGICA_LT expressao_aritmetica | expressao_aritmetica LOGICA_LE expressao_aritmetica | expressao_aritmetica LOGICA_GT expressao_aritmetica | expressao_aritmetica LOGICA_GE expressao_aritmetica
 
-expressao_aritmetica: expressao_aritmetica '+' termo | expressao_aritmetica '-' termo | termo
+expressao_aritmetica: expressao_aritmetica ARITIMETICA_ADD termo | expressao_aritmetica ARITIMETICA_SUB termo | termo
 
-termo: termo '*' fator | termo '/' fator | fator
+termo: termo ARITIMETICA_MUL fator | termo ARITIMETICA_DIV fator | fator
 
-fator: '(' expressao_aritmetica ')' | CONSTANTE_INTEIRA | CONSTANTE_FLOAT | ID | chamada_funcao
+fator: TNUM | TID | TSTRING | TAPAR expressao_aritmetica TFPAR
 
 %%
+
+int yyerror(const char *str) {
+    fprintf(stderr, "%s\n", str);
+    return 0;
+}
+
+int main(int argc, char **argv) {
+    yyparse();
+    return 0;
+}
