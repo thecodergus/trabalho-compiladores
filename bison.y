@@ -24,11 +24,14 @@ int yylex();
 
 %%
 
-programa: lista_funcoes bloco_principal | bloco_principal
+programa: lista_funcoes bloco_principal 
+        | bloco_principal
 
-lista_funcoes: lista_funcoes funcao | funcao
+lista_funcoes: lista_funcoes funcao 
+            | funcao
 
-funcao: tipo_retorno ID SIMBOLO_PARENTESES_INICIO decl_parametros SIMBOLO_PARENTESES_FIM bloco_principal | tipo_retorno ID SIMBOLO_PARENTESES_INICIO SIMBOLO_PARENTESES_FIM bloco_principal
+funcao: tipo_retorno ID SIMBOLO_PARENTESES_INICIO decl_parametros SIMBOLO_PARENTESES_FIM bloco_principal 
+    | tipo_retorno ID SIMBOLO_PARENTESES_INICIO SIMBOLO_PARENTESES_FIM bloco_principal
 
 tipo_retorno: TIPO_VOID 
             | TIPO_INT 
