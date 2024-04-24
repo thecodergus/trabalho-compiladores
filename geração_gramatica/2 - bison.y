@@ -1,7 +1,6 @@
 %option noyywrap
 
 %{
-#define YYSTYPE double
 #include "expr.tab.h"
 #include <stdio.h>
 #include <stdlib.h>
