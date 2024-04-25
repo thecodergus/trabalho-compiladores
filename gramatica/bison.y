@@ -1,9 +1,10 @@
 %language "c"
 
-%code top{
+%{
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 
 int yyerror(const char *);
 int yylex();
@@ -18,20 +19,14 @@ int yylex();
 // Simbolo de identificadores de variaveis e funcoes
 %token ID LITERAL
 
-// Simbbolos de tipos de variaveis e funcoes
-%token TIPO_VOID TIPO_INT TIPO_FLOAT TIPO_STRING
-
-// Simbolos de operadores aritmeticos
-%token OPERADOR_MULTIPLICACAO OPERADOR_DIVISAO OPERADOR_SOMA OPERADOR_SUBTRACAO OPERADOR_POTENCIA 
-
-// Simbolos de operadores de atribuicao
-%token  SIMBOLO_ATRIBUICAO 
-
-// Simbolos de abrir e fechar parenteses
-%token SIMBOLO_ABRE_PARENTESES SIMBOLO_FECHA_PARENTESES
+// Simbolo de tipos
+%token TIPO_VOID TIPO_FLOAT TIPO_INT TIPO_STRING
 
 // Simbolos de abrir e fechar chaves
 %token SIMBOLO_ABRE_CHAVES SIMBOLO_FECHA_CHAVES
+
+// Simbolocos de abre e fecha parenteses
+%token SIMBOLO_ABRE_PARENTESES SIMBOLO_FECHA_PARENTESES
 
 // Simbolo de virgula e ponto e virgula
 %token SIMBOLO_VIRGULA SIMBOLO_PONTO_VIRGULA
@@ -40,17 +35,17 @@ int yylex();
 %token FIM
 
 
-// Operadores Logicos
-%left LOGICA_OR
-%left LOGICA_AND
-%left LOGICA_EQ LOGICA_NE
-%left LOGICA_LT LOGICA_LE LOGICA_GT LOGICA_GE
-%precedence LOGICA_NOT
-
-// Operadores Aritmeticos
+// Operadores
+%right SIMBOLO_ATRIBUICAO
+%right LOGICA_EQ LOGICA_GT LOGICA_LT LOGICA_GE LOGICA_LE LOGICA_NE
 %left OPERADOR_SOMA OPERADOR_SUBTRACAO
 %left OPERADOR_MULTIPLICACAO OPERADOR_DIVISAO
-%left OPERADOR_POTENCIA
+%right OPERADOR_POTENCIA
+
+// Tokens não associativos
+%nonassoc LOGICA_OR LOGICA_AND LOGICA_NOT
+%nonassoc COMANDO_IF COMANDO_ELSE COMANDO_PRINT COMANDO_READ COMANDO_RETURN COMANDO_WHILE
+%nonassoc SIMBOLO_ABRE_CHAVES SIMBOLO_FECHA_CHAVES SIMBOLO_ABRE_PARENTESES SIMBOLO_FECHA_PARENTESES SIMBOLO_VIRGULA SIMBOLO_PONTO_VIRGULA
 %%
 Inicio: 
     Programa FIM

@@ -55,9 +55,4 @@ string          { return TIPO_STRING; }
 #*             {}
 .               { return FIM; }
 
-
 %%
-
-int yywrap() {
-    return 1;
-}
