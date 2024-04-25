@@ -107,7 +107,7 @@ BloboPrincipal:
 
 Declaracoes:
     Declaracoes Declaracao
-    | Declaracao
+    | Declaracao SIMBOLO_PONTO_VIRGULA
     ;
 
 Declaracao:
