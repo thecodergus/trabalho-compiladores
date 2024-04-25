@@ -91,6 +91,11 @@ Declaracoes:
 Declaracao:
     Tipo ListaId
 
+Tipo:
+    TIPO_INT
+    | TIPO_FLOAT
+    | TIPO_STRING
+
 ListaId:
     ListaId SIMBOLO_VIRGULA ID
     | ID
@@ -143,7 +148,7 @@ ChamaFuncao:
 
 ListaParametros:
     ListaParametros SIMBOLO_VIRGULA ExpressaoAritmetica
-    | ListaParametros, LITERAL
+    | ListaParametros SIMBOLO_VIRGULA LITERAL
     | ExpressaoAritmetica
     | LITERAL
 
