@@ -26,7 +26,6 @@ int yylex();
 
 // Simbolo de identificadores de variaveis e funcoes
 %token <string>ID 
-%token LITERAL
 
 // Simbolo de tipos
 %token TIPO_VOID 
@@ -130,17 +129,17 @@ Bloco:
 
 ListaComandos:
     ListaComandos Comando
-    | Comando SIMBOLO_PONTO_VIRGULA
+    | Comando
     ;
 
 Comando:
     ComandoSe
     | ComandoEnquanto
-    | ComandoAtribuicao
-    | ComandoEscrita
-    | ComandoLeitura
-    | ComandoRetorno
-    | Retorno
+    | ComandoAtribuicao SIMBOLO_PONTO_VIRGULA
+    | ComandoEscrita SIMBOLO_PONTO_VIRGULA
+    | ComandoLeitura SIMBOLO_PONTO_VIRGULA
+    | ComandoRetorno SIMBOLO_PONTO_VIRGULA
+    | Retorno SIMBOLO_PONTO_VIRGULA
     ;
 
 Retorno:
@@ -197,7 +196,12 @@ Fator:
 
 Termo:
     ID
-    | LITERAL
+    | Literal
+    ;
+
+Literal:
+    Tipo
+    ;
     
 
 ExpressaoLogica:
