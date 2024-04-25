@@ -29,9 +29,9 @@ int yylex();
 
 // Simbolo de tipos
 %token VOID 
-%token <real> LITERAL_FLOAT 
-%token <inteiro> LITERAL_INT 
-%token <string> LITERAL_STRING
+%token <real> FLOAT 
+%token <inteiro> INT 
+%token <string> STRING
 
 // Simbolos de abrir e fechar chaves
 %token SIMBOLO_ABRE_CHAVES SIMBOLO_FECHA_CHAVES
@@ -65,13 +65,16 @@ int yylex();
 // Tokens não associativos
 %nonassoc LOGICA_OR LOGICA_AND LOGICA_NOT
 %%
-Inicio: 
+// COMEÇO CODIGO COM BASE NA GRAMATICA DO PROFESSOR
+
+InicioPrograma:
     Programa FIM
+    | FIM
     ;
 
 Programa:
-    ListaFuncoes BlocoPrincipal
-    | BlocoPrincipal
+    ListaFuncoes BloboPrincipal
+    | BloboPrincipal
     ;
 
 ListaFuncoes:
@@ -80,8 +83,8 @@ ListaFuncoes:
     ;
 
 Funcao:
-    TipoRetorno ID SIMBOLO_ABRE_PARENTESES DeclaracaoParametros SIMBOLO_FECHA_PARENTESES BlocoPrincipal
-    | TipoRetorno ID SIMBOLO_ABRE_PARENTESES SIMBOLO_FECHA_PARENTESES BlocoPrincipal
+    TipoRetorno ID SIMBOLO_ABRE_PARENTESES DeclaracaoParametros SIMBOLO_FECHA_PARENTESES BloboPrincipal
+    | TipoRetorno ID SIMBOLO_ABRE_PARENTESES SIMBOLO_FECHA_PARENTESES BloboPrincipal
     ;
 
 TipoRetorno:
@@ -94,28 +97,24 @@ DeclaracaoParametros:
     | Parametro
     ;
 
-Parametro:
-    Tipo ID
-    ;
-
-BlocoPrincipal:
-    SIMBOLO_ABRE_CHAVES Declaracoes ListaComandos SIMBOLO_FECHA_CHAVES
-    | SIMBOLO_ABRE_CHAVES ListaComandos SIMBOLO_FECHA_CHAVES
+BloboPrincipal:
+    SIMBOLO_ABRE_CHAVES Declaracoes ListaComando SIMBOLO_FECHA_CHAVES
+    | SIMBOLO_ABRE_CHAVES ListaComando SIMBOLO_FECHA_CHAVES
     ;
 
 Declaracoes:
     Declaracoes Declaracao
-    | Declaracao SIMBOLO_PONTO_VIRGULA
+    | Declaracao
     ;
 
 Declaracao:
     Tipo ListaId
     ;
 
-Tipo:
-    LITERAL_INT
-    | LITERAL_FLOAT
-    | LITERAL_STRING
+Tipo: 
+    INT
+    | STRING
+    | FLOAT
     ;
 
 ListaId:
@@ -123,12 +122,11 @@ ListaId:
     | ID
     ;
 
-Bloco:
-    SIMBOLO_ABRE_CHAVES ListaComandos SIMBOLO_FECHA_CHAVES
-    ;
+Bloco: 
+    SIMBOLO_ABRE_CHAVES ListaComando SIMBOLO_FECHA_CHAVES
 
-ListaComandos:
-    ListaComandos Comando
+ListaComando:
+    ListaComando Comando
     | Comando
     ;
 
@@ -138,12 +136,13 @@ Comando:
     | ComandoAtribuicao SIMBOLO_PONTO_VIRGULA
     | ComandoEscrita SIMBOLO_PONTO_VIRGULA
     | ComandoLeitura SIMBOLO_PONTO_VIRGULA
-    | ComandoRetorno SIMBOLO_PONTO_VIRGULA
+    | ChamadaProc SIMBOLO_PONTO_VIRGULA
     | Retorno SIMBOLO_PONTO_VIRGULA
     ;
 
 Retorno:
-    COMANDO_RETURN ExpressaoAritmetica
+    COMANDO_RETURN ExpressaoAritimetica
+    | COMANDO_RETURN Literal
     | COMANDO_RETURN
     ;
 
@@ -157,66 +156,30 @@ ComandoEnquanto:
     ;
 
 ComandoAtribuicao:
-    ID SIMBOLO_ATRIBUICAO ExpressaoAritmetica
-    ;
+    ID SIMBOLO_ATRIBUICAO ExpressaoAritimetica
+    | ID SIMBOLO_ATRIBUICAO Literal
 
 ComandoEscrita:
-    COMANDO_PRINT SIMBOLO_ABRE_PARENTESES ExpressaoAritmetica SIMBOLO_FECHA_PARENTESES
-    ;
+    COMANDO_PRINT SIMBOLO_ABRE_PARENTESES ExpressaoAritimetica SIMBOLO_FECHA_PARENTESES
+    | COMANDO_PRINT SIMBOLO_ABRE_PARENTESES Literal SIMBOLO_FECHA_PARENTESES
 
 ComandoLeitura:
     COMANDO_READ SIMBOLO_ABRE_PARENTESES ID SIMBOLO_FECHA_PARENTESES
-    ;
 
-ComandoRetorno:
-    ChamaFuncao
-    ;
+ChamadaProc:
+    ChamadaFuncao
 
-ChamaFuncao:
+ChamadaFuncao:
     ID SIMBOLO_ABRE_PARENTESES ListaParametros SIMBOLO_FECHA_PARENTESES
     | ID SIMBOLO_ABRE_PARENTESES SIMBOLO_FECHA_PARENTESES
-    ;
 
 ListaParametros:
-    ListaParametros SIMBOLO_VIRGULA ExpressaoAritmetica
-    | ExpressaoAritmetica
-    ;
-
-ExpressaoAritmetica:
-    ExpressaoAritmetica OPERADOR_SOMA ExpressaoAritmetica
-    | ExpressaoAritmetica OPERADOR_SUBTRACAO ExpressaoAritmetica
-    | Fator
-    ;
-
-Fator:
-    Termo
-    | Fator OPERADOR_MULTIPLICACAO Termo
-    | Fator OPERADOR_DIVISAO Termo
-    ;
-
-Termo:
-    ID
+    ListaParametros SIMBOLO_VIRGULA ExpressaoAritimetica
+    | ListaParametros SIMBOLO_VIRGULA Literal
+    | ExpressaoAritimetica
     | Literal
-    ;
 
-Literal:
-    Tipo
-    ;
-    
-
-ExpressaoLogica:
-    ExpressaoLogica LOGICA_OR ExpressaoAritmetica
-    | ExpressaoLogica LOGICA_AND ExpressaoAritmetica
-    | ExpressaoLogica LOGICA_EQ ExpressaoAritmetica
-    | ExpressaoLogica LOGICA_NE ExpressaoAritmetica
-    | ExpressaoLogica LOGICA_LT ExpressaoAritmetica
-    | ExpressaoLogica LOGICA_LE ExpressaoAritmetica
-    | ExpressaoLogica LOGICA_GT ExpressaoAritmetica
-    | ExpressaoLogica LOGICA_GE ExpressaoAritmetica
-    | LOGICA_NOT ExpressaoLogica
-    | SIMBOLO_ABRE_PARENTESES ExpressaoLogica SIMBOLO_FECHA_PARENTESES
-    | ExpressaoAritmetica
-    ;
+// FIM CODIGO COM BASE NA GRAMATICA DO PROFESSOR
 %%
 
 int yyerror(const char *str) {

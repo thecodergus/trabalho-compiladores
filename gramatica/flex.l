@@ -49,10 +49,10 @@ string          { return TIPO_STRING; }
 "-"             { return OPERADOR_SUBTRACAO; }
 "^"             { return OPERADOR_POTENCIA; }
 ","             { return SIMBOLO_VIRGULA; }
-{inteito}       { yylval.inteiro = atoi(yytext); return LITERAL_INT; }
-{float}         { yylval.real = atof(yytext); return LITERAL_FLOAT; }
+{inteito}       { yylval.inteiro = atoi(yytext); return INT; }
+{float}         { yylval.real = atof(yytext); return FLOAT; }
 {id}            { yylval.string = strdup(yytext); return ID; }
-{string}        { yylval.string = strdup(yytext + 1); return LITERAL_STRING; }
+{string}        { yylval.string = strdup(yytext + 1); return STRING; }
 {delim}         {}
 #*              {}
 .               { printf("Caractere invalido: %c\\n", yytext[0]); return ERRO; }
