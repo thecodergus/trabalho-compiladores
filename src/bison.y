@@ -192,14 +192,14 @@ Termo:
     
 
 ExpressaoLogica:
-    ExpressaoLogica LOGICA_OR ExpressaoLogica
-    | ExpressaoLogica LOGICA_AND ExpressaoLogica
-    | ExpressaoLogica LOGICA_EQ ExpressaoLogica
-    | ExpressaoLogica LOGICA_NE ExpressaoLogica
-    | ExpressaoLogica LOGICA_LT ExpressaoLogica
-    | ExpressaoLogica LOGICA_LE ExpressaoLogica
-    | ExpressaoLogica LOGICA_GT ExpressaoLogica
-    | ExpressaoLogica LOGICA_GE ExpressaoLogica
+    ExpressaoLogica LOGICA_OR ExpressaoAritmetica
+    | ExpressaoLogica LOGICA_AND ExpressaoAritmetica
+    | ExpressaoLogica LOGICA_EQ ExpressaoAritmetica
+    | ExpressaoLogica LOGICA_NE ExpressaoAritmetica
+    | ExpressaoLogica LOGICA_LT ExpressaoAritmetica
+    | ExpressaoLogica LOGICA_LE ExpressaoAritmetica
+    | ExpressaoLogica LOGICA_GT ExpressaoAritmetica
+    | ExpressaoLogica LOGICA_GE ExpressaoAritmetica
     | LOGICA_NOT ExpressaoLogica
     | SIMBOLO_ABRE_PARENTESES ExpressaoLogica SIMBOLO_FECHA_PARENTESES
     | ExpressaoAritmetica

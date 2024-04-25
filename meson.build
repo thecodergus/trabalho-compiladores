@@ -21,6 +21,7 @@ app_src = files(
 )
 
 # Local para importar as dependencias
+fl_lib = dependency('fl', required: true)
 
 # Aplicação Central
 executable('main',
