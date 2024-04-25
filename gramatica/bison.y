@@ -177,21 +177,21 @@ Fator:
     ;
 
 Termo:
-    ID {$$ = $1;}
+    ID
     | LITERAL {$$ = $1;}
     
 
 ExpressaoLogica:
-    ExpressaoLogica LOGICA_OR ExpressaoAritmetica
-    | ExpressaoLogica LOGICA_AND ExpressaoAritmetica
-    | ExpressaoLogica LOGICA_EQ ExpressaoAritmetica
-    | ExpressaoLogica LOGICA_NE ExpressaoAritmetica
-    | ExpressaoLogica LOGICA_LT ExpressaoAritmetica
-    | ExpressaoLogica LOGICA_LE ExpressaoAritmetica
-    | ExpressaoLogica LOGICA_GT ExpressaoAritmetica
-    | ExpressaoLogica LOGICA_GE ExpressaoAritmetica
+    ExpressaoLogica LOGICA_OR ExpressaoAritmetica {$$ = $1 || $3;}
+    | ExpressaoLogica LOGICA_AND ExpressaoAritmetica {$$ = $1 && $3;}
+    | ExpressaoLogica LOGICA_EQ ExpressaoAritmetica {$$ = $1 == $3;}
+    | ExpressaoLogica LOGICA_NE ExpressaoAritmetica {$$ = $1 != $3;}
+    | ExpressaoLogica LOGICA_LT ExpressaoAritmetica {$$ = $1 < $3;}
+    | ExpressaoLogica LOGICA_LE ExpressaoAritmetica {$$ = $1 <= $3;}
+    | ExpressaoLogica LOGICA_GT ExpressaoAritmetica {$$ = $1 > $3;}
+    | ExpressaoLogica LOGICA_GE ExpressaoAritmetica {$$ = $1 >= $3;}
     | LOGICA_NOT ExpressaoLogica
-    | SIMBOLO_ABRE_PARENTESES ExpressaoLogica SIMBOLO_FECHA_PARENTESES
+    | SIMBOLO_ABRE_PARENTESES ExpressaoLogica SIMBOLO_FECHA_PARENTESES { $$ = $2; }
     | ExpressaoAritmetica
     ;
 %%
