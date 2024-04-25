@@ -1,7 +1,7 @@
 %language "c"
 
 %code top{
-#include "expr.tab.h"
+-- #include "expr.tab.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
