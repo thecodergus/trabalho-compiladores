@@ -31,7 +31,7 @@ int yylex();
 %token TIPO_VOID 
 %token <real> TIPO_FLOAT 
 %token <inteiro> TIPO_INT 
-%token <string >TIPO_STRING
+%token <string> TIPO_STRING
 
 // Simbolos de abrir e fechar chaves
 %token SIMBOLO_ABRE_CHAVES SIMBOLO_FECHA_CHAVES
