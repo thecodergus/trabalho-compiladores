@@ -11,16 +11,26 @@ int yylex();
 
 %}
 
+%union {
+    int inteiro;
+    float real;
+    char *string;
+}
+
 %define parse.error verbose
 
 // Simbolos de comandos
 %token  COMANDO_PRINT COMANDO_READ COMANDO_IF COMANDO_ELSE COMANDO_WHILE COMANDO_RETURN
 
 // Simbolo de identificadores de variaveis e funcoes
-%token ID LITERAL
+%token <string>ID 
+%token LITERAL
 
 // Simbolo de tipos
-%token TIPO_VOID TIPO_FLOAT TIPO_INT TIPO_STRING
+%token TIPO_VOID 
+%token <real> TIPO_FLOAT 
+%token <inteiro> TIPO_INT 
+%token <string >TIPO_STRING
 
 // Simbolos de abrir e fechar chaves
 %token SIMBOLO_ABRE_CHAVES SIMBOLO_FECHA_CHAVES

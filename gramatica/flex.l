@@ -47,10 +47,10 @@ string          { return TIPO_STRING; }
 "-"             { return OPERADOR_SUBTRACAO; }
 "^"             { return OPERADOR_POTENCIA; }
 ","             { return SIMBOLO_VIRGULA; }
-{inteito}       { yylval = atoi(yytext); return TIPO_INT; }
-{float}         { yylval = atof(yytext); return TIPO_FLOAT; }
-{id}            { yylval = strdup(yytext); return ID; }
-{string}        { yylval = strdup(yytext + 1); return TIPO_STRING; }
+{inteito}       { yylval.inteiro = atoi(yytext); return TIPO_INT; }
+{float}         { yylval.real = atof(yytext); return TIPO_FLOAT; }
+{id}            { yylval.string = strdup(yytext); return ID; }
+{string}        { yylval.string = strdup(yytext + 1); return TIPO_STRING; }
 {delim}         {}
 #*             {}
 .               { return FIM; }
