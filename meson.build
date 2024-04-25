@@ -21,7 +21,7 @@ app_src = files(
 )
 
 # Local para importar as dependencias
-fl_lib = dependency('fl', required: true)
+flex_dep = dependency('flex')
 
 # Aplicação Central
 executable('main',
@@ -30,7 +30,7 @@ executable('main',
    ],
    include_directories : inc,
    dependencies: [
-
+      flex_dep
    ],
    install: true,
    c_args : c_args
