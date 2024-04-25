@@ -46,8 +46,8 @@ string          { return TIPO_STRING; }
 "-"             { return OPERADOR_SUBTRACAO; }
 "^"             { return OPERADOR_POTENCIA; }
 ","             { return SIMBOLO_VIRGULA; }
-{inteito}       { yylval = atoi(yytext); return TIPO_NUM_INTEIRO; }
-{float}         { yylval = atof(yytext); return TIPO_NUM_FLUTUANTE; }
+{inteito}       { yylval = atoi(yytext); return TIPO_INT; }
+{float}         { yylval = atof(yytext); return TIPO_FLOAT; }
 {id}            { yylval = strdup(yytext); return ID; }
 {string}        { yylval = strdup(yytext + 1); yylval_len = strlen(yylval) - 1; return TIPO_STRING; }
 {delim}         {}
