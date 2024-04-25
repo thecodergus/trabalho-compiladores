@@ -28,10 +28,10 @@ int yylex();
 %token <string>ID 
 
 // Simbolo de tipos
-%token VOID 
-%token <real> FLOAT 
-%token <inteiro> INT 
-%token <string> STRING
+%token TIPO_VOID TIPO_FLOAT TIPO_INT TIPO_STRING
+%token <real> LITERAL_FLOAT 
+%token <inteiro> LITERAL_INT 
+%token <string> LITERAL_STRING
 
 // Simbolos de abrir e fechar chaves
 %token SIMBOLO_ABRE_CHAVES SIMBOLO_FECHA_CHAVES
@@ -85,7 +85,7 @@ Funcao:
 
 TipoRetorno:
     Tipo
-    | VOID
+    | TIPO_VOID
     ;
 
 DeclaracaoParametros:
@@ -111,13 +111,15 @@ Declaracao:
     ;
 
 Tipo: 
-    INT
-    | STRING
-    | FLOAT
+    TIPO_INT
+    | TIPO_STRING
+    | TIPO_FLOAT
     ;
 
 Literal:
-    Tipo
+    LITERAL_INT
+    | LITERAL_FLOAT
+    | LITERAL_STRING
 
 ListaId:
     ListaId SIMBOLO_VIRGULA ID
@@ -221,10 +223,10 @@ SubExpressaoAritimetica:
     | SubSubExpressaoAritimetica
 
 SubSubExpressaoAritimetica:
-    SubSubExpressaoAritimetica OPERADOR_POTENCIA FatorAritmetica
-    | FatorAritmetica
+    SubSubExpressaoAritimetica OPERADOR_POTENCIA FatorAritmetico
+    | FatorAritmetico
 
-FatorAritmetica:
+FatorAritmetico:
     ID
     | Literal
 

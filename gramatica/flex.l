@@ -24,10 +24,10 @@ while           { return COMANDO_WHILE; }
 print           { return COMANDO_PRINT; }
 read            { return COMANDO_READ; }
 return          { return COMANDO_RETURN; }
-void            { return VOID; }
-int             { return INT; }
-float           { return FLOAT; }
-string          { return STRING; }
+void            { return TIPO_VOID; }
+int             { return TIPO_INT; }
+float           { return TIPO_FLOAT; }
+string          { return TIPO_STRING; }
 "=="            { return LOGICA_EQ; }
 "!="            { return LOGICA_NE; }
 "<="            { return LOGICA_LE; }
@@ -49,10 +49,10 @@ string          { return STRING; }
 "-"             { return OPERADOR_SUBTRACAO; }
 "^"             { return OPERADOR_POTENCIA; }
 ","             { return SIMBOLO_VIRGULA; }
-{inteito}       { yylval.inteiro = atoi(yytext); return INT; }
-{float}         { yylval.real = atof(yytext); return FLOAT; }
+{inteito}       { yylval.inteiro = atoi(yytext); return LITERAL_INT; }
+{float}         { yylval.real = atof(yytext); return LITERAL_FLOAT; }
 {id}            { yylval.string = strdup(yytext); return ID; }
-{string}        { yylval.string = strdup(yytext + 1); return STRING; }
+{string}        { yylval.string = strdup(yytext + 1); return LITERAL_STRING; }
 {delim}         {}
 #*              {}
 .               { printf("Caractere invalido: %c\\n", yytext[0]); return ERRO; }
