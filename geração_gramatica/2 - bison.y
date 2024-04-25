@@ -67,7 +67,7 @@ ListaFuncoes:
 
 Funcao:
     TipoRetorno ID SIMBOLO_ABRE_PARENTESES DeclaracaoParametros SIMBOLO_FECHA_PARENTESES BlocoPrincipal
-    | TipoRetorno ID SIMBOLO_ABRE_PARENTESES SIMBOLO_FECHA_CHAVES BlocoPrincipal
+    | TipoRetorno ID SIMBOLO_ABRE_PARENTESES SIMBOLO_FECHA_PARENTESES BlocoPrincipal
 
 TipoRetorno:
     Tipo
@@ -91,11 +91,6 @@ Declaracoes:
 Declaracao:
     Tipo ListaId
 
-Tipo:
-    TIPO_INT
-    | TIPO_FLOAT
-    | TIPO_STRING
-
 ListaId:
     ListaId SIMBOLO_VIRGULA ID
     | ID
@@ -113,12 +108,12 @@ Comando:
     | ComandoAtribuicao
     | ComandoEscrita
     | ComandoLeitura
-    | ChamadaProc
+    | ComandoRetorno
     | Retorno
 
-Retorno: 
-    COMANDO_RETURN ExpressaoAritmetica
-    | COMANDO_RETURN ID
+Retorno:
+    COMANDO_RETURN ExpressaoAritmetica SIMBOLO_PONTO_VIRGULA
+    | COMANDO_RETURN LITERAL SIMBOLO_PONTO_VIRGULA
     | COMANDO_RETURN SIMBOLO_PONTO_VIRGULA
 
 ComandoSe:
@@ -130,31 +125,35 @@ ComandoEnquanto:
 
 ComandoAtribuicao:
     ID SIMBOLO_ATRIBUICAO ExpressaoAritmetica SIMBOLO_PONTO_VIRGULA
-    | ID SIMBOLO_ATRIBUICAO ID SIMBOLO_PONTO_VIRGULA
     | ID SIMBOLO_ATRIBUICAO LITERAL SIMBOLO_PONTO_VIRGULA
 
 ComandoEscrita:
-    COMANDO_READ SIMBOLO_ABRE_PARENTESES ID SIMBOLO_FECHA_PARENTESES
-    | COMANDO_READ SIMBOLO_ABRE_PARENTESES LITERAL SIMBOLO_FECHA_PARENTESES
-    | COMANDO_READ SIMBOLO_ABRE_PARENTESES ExpressaoAritmetica SIMBOLO_FECHA_PARENTESES
+    COMANDO_PRINT SIMBOLO_ABRE_PARENTESES ExpressaoAritmetica SIMBOLO_FECHA_PARENTESES SIMBOLO_PONTO_VIRGULA
+    | COMANDO_PRINT SIMBOLO_ABRE_PARENTESES LITERAL SIMBOLO_FECHA_PARENTESES SIMBOLO_PONTO_VIRGULA
 
 ComandoLeitura:
-    COMANDO_PRINT SIMBOLO_ABRE_PARENTESES ExpressaoAritmetica SIMBOLO_FECHA_PARENTESES SIMBOLO_PONTO_VIRGULA
-    | COMANDO_PRINT SIMBOLO_ABRE_PARENTESES ID SIMBOLO_FECHA_PARENTESES SIMBOLO_PONTO_VIRGULA
-    | COMANDO_PRINT SIMBOLO_ABRE_PARENTESES LITERAL SIMBOLO_FECHA_PARENTESES SIMBOLO_PONTO_VIRGULA
-    
-ChamadaProc:
-    ChamadaFuncao SIMBOLO_PONTO_VIRGULA
+    COMANDO_READ SIMBOLO_ABRE_PARENTESES ID SIMBOLO_FECHA_PARENTESES SIMBOLO_PONTO_VIRGULA
 
-ChamadaFuncao:
+ComandoRetorno:
+    ChamaFuncao SIMBOLO_PONTO_VIRGULA
+
+ChamaFuncao:
     ID SIMBOLO_ABRE_PARENTESES ListaParametros SIMBOLO_FECHA_PARENTESES
     | ID SIMBOLO_ABRE_PARENTESES SIMBOLO_FECHA_PARENTESES
 
 ListaParametros:
     ListaParametros SIMBOLO_VIRGULA ExpressaoAritmetica
-    | ListaParametros SIMBOLO_VIRGULA ID
-    | ListaParametros SIMBOLO_VIRGULA LITERAL
+    | ListaParametros, LITERAL
     | ExpressaoAritmetica
+    | LITERAL
+
+ExpressaoAritmetica:
+    ExpressaoAritmetica OPERADOR_SOMA ExpressaoAritmetica {$$ = $1 + $3;}
+    | ExpressaoAritmetica OPERADOR_SUBTRACAO ExpressaoAritmetica {$$ = $1 - $3;}
+    | ExpressaoAritmetica OPERADOR_MULTIPLICACAO ExpressaoAritmetica {$$ = $1 * $3;}
+    | ExpressaoAritmetica OPERADOR_DIVISAO ExpressaoAritmetica {$$ = $1 / $3;}
+    | ExpressaoAritmetica OPERADOR_POTENCIA ExpressaoAritmetica {$$ = pow($1, $3);}
+    | SIMBOLO_ABRE_PARENTESES ExpressaoAritmetica SIMBOLO_FECHA_PARENTESES {$$ = $2;}
     | ID
     | LITERAL
 
@@ -162,17 +161,14 @@ ExpressaoLogica:
     ExpressaoLogica LOGICA_OR ExpressaoLogica
     | ExpressaoLogica LOGICA_AND ExpressaoLogica
     | ExpressaoLogica LOGICA_EQ ExpressaoLogica
+    | ExpressaoLogica LOGICA_NE ExpressaoLogica
+    | ExpressaoLogica LOGICA_LT ExpressaoLogica
+    | ExpressaoLogica LOGICA_LE ExpressaoLogica
+    | ExpressaoLogica LOGICA_GT ExpressaoLogica
+    | ExpressaoLogica LOGICA_GE ExpressaoLogica
+    | LOGICA_NOT ExpressaoLogica
     | SIMBOLO_ABRE_PARENTESES ExpressaoLogica SIMBOLO_FECHA_PARENTESES
-    | LOGICA_NOT ExpressaoLogica 
     | ExpressaoAritmetica
-
-ExpressaoAritmetica:
-    ExpressaoAritmetica OPERADOR_SOMA ExpressaoAritmetica
-    | ExpressaoAritmetica OPERADOR_SUBTRACAO ExpressaoAritmetica
-    | ExpressaoAritmetica OPERADOR_MULTIPLICACAO ExpressaoAritmetica
-    | ExpressaoAritmetica OPERADOR_DIVISAO ExpressaoAritmetica
-    | ExpressaoAritmetica OPERADOR_POTENCIA ExpressaoAritmetica
-    | SIMBOLO_ABRE_PARENTESES ExpressaoAritmetica SIMBOLO_FECHA_PARENTESES
     | ID
     | LITERAL
 
