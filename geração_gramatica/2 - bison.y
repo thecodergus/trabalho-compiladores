@@ -13,43 +13,43 @@ int yylex();
 
 %define parse.error verbose
 
--- Simbolos de comandos
+// Simbolos de comandos
 %token  COMANDO_PRINT COMANDO_READ COMANDO_IF COMANDO_ELSE COMANDO_WHILE COMANDO_RETURN
 
--- Simbolo de identificadores de variaveis e funcoes
+// Simbolo de identificadores de variaveis e funcoes
 %token ID LITERAL
 
 
--- Simbbolos de tipos de variaveis e funcoes
+// Simbbolos de tipos de variaveis e funcoes
 %token TIPO_VOID TIPO_INT TIPO_FLOAT TIPO_STRING
 
--- Simbolos de operadores aritmeticos
+// Simbolos de operadores aritmeticos
 %token OPERADOR_MULTIPLICACAO OPERADOR_DIVISAO OPERADOR_SOMA OPERADOR_SUBTRACAO OPERADOR_POTENCIA 
 
--- Simbolos de operadores de atribuicao
+// Simbolos de operadores de atribuicao
 %token  SIMBOLO_ATRIBUICAO 
 
--- Simbolos de abrir e fechar parenteses
-%tokern SIMBOLO_ABRE_PARENTESES SIMBOLO_FECHA_PARENTESES
+// Simbolos de abrir e fechar parenteses
+%token SIMBOLO_ABRE_PARENTESES SIMBOLO_FECHA_PARENTESES
 
--- Simbolos de abrir e fechar chaves
+// Simbolos de abrir e fechar chaves
 %token SIMBOLO_ABRE_CHAVES SIMBOLO_FECHA_CHAVES
 
--- Simbolo de virgula e ponto e virgula
+// Simbolo de virgula e ponto e virgula
 %token SIMBOLO_VIRGULA SIMBOLO_PONTO_VIRGULA
 
--- Simbolo de fim de programa
+// Simbolo de fim de programa
 %token FIM
 
 
--- Operadores Logicos
+// Operadores Logicos
 %left LOGICA_OR
 %left LOGICA_AND
 %left LOGICA_EQ LOGICA_NE
 %left LOGICA_LT LOGICA_LE LOGICA_GT LOGICA_GE
 %precedence LOGICA_NOT
 
--- Operadores Aritmeticos
+// Operadores Aritmeticos
 %left OPERADOR_SOMA OPERADOR_SUBTRACAO
 %left OPERADOR_MULTIPLICACAO OPERADOR_DIVISAO
 %left OPERADOR_POTENCIA
