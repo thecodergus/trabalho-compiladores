@@ -29,9 +29,9 @@ int yylex();
 
 // Simbolo de tipos
 %token TIPO_VOID TIPO_FLOAT TIPO_INT TIPO_STRING
-%token <real> LITERAL_FLOAT 
-%token <inteiro> LITERAL_INT 
-%token <string> LITERAL_STRING
+%token <real> CONSTANTE_FLOAT 
+%token <inteiro> CONSTANTE_INT 
+%token <string> LITERAL
 
 // Simbolos de abrir e fechar chaves
 %token SIMBOLO_ABRE_CHAVES SIMBOLO_FECHA_CHAVES
@@ -117,9 +117,13 @@ Tipo:
     ;
 
 Literal:
-    LITERAL_INT
-    | LITERAL_FLOAT
-    | LITERAL_STRING
+    LITERAL
+
+Constante:
+    CONSTANTE_INT
+    | CONSTANTE_FLOAT
+    ;
+
 
 ListaId:
     ListaId SIMBOLO_VIRGULA ID
@@ -191,10 +195,11 @@ ListaParametros:
 
 // FIM CODIGO COM BASE NA GRAMATICA DO PROFESSOR
 ExpressaoLogica:
-    LOGICA_NOT ExpressaoLogica
+    ExpressaoLogica LOGICA_OR SubExpressaoLogica
+    | LOGICA_NOT SubExpressaoLogica
     | SIMBOLO_ABRE_PARENTESES ExpressaoLogica SIMBOLO_FECHA_PARENTESES
-    | ExpressaoLogica LOGICA_OR SubExpressaoLogica
     | SubExpressaoLogica
+
 
 SubExpressaoLogica:
     SubExpressaoLogica LOGICA_AND ExpressaoRelacional
@@ -214,7 +219,6 @@ ExpressaoAritimetica:
     ExpressaoAritimetica OPERADOR_SOMA SubExpressaoAritimetica
     | ExpressaoAritimetica OPERADOR_SUBTRACAO SubExpressaoAritimetica
     | OPERADOR_SUBTRACAO ExpressaoAritimetica
-    | SIMBOLO_ABRE_PARENTESES ExpressaoAritimetica SIMBOLO_FECHA_PARENTESES
     | SubExpressaoAritimetica
 
 SubExpressaoAritimetica:
@@ -229,7 +233,7 @@ SubSubExpressaoAritimetica:
 
 FatorAritmetico:
     ID
-    | Literal
+    | Constante
 
 %%
 
