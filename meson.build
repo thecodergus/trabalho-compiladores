@@ -15,7 +15,9 @@ inc = include_directories('include', '/usr/local/include')
 
 # Importa os arquivos de código fonte
 app_src = files(
- 'src/main.c'
+ 'src/main.c',
+ 'src/lex.yy.c',
+ 'src/bison.tab.c'
 )
 
 # Local para importar as dependencias
