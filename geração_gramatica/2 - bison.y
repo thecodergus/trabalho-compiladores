@@ -145,13 +145,13 @@ expressao_relacional:
                 ;
 
 expressao_aritmetica: 
-                '(' expressao_aritmetica ')' {$$ = $2;}
+                | fator
                 | expressao_aritmetica '*' expressao_aritmetica {$$ = $1 * $3;}
-                | expressao_aritmetica '/' expressao_aritmetica  {$$ = $1 / $3;}
+                | expressao_aritmetica '/' expressao_aritmetica  { if ($3==0) yyerror("divisao por zero"); else $$ = $1 / $3; }
                 | expressao_aritmetica '+' expressao_aritmetica {$$ = $1 + $3;}
                 | expressao_aritmetica '-' expressao_aritmetica {$$ = $1 - $3;}
                 | '-' expressao_aritmetica {$$ = -$2;}
-                | fator
+                | '(' expressao_aritmetica ')' {$$ = $2;}
                 ;
 
 fator: 
