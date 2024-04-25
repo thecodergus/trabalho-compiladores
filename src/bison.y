@@ -131,7 +131,6 @@ Comando:
 
 Retorno:
     COMANDO_RETURN ExpressaoAritmetica SIMBOLO_PONTO_VIRGULA
-    | COMANDO_RETURN LITERAL SIMBOLO_PONTO_VIRGULA
     | COMANDO_RETURN SIMBOLO_PONTO_VIRGULA
     ;
 
@@ -146,12 +145,10 @@ ComandoEnquanto:
 
 ComandoAtribuicao:
     ID SIMBOLO_ATRIBUICAO ExpressaoAritmetica SIMBOLO_PONTO_VIRGULA
-    | ID SIMBOLO_ATRIBUICAO LITERAL SIMBOLO_PONTO_VIRGULA
     ;
 
 ComandoEscrita:
     COMANDO_PRINT SIMBOLO_ABRE_PARENTESES ExpressaoAritmetica SIMBOLO_FECHA_PARENTESES SIMBOLO_PONTO_VIRGULA
-    | COMANDO_PRINT SIMBOLO_ABRE_PARENTESES LITERAL SIMBOLO_FECHA_PARENTESES SIMBOLO_PONTO_VIRGULA
     ;
 
 ComandoLeitura:
@@ -169,9 +166,7 @@ ChamaFuncao:
 
 ListaParametros:
     ListaParametros SIMBOLO_VIRGULA ExpressaoAritmetica
-    | ListaParametros SIMBOLO_VIRGULA LITERAL
     | ExpressaoAritmetica
-    | LITERAL
     ;
 
 ExpressaoAritmetica:
