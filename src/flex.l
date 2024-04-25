@@ -1,7 +1,6 @@
 %option noyywrap
 
 %{
-#include "expr.tab.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
