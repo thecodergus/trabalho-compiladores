@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "bison.tab.h"
 %}
 
 delim     [ \t\r\n\f]+
@@ -42,7 +43,6 @@ string          { return TIPO_STRING; }
 ";"             { return SIMBOLO_PONTO_VIRGULA; }
 "*"             { return OPERADOR_MULTIPLICACAO; }
 "/"             { return OPERADOR_DIVISAO; }
-"%"             { return OPERADOR_MOD; }
 "+"             { return OPERADOR_SOMA; }
 "-"             { return OPERADOR_SUBTRACAO; }
 "^"             { return OPERADOR_POTENCIA; }
@@ -50,7 +50,7 @@ string          { return TIPO_STRING; }
 {inteito}       { yylval = atoi(yytext); return TIPO_INT; }
 {float}         { yylval = atof(yytext); return TIPO_FLOAT; }
 {id}            { yylval = strdup(yytext); return ID; }
-{string}        { yylval = strdup(yytext + 1); yylval_len = strlen(yylval) - 1; return TIPO_STRING; }
+{string}        { yylval = strdup(yytext + 1); return TIPO_STRING; }
 {delim}         {}
 #*             {}
 .               { return FIM; }
