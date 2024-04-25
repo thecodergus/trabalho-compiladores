@@ -6,17 +6,19 @@
 #include <stdlib.h>
 %}
 
-delim     [ \t\n]
+delim     [ \t\r\n\f]
 ws        {delim}+
 digito    [0-9]
-num       {digito}+("."{digito}*)?("e"[+-]?{digito}+)?
+inteito    {digito}+
+float       {digito}+("."{digito}*)?("e"[+-]?{digito}+)?
 id        [a-zA-Z_][a-zA-Z0-9_]*
-string    \"([^\\"]|\\")*\"
+string    \"([^\"]|\\\\")*\"
 
 %%
 
 {ws}          {}
-{num}         { yylval = atof(yytext); return TIPO_NUM; }
+{inteito}     { yylval = atoi(yytext); return TIPO_NUM_INTEIRO; }
+{float}         { yylval = atof(yytext); return TIPO_NUM_FLUTUANTE; }
 {id}          { yylval = strdup(yytext); return ID; }
 {string}      { yylval = strdup(yytext + 1); yylval_len = strlen(yylval) - 1; return TIPO_STRING; }
 "=="          { return LOGICA_EQ; }

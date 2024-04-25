@@ -12,7 +12,7 @@ int yylex();
 
 %define parse.error verbose
 
-%token TIPO_NUM COMANDO_PRINT COMANDO_READ ID TIPO_STRING
+%token TIPO_NUM_INTEIRO TIPO_NUM_FLUTUANTE COMANDO_PRINT COMANDO_READ ID TIPO_STRING
 %token LOGICA_EQ LOGICA_NE LOGICA_LE LOGICA_GE LOGICA_LT LOGICA_GT LOGICA_AND LOGICA_OR LOGICA_NOT
 %token COMANDO_IF COMANDO_ELSE COMANDO_WHILE COMANDO_RETURN
 %token TIPO_VOID TIPO_INT TIPO_FLOAT TIPO_STRING
@@ -155,7 +155,8 @@ expressao_aritmetica:
                 ;
 
 fator: 
-                TIPO_NUM 
+                TIPO_NUM_INTEIRO
+                | TIPO_NUM_FLUTUANTE
                 | ID 
                 | TIPO_STRING 
                 ;
