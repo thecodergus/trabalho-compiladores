@@ -70,7 +70,7 @@ Funcao:
     | TipoRetorno ID SIMBOLO_ABRE_PARENTESES SIMBOLO_FECHA_CHAVES BlocoPrincipal
 
 TipoRetorno:
-    TIPO
+    Tipo
     | TIPO_VOID
 
 DeclaracaoParametros:
@@ -155,6 +155,24 @@ ListaParametros:
     | ListaParametros SIMBOLO_VIRGULA ID
     | ListaParametros SIMBOLO_VIRGULA LITERAL
     | ExpressaoAritmetica
+    | ID
+    | LITERAL
+
+ExpressaoLogica:
+    ExpressaoLogica LOGICA_OR ExpressaoLogica
+    | ExpressaoLogica LOGICA_AND ExpressaoLogica
+    | ExpressaoLogica LOGICA_EQ ExpressaoLogica
+    | SIMBOLO_ABRE_PARENTESES ExpressaoLogica SIMBOLO_FECHA_PARENTESES
+    | LOGICA_NOT ExpressaoLogica 
+    | ExpressaoAritmetica
+
+ExpressaoAritmetica:
+    ExpressaoAritmetica OPERADOR_SOMA ExpressaoAritmetica
+    | ExpressaoAritmetica OPERADOR_SUBTRACAO ExpressaoAritmetica
+    | ExpressaoAritmetica OPERADOR_MULTIPLICACAO ExpressaoAritmetica
+    | ExpressaoAritmetica OPERADOR_DIVISAO ExpressaoAritmetica
+    | ExpressaoAritmetica OPERADOR_POTENCIA ExpressaoAritmetica
+    | SIMBOLO_ABRE_PARENTESES ExpressaoAritmetica SIMBOLO_FECHA_PARENTESES
     | ID
     | LITERAL
 
