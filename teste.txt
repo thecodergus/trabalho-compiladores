@@ -1,3 +1,7 @@
+int bb(float e){
+    return e;
+}
+
 {
     int a;
 
