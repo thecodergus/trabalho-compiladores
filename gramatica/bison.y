@@ -158,28 +158,47 @@ ComandoEnquanto:
 ComandoAtribuicao:
     ID SIMBOLO_ATRIBUICAO ExpressaoAritimetica
     | ID SIMBOLO_ATRIBUICAO Literal
+    ;
 
 ComandoEscrita:
     COMANDO_PRINT SIMBOLO_ABRE_PARENTESES ExpressaoAritimetica SIMBOLO_FECHA_PARENTESES
     | COMANDO_PRINT SIMBOLO_ABRE_PARENTESES Literal SIMBOLO_FECHA_PARENTESES
+    ;
 
 ComandoLeitura:
     COMANDO_READ SIMBOLO_ABRE_PARENTESES ID SIMBOLO_FECHA_PARENTESES
+    ;
 
 ChamadaProc:
     ChamadaFuncao
+    ;
 
 ChamadaFuncao:
     ID SIMBOLO_ABRE_PARENTESES ListaParametros SIMBOLO_FECHA_PARENTESES
     | ID SIMBOLO_ABRE_PARENTESES SIMBOLO_FECHA_PARENTESES
+    ;
 
 ListaParametros:
     ListaParametros SIMBOLO_VIRGULA ExpressaoAritimetica
     | ListaParametros SIMBOLO_VIRGULA Literal
     | ExpressaoAritimetica
     | Literal
+    ;
 
 // FIM CODIGO COM BASE NA GRAMATICA DO PROFESSOR
+ExpressaoLogica:
+    ExpressaoLogica LOGICA_OR SubExpressaoLogica
+    | SubExpressaoLogica
+
+SubExpressaoLogica:
+    SubExpressaoLogica LOGICA_AND SubSubExpressaoLogica
+    | SubSubExpressaoLogica
+
+// Espaço para as comparações
+
+SubSubExpressaoLogica:
+    SubSubExpressaoLogica 
+
 %%
 
 int yyerror(const char *str) {
