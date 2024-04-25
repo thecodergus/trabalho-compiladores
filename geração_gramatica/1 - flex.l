@@ -2,7 +2,9 @@
 
 %{
 #include "expr.tab.h"
+#include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 %}
 
 delim     [ \t\r\n\f]+
@@ -52,7 +54,7 @@ string          { return TIPO_STRING; }
 {string}        { yylval = strdup(yytext + 1); yylval_len = strlen(yylval) - 1; return TIPO_STRING; }
 {delim}         {}
 #*             {}
-.               { return yytext[0]; }
+.               { return FIM; }
 
 
 %%
