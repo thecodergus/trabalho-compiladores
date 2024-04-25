@@ -174,8 +174,6 @@ ExpressaoLogica:
     | LOGICA_NOT ExpressaoLogica
     | SIMBOLO_ABRE_PARENTESES ExpressaoLogica SIMBOLO_FECHA_PARENTESES
     | ExpressaoAritmetica
-    | ID
-    | LITERAL
 
 %%
 
