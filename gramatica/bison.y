@@ -59,11 +59,7 @@ int yylex();
 
 
 // Operadores
-%precedence LOGICA_EQ LOGICA_GT LOGICA_LT LOGICA_GE LOGICA_LE LOGICA_NE
 %left OPERADOR_SOMA OPERADOR_SUBTRACAO
-
-// Tokens não associativos
-%nonassoc LOGICA_OR LOGICA_AND LOGICA_NOT
 %%
 // COMEÇO CODIGO COM BASE NA GRAMATICA DO PROFESSOR
 
@@ -193,7 +189,9 @@ ListaParametros:
 
 // FIM CODIGO COM BASE NA GRAMATICA DO PROFESSOR
 ExpressaoLogica:
-    ExpressaoLogica LOGICA_OR SubExpressaoLogica
+    LOGICA_NOT ExpressaoLogica
+    | SIMBOLO_ABRE_PARENTESES ExpressaoLogica SIMBOLO_FECHA_PARENTESES
+    | ExpressaoLogica LOGICA_OR SubExpressaoLogica
     | SubExpressaoLogica
 
 SubExpressaoLogica:
@@ -219,7 +217,7 @@ ExpressaoAritimetica:
 
 SubExpressaoAritimetica:
     SubExpressaoAritimetica OPERADOR_MULTIPLICACAO SubSubExpressaoAritimetica
-    | SubExpressaoAritimetica OPERADOR_MULTIPLICACAO SubSubExpressaoAritimetica
+    | SubExpressaoAritimetica OPERADOR_DIVISAO SubSubExpressaoAritimetica
     | SubSubExpressaoAritimetica
 
 SubSubExpressaoAritimetica:
