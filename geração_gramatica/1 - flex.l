@@ -53,3 +53,10 @@ string          { return TIPO_STRING; }
 {delim}         {}
 #*             {}
 .               { return yytext[0]; }
+
+
+%%
+
+int yywrap() {
+    return 1;
+}
