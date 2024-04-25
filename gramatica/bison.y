@@ -197,17 +197,17 @@ ExpressaoLogica:
     | SubExpressaoLogica
 
 SubExpressaoLogica:
-    SubExpressaoLogica LOGICA_AND SubSubExpressaoLogica
-    | SubSubExpressaoLogica
+    SubExpressaoLogica LOGICA_AND ExpressaoRelacional
+    | ExpressaoRelacional
 
 // Espaço para as comparações
-SubSubExpressaoLogica:
-    SubSubExpressaoLogica LOGICA_EQ ExpressaoAritimetica
-    | SubSubExpressaoLogica LOGICA_NE ExpressaoAritimetica
-    | SubSubExpressaoLogica LOGICA_LE ExpressaoAritimetica
-    | SubSubExpressaoLogica LOGICA_GE ExpressaoAritimetica
-    | SubSubExpressaoLogica LOGICA_LT ExpressaoAritimetica
-    | SubSubExpressaoLogica LOGICA_GT ExpressaoAritimetica
+ExpressaoRelacional:
+    ExpressaoRelacional LOGICA_EQ ExpressaoAritimetica
+    | ExpressaoRelacional LOGICA_NE ExpressaoAritimetica
+    | ExpressaoRelacional LOGICA_LE ExpressaoAritimetica
+    | ExpressaoRelacional LOGICA_GE ExpressaoAritimetica
+    | ExpressaoRelacional LOGICA_LT ExpressaoAritimetica
+    | ExpressaoRelacional LOGICA_GT ExpressaoAritimetica
     | ExpressaoAritimetica
 
 ExpressaoAritimetica:
@@ -220,6 +220,7 @@ ExpressaoAritimetica:
 SubExpressaoAritimetica:
     SubExpressaoAritimetica OPERADOR_MULTIPLICACAO SubSubExpressaoAritimetica
     | SubExpressaoAritimetica OPERADOR_DIVISAO SubSubExpressaoAritimetica
+    | ChamadaFuncao
     | SubSubExpressaoAritimetica
 
 SubSubExpressaoAritimetica:
