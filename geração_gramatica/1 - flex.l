@@ -33,6 +33,19 @@ string          { return TIPO_STRING; }
 "&&"            { return LOGICA_AND; }
 "||"            { return LOGICA_OR; }
 "!"             { return LOGICA_NOT; }
+"="             { return SIMBOLO_ATRIBUICAO; }
+"("             { return SIMBOLO_ABRE_PARENTESES; }
+")"             { return SIMBOLO_FECHA_PARENTESES; }
+"{"             { return SIMBOLO_ABRE_CHAVES; }
+"}"             { return SIMBOLO_FECHA_CHAVES; }
+";"             { return SIMBOLO_PONTO_VIRGULA; }
+"*"             { return OPERADOR_MULTIPLICACAO; }
+"/"             { return OPERADOR_DIVISAO; }
+"%"             { return OPERADOR_MOD; }
+"+"             { return OPERADOR_SOMA; }
+"-"             { return OPERADOR_SUBTRACAO; }
+"^"             { return OPERADOR_POTENCIA; }
+","             { return SIMBOLO_VIRGULA; }
 {inteito}       { yylval = atoi(yytext); return TIPO_NUM_INTEIRO; }
 {float}         { yylval = atof(yytext); return TIPO_NUM_FLUTUANTE; }
 {id}            { yylval = strdup(yytext); return ID; }
