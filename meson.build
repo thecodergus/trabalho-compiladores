@@ -30,7 +30,7 @@ executable('main',
    ],
    include_directories : inc,
    dependencies: [
-      flex_dep
+      
    ],
    install: true,
    c_args : c_args
