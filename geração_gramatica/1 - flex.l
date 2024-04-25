@@ -7,8 +7,8 @@
 
 delim     [ \t\r\n\f]+
 digito    [0-9]
-inteito    {digito}+
-float       {digito}+("."{digito}*)?("e"[+-]?{digito}+)?
+inteito    -?({digito})+
+float       -?({digito})+("."{digito}*)?("e"[+-]?{digito}+)?
 id        [a-zA-Z_][a-zA-Z0-9_]*
 string    \"([^\\\n]|(\\.))*?\"
 
