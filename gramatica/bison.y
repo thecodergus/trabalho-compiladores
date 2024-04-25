@@ -179,33 +179,33 @@ ListaParametros:
     ;
 
 ExpressaoAritmetica:
-    ExpressaoAritmetica OPERADOR_SOMA ExpressaoAritmetica {$$ = $1 + $3;}
-    | ExpressaoAritmetica OPERADOR_SUBTRACAO ExpressaoAritmetica {$$ = $1 - $3;}
-    | Fator {$$ = $1;}
+    ExpressaoAritmetica OPERADOR_SOMA ExpressaoAritmetica
+    | ExpressaoAritmetica OPERADOR_SUBTRACAO ExpressaoAritmetica
+    | Fator
     ;
 
 Fator:
-    Termo {$$ = $1;}
-    | Fator OPERADOR_MULTIPLICACAO Termo {$$ = $1 * $3;}
-    | Fator OPERADOR_DIVISAO Termo {$$ = $1 / $3;}
+    Termo
+    | Fator OPERADOR_MULTIPLICACAO Termo
+    | Fator OPERADOR_DIVISAO Termo
     ;
 
 Termo:
     ID
-    | LITERAL {$$ = $1;}
+    | LITERAL
     
 
 ExpressaoLogica:
-    ExpressaoLogica LOGICA_OR ExpressaoAritmetica {$$ = $1 || $3;}
-    | ExpressaoLogica LOGICA_AND ExpressaoAritmetica {$$ = $1 && $3;}
-    | ExpressaoLogica LOGICA_EQ ExpressaoAritmetica {$$ = $1 == $3;}
-    | ExpressaoLogica LOGICA_NE ExpressaoAritmetica {$$ = $1 != $3;}
-    | ExpressaoLogica LOGICA_LT ExpressaoAritmetica {$$ = $1 < $3;}
-    | ExpressaoLogica LOGICA_LE ExpressaoAritmetica {$$ = $1 <= $3;}
-    | ExpressaoLogica LOGICA_GT ExpressaoAritmetica {$$ = $1 > $3;}
-    | ExpressaoLogica LOGICA_GE ExpressaoAritmetica {$$ = $1 >= $3;}
+    ExpressaoLogica LOGICA_OR ExpressaoAritmetica
+    | ExpressaoLogica LOGICA_AND ExpressaoAritmetica
+    | ExpressaoLogica LOGICA_EQ ExpressaoAritmetica
+    | ExpressaoLogica LOGICA_NE ExpressaoAritmetica
+    | ExpressaoLogica LOGICA_LT ExpressaoAritmetica
+    | ExpressaoLogica LOGICA_LE ExpressaoAritmetica
+    | ExpressaoLogica LOGICA_GT ExpressaoAritmetica
+    | ExpressaoLogica LOGICA_GE ExpressaoAritmetica
     | LOGICA_NOT ExpressaoLogica
-    | SIMBOLO_ABRE_PARENTESES ExpressaoLogica SIMBOLO_FECHA_PARENTESES { $$ = $2; }
+    | SIMBOLO_ABRE_PARENTESES ExpressaoLogica SIMBOLO_FECHA_PARENTESES
     | ExpressaoAritmetica
     ;
 %%
