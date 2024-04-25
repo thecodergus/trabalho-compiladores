@@ -6,6 +6,7 @@
 #include <string.h>
 #include <math.h>
 
+
 int yyerror(const char *);
 int yylex();
 
@@ -18,7 +19,7 @@ int yylex();
 }
 
 %define parse.error verbose
-%define parse.trace on
+%define parse.trace true
 
 // Simbolos de comandos
 %token  COMANDO_PRINT COMANDO_READ COMANDO_IF COMANDO_ELSE COMANDO_WHILE COMANDO_RETURN
@@ -51,8 +52,11 @@ int yylex();
 // Simbolo de virgula e ponto e virgula
 %token SIMBOLO_VIRGULA SIMBOLO_PONTO_VIRGULA
 
+// Simbolo para erros
+%token ERRO
+
 // Simbolo de fim de programa
-%token FIMSIMBOLO_PONTO_VIRGULA
+%token FIM 0 "Fim do arquivo"
 
 
 // Operadores

@@ -5,6 +5,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include "bison.tab.h"
+
+#define yyterminate() return FIM
 %}
 
 delim     [ \t\r\n\f]+
@@ -52,7 +54,9 @@ string          { return TIPO_STRING; }
 {id}            { yylval.string = strdup(yytext); return ID; }
 {string}        { yylval.string = strdup(yytext + 1); return TIPO_STRING; }
 {delim}         {}
-#*             {}
-.               { return FIM; }
+#*              {}
+.               { printf("Caractere invalido: %c\\n", yytext[0]); return ERRO; }
+<<EOF>>         { return FIM; }
+
 
 %%
