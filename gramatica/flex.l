@@ -24,10 +24,10 @@ while           { return COMANDO_WHILE; }
 print           { return COMANDO_PRINT; }
 read            { return COMANDO_READ; }
 return          { return COMANDO_RETURN; }
-void            { return TIPO_VOID; }
-int             { return TIPO_INT; }
-float           { return TIPO_FLOAT; }
-string          { return TIPO_STRING; }
+void            { return VOID; }
+int             { return INT; }
+float           { return FLOAT; }
+string          { return STRING; }
 "=="            { return LOGICA_EQ; }
 "!="            { return LOGICA_NE; }
 "<="            { return LOGICA_LE; }

@@ -97,6 +97,9 @@ DeclaracaoParametros:
     | Parametro
     ;
 
+Parametro:
+    Tipo ID
+
 BloboPrincipal:
     SIMBOLO_ABRE_CHAVES Declaracoes ListaComando SIMBOLO_FECHA_CHAVES
     | SIMBOLO_ABRE_CHAVES ListaComando SIMBOLO_FECHA_CHAVES
@@ -116,6 +119,9 @@ Tipo:
     | STRING
     | FLOAT
     ;
+
+Literal:
+    Tipo
 
 ListaId:
     ListaId SIMBOLO_VIRGULA ID
@@ -195,9 +201,34 @@ SubExpressaoLogica:
     | SubSubExpressaoLogica
 
 // Espaço para as comparações
-
 SubSubExpressaoLogica:
-    SubSubExpressaoLogica 
+    SubSubExpressaoLogica LOGICA_EQ ExpressaoAritimetica
+    | SubSubExpressaoLogica LOGICA_NE ExpressaoAritimetica
+    | SubSubExpressaoLogica LOGICA_LE ExpressaoAritimetica
+    | SubSubExpressaoLogica LOGICA_GE ExpressaoAritimetica
+    | SubSubExpressaoLogica LOGICA_LT ExpressaoAritimetica
+    | SubSubExpressaoLogica LOGICA_GT ExpressaoAritimetica
+    | ExpressaoAritimetica
+
+ExpressaoAritimetica:
+    ExpressaoAritimetica OPERADOR_SOMA SubExpressaoAritimetica
+    | ExpressaoAritimetica OPERADOR_SUBTRACAO SubExpressaoAritimetica
+    | OPERADOR_SUBTRACAO ExpressaoAritimetica
+    | SIMBOLO_ABRE_PARENTESES ExpressaoAritimetica SIMBOLO_FECHA_PARENTESES
+    | SubExpressaoAritimetica
+
+SubExpressaoAritimetica:
+    SubExpressaoAritimetica OPERADOR_MULTIPLICACAO SubSubExpressaoAritimetica
+    | SubExpressaoAritimetica OPERADOR_MULTIPLICACAO SubSubExpressaoAritimetica
+    | SubSubExpressaoAritimetica
+
+SubSubExpressaoAritimetica:
+    SubSubExpressaoAritimetica OPERADOR_POTENCIA FatorAritmetica
+    | FatorAritmetica
+
+FatorAritmetica:
+    ID
+    | Literal
 
 %%
 
