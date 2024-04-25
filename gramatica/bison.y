@@ -18,6 +18,7 @@ int yylex();
 }
 
 %define parse.error verbose
+%define parse.trace on
 
 // Simbolos de comandos
 %token  COMANDO_PRINT COMANDO_READ COMANDO_IF COMANDO_ELSE COMANDO_WHILE COMANDO_RETURN
@@ -51,7 +52,7 @@ int yylex();
 %token SIMBOLO_VIRGULA SIMBOLO_PONTO_VIRGULA
 
 // Simbolo de fim de programa
-%token FIM
+%token FIMSIMBOLO_PONTO_VIRGULA
 
 
 // Operadores
@@ -101,7 +102,7 @@ BlocoPrincipal:
 
 Declaracoes:
     Declaracoes Declaracao
-    | Declaracao
+    | Declaracao SIMBOLO_PONTO_VIRGULA
     ;
 
 Declaracao:
@@ -125,7 +126,7 @@ Bloco:
 
 ListaComandos:
     ListaComandos Comando
-    | Comando
+    | Comando SIMBOLO_PONTO_VIRGULA
     ;
 
 Comando:
@@ -139,8 +140,8 @@ Comando:
     ;
 
 Retorno:
-    COMANDO_RETURN ExpressaoAritmetica SIMBOLO_PONTO_VIRGULA
-    | COMANDO_RETURN SIMBOLO_PONTO_VIRGULA
+    COMANDO_RETURN ExpressaoAritmetica
+    | COMANDO_RETURN
     ;
 
 ComandoSe:
@@ -153,19 +154,19 @@ ComandoEnquanto:
     ;
 
 ComandoAtribuicao:
-    ID SIMBOLO_ATRIBUICAO ExpressaoAritmetica SIMBOLO_PONTO_VIRGULA
+    ID SIMBOLO_ATRIBUICAO ExpressaoAritmetica
     ;
 
 ComandoEscrita:
-    COMANDO_PRINT SIMBOLO_ABRE_PARENTESES ExpressaoAritmetica SIMBOLO_FECHA_PARENTESES SIMBOLO_PONTO_VIRGULA
+    COMANDO_PRINT SIMBOLO_ABRE_PARENTESES ExpressaoAritmetica SIMBOLO_FECHA_PARENTESES
     ;
 
 ComandoLeitura:
-    COMANDO_READ SIMBOLO_ABRE_PARENTESES ID SIMBOLO_FECHA_PARENTESES SIMBOLO_PONTO_VIRGULA
+    COMANDO_READ SIMBOLO_ABRE_PARENTESES ID SIMBOLO_FECHA_PARENTESES
     ;
 
 ComandoRetorno:
-    ChamaFuncao SIMBOLO_PONTO_VIRGULA
+    ChamaFuncao
     ;
 
 ChamaFuncao:

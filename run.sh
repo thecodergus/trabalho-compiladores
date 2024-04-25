@@ -29,8 +29,7 @@ cd $PASTA # Entrando na pasta build
 
 # Compilando o codigo
 if ninja; then
-    # clear -x # Limpando a tela
-    ./$NOME_PROJETO # Executando o codigo compilado
+    YYDEBUG=1 ./$NOME_PROJETO # Executando o codigo compilado
 else
     echo "Erro na compilação. O projeto não será executado."
 fi
