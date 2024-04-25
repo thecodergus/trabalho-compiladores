@@ -1,22 +1,45 @@
-<Programa> -> <ListaFuncoes><BlocoPrincipal> | <BlocoPrincipal>
-<ListaFuncoes> -> <ListaFuncoes><Funcao> | <Funcao>
-<Funcao> -> <TipoRetorno> id(<DeclParametros>) <BlocoPrincipal> | <TipoRetorno> id() <BlocoPrincipal>
-<TipoRetorno> -> <Tipo> | void
-<DeclParametros> -> <DeclParametros>, <Parametro> | <Parametro>
+<Programa> -> <ListaFuncoes><BlocoPrincipal> 
+            | <BlocoPrincipal>
+<ListaFuncoes> -> <ListaFuncoes><Funcao> 
+                | <Funcao>
+<Funcao> -> <TipoRetorno> id(<DeclParametros>) <BlocoPrincipal> 
+            | <TipoRetorno> id() <BlocoPrincipal>
+<TipoRetorno> -> <Tipo> 
+                | void
+<DeclParametros> -> <DeclParametros>, <Parametro> 
+                    | <Parametro>
 <Parametro> -> <Tipo> id
-<BlocoPrincipal> -> {<Declaracoes><ListaComando>} | {<ListaComando>}
-<Declaracoes> -> <Declaracoes><Declarado> | <Declaracao>
-<Tipo> -> int | string | float
-<ListaId> -> <ListaId>, id | id
+<BlocoPrincipal> -> {<Declaracoes><ListaComando>} 
+                    | {<ListaComando>}
+<Declaracoes> -> <Declaracoes><Declarado> 
+                | <Declaracao>
+<Tipo> -> int 
+        | string 
+        | float
+<ListaId> -> <ListaId>, id 
+            | id
 <Bloco> -> {<ListaComando>}
-<ListaComando> -> <ListaComando><Comando> | <Comando>
-<Comando> -> <ComandoSe> | <ComandoEnquanto> | <ComandoAtribuicao> | <ComandoEscrita> | <ComandoLeitura> | <ChamadaProc> | <Retorno>
-<Retorno> -> return <ExpressaoAritimetica>; | return literal; | return;
-<ComandoSe> -> if(<ExpressaoLogica>)<Bloco> | if(<ExpressaoLogica>)<Bloco>else<Bloco>
+<ListaComando> -> <ListaComando><Comando> 
+                | <Comando>
+<Comando> -> <ComandoSe> 
+            | <ComandoEnquanto> 
+            | <ComandoAtribuicao> 
+            | <ComandoEscrita> 
+            | <ComandoLeitura> 
+            | <ChamadaProc> 
+            | <Retorno>
+<Retorno> -> return <ExpressaoAritimetica>; 
+            | return literal; 
+            | return;
+<ComandoSe> -> if(<ExpressaoLogica>)<Bloco> 
+            | if(<ExpressaoLogica>)<Bloco>else<Bloco>
 <ComandoEnquanto> -> while(<ExpressaoLogica>)<Bloco>
 <ComandoAtribuicao> -> id = <ExpressaoAritmetica> | id = literal;
 <ComandoEscrita> -> print(<ExpressaoAritmetica>); | print(literal);
 <ComandoLeitura> -> read(id);
 <ChamadaProc> -> <ChamadaFuncao>;
-<ChamadaFuncao> -> id(<ListaParametros>) | id()
-<ListaParametros> -> <ListaParametros>, <ExpressaoAritmetica> | <ListaParametros>, literal | literal
+<ChamadaFuncao> -> id(<ListaParametros>) 
+                    | id()
+<ListaParametros> -> <ListaParametros>, <ExpressaoAritmetica> 
+                    | <ListaParametros>, literal 
+                    | literal

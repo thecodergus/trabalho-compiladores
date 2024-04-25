@@ -28,10 +28,10 @@ int yylex();
 %token <string>ID 
 
 // Simbolo de tipos
-%token TIPO_VOID 
-%token <real> TIPO_FLOAT 
-%token <inteiro> TIPO_INT 
-%token <string> TIPO_STRING
+%token VOID 
+%token <real> LITERAL_FLOAT 
+%token <inteiro> LITERAL_INT 
+%token <string> LITERAL_STRING
 
 // Simbolos de abrir e fechar chaves
 %token SIMBOLO_ABRE_CHAVES SIMBOLO_FECHA_CHAVES
@@ -86,7 +86,7 @@ Funcao:
 
 TipoRetorno:
     Tipo
-    | TIPO_VOID
+    | VOID
     ;
 
 DeclaracaoParametros:
@@ -113,9 +113,9 @@ Declaracao:
     ;
 
 Tipo:
-    TIPO_INT
-    | TIPO_FLOAT
-    | TIPO_STRING
+    LITERAL_INT
+    | LITERAL_FLOAT
+    | LITERAL_STRING
     ;
 
 ListaId:
