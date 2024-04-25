@@ -20,7 +20,6 @@
 #include <string.h>
 #include <errno.h>
 #include <stdlib.h>
-#include "bison.tab.h"
 
 /* end standard C headers. */
 
