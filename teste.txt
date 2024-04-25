@@ -1,7 +1,5 @@
 {
     int a;
 
-    a = 20;
-
-    return 20;
+    return a;
 }
