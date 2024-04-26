@@ -5,7 +5,10 @@ int bb(float e){
 {
     int a;
 
-    a = 20;
+
+    while(!((20 > 10) || (10 >= 10))){
+        a = 20;
+    }
 
     return a;
 }
