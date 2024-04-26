@@ -59,7 +59,14 @@ int yylex();
 
 
 // Operadores
+%left LOGICA_OR
+%left LOGICA_AND
+%left LOGICA_EQ LOGICA_NE
+%left LOGICA_LT LOGICA_GT LOGICA_LE LOGICA_GE
 %left OPERADOR_SOMA OPERADOR_SUBTRACAO
+%left OPERADOR_MULTIPLICACAO OPERADOR_DIVISAO
+%right OPERADOR_POTENCIA
+%precedence LOGICA_NOT
 %%
 // COMEÇO CODIGO COM BASE NA GRAMATICA DO PROFESSOR
 
@@ -116,15 +123,6 @@ Tipo:
     | TIPO_FLOAT
     ;
 
-Literal:
-    LITERAL
-
-Constante:
-    CONSTANTE_INT
-    | CONSTANTE_FLOAT
-    ;
-
-
 ListaId:
     ListaId SIMBOLO_VIRGULA ID
     | ID
@@ -149,28 +147,28 @@ Comando:
     ;
 
 Retorno:
-    COMANDO_RETURN ExpressaoAritimetica
-    | COMANDO_RETURN Literal
+    COMANDO_RETURN Expressao
+    | COMANDO_RETURN LITERAL
     | COMANDO_RETURN
     ;
 
 ComandoSe:
-    COMANDO_IF SIMBOLO_ABRE_PARENTESES ExpressaoLogica SIMBOLO_FECHA_PARENTESES Bloco
-    | COMANDO_IF SIMBOLO_ABRE_PARENTESES ExpressaoLogica SIMBOLO_FECHA_PARENTESES Bloco COMANDO_ELSE Bloco
+    COMANDO_IF SIMBOLO_ABRE_PARENTESES Expressao SIMBOLO_FECHA_PARENTESES Bloco
+    | COMANDO_IF SIMBOLO_ABRE_PARENTESES Expressao SIMBOLO_FECHA_PARENTESES Bloco COMANDO_ELSE Bloco
     ;
 
 ComandoEnquanto:
-    COMANDO_WHILE SIMBOLO_ABRE_PARENTESES ExpressaoLogica SIMBOLO_FECHA_PARENTESES Bloco
+    COMANDO_WHILE SIMBOLO_ABRE_PARENTESES Expressao SIMBOLO_FECHA_PARENTESES Bloco
     ;
 
 ComandoAtribuicao:
-    ID SIMBOLO_ATRIBUICAO ExpressaoAritimetica
-    | ID SIMBOLO_ATRIBUICAO Literal
+    ID SIMBOLO_ATRIBUICAO Expressao
+    | ID SIMBOLO_ATRIBUICAO LITERAL
     ;
 
 ComandoEscrita:
-    COMANDO_PRINT SIMBOLO_ABRE_PARENTESES ExpressaoAritimetica SIMBOLO_FECHA_PARENTESES
-    | COMANDO_PRINT SIMBOLO_ABRE_PARENTESES Literal SIMBOLO_FECHA_PARENTESES
+    COMANDO_PRINT SIMBOLO_ABRE_PARENTESES Expressao SIMBOLO_FECHA_PARENTESES
+    | COMANDO_PRINT SIMBOLO_ABRE_PARENTESES LITERAL SIMBOLO_FECHA_PARENTESES
     ;
 
 ComandoLeitura:
@@ -187,53 +185,33 @@ ChamadaFuncao:
     ;
 
 ListaParametros:
-    ListaParametros SIMBOLO_VIRGULA ExpressaoAritimetica
-    | ListaParametros SIMBOLO_VIRGULA Literal
-    | ExpressaoAritimetica
-    | Literal
+    ListaParametros SIMBOLO_VIRGULA Expressao
+    | ListaParametros SIMBOLO_VIRGULA LITERAL
+    | Expressao
+    | LITERAL
     ;
 
 // FIM CODIGO COM BASE NA GRAMATICA DO PROFESSOR
-ExpressaoLogica:
-    ExpressaoLogica LOGICA_OR SubExpressaoLogica
-    | LOGICA_NOT SubExpressaoLogica
-    | SIMBOLO_ABRE_PARENTESES ExpressaoLogica SIMBOLO_FECHA_PARENTESES
-    | SubExpressaoLogica
 
-
-SubExpressaoLogica:
-    SubExpressaoLogica LOGICA_AND ExpressaoRelacional
-    | ExpressaoRelacional
-
-// Espaço para as comparações
-ExpressaoRelacional:
-    ExpressaoRelacional LOGICA_EQ ExpressaoAritimetica
-    | ExpressaoRelacional LOGICA_NE ExpressaoAritimetica
-    | ExpressaoRelacional LOGICA_LE ExpressaoAritimetica
-    | ExpressaoRelacional LOGICA_GE ExpressaoAritimetica
-    | ExpressaoRelacional LOGICA_LT ExpressaoAritimetica
-    | ExpressaoRelacional LOGICA_GT ExpressaoAritimetica
-    | ExpressaoAritimetica
-
-ExpressaoAritimetica:
-    ExpressaoAritimetica OPERADOR_SOMA SubExpressaoAritimetica
-    | ExpressaoAritimetica OPERADOR_SUBTRACAO SubExpressaoAritimetica
-    | OPERADOR_SUBTRACAO ExpressaoAritimetica
-    | SubExpressaoAritimetica
-
-SubExpressaoAritimetica:
-    SubExpressaoAritimetica OPERADOR_MULTIPLICACAO SubSubExpressaoAritimetica
-    | SubExpressaoAritimetica OPERADOR_DIVISAO SubSubExpressaoAritimetica
-    | ChamadaFuncao
-    | SubSubExpressaoAritimetica
-
-SubSubExpressaoAritimetica:
-    SubSubExpressaoAritimetica OPERADOR_POTENCIA FatorAritmetico
-    | FatorAritmetico
-
-FatorAritmetico:
-    ID
-    | Constante
+Expressao:
+    CONSTANTE_INT
+    | CONSTANTE_FLOAT
+    | ID
+    | Expressao OPERADOR_SOMA Expressao
+    | Expressao OPERADOR_SUBTRACAO Expressao
+    | Expressao OPERADOR_MULTIPLICACAO Expressao
+    | Expressao OPERADOR_DIVISAO Expressao
+    | Expressao OPERADOR_POTENCIA Expressao
+    | Expressao LOGICA_LT Expressao
+    | Expressao LOGICA_GT Expressao
+    | Expressao LOGICA_LE Expressao
+    | Expressao LOGICA_GE Expressao
+    | Expressao LOGICA_AND Expressao
+    | Expressao LOGICA_OR Expressao
+    | Expressao LOGICA_EQ Expressao
+    | Expressao LOGICA_NE Expressao
+    | LOGICA_NOT Expressao
+    | SIMBOLO_ABRE_PARENTESES Expressao SIMBOLO_FECHA_PARENTESES
 
 %%
 
