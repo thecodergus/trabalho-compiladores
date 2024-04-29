@@ -212,7 +212,7 @@ Expressao:
     | Expressao LOGICA_NE Expressao
     | LOGICA_NOT Expressao
     | SIMBOLO_ABRE_PARENTESES Expressao SIMBOLO_FECHA_PARENTESES
-
+    ;
 %%
 
 int yyerror(const char *str) {
