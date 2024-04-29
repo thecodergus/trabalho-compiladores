@@ -213,6 +213,16 @@ Expressao:
     | LOGICA_NOT Expressao
     | SIMBOLO_ABRE_PARENTESES Expressao SIMBOLO_FECHA_PARENTESES
     ;
+
+// Relacional -> Aritimetica == Aritmetica
+//       | " ------------------"
+
+// ExpressaoLogica  -> ExpressaoLogica && TermoLogico
+//                  | ExpressaoLogica || TermoLogico
+//                  | TermoLogico
+// TermoLogico -> !TermoLogico
+//                  | ExpressaoRelacional
+//                  | (ExpressaoLogica)
 %%
 
 int yyerror(const char *str) {
