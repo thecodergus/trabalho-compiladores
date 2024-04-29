@@ -59,14 +59,9 @@ int yylex();
 
 
 // Operadores
-%left LOGICA_OR
-%left LOGICA_AND
-%left LOGICA_EQ LOGICA_NE
-%left LOGICA_LT LOGICA_GT LOGICA_LE LOGICA_GE
 %left OPERADOR_SOMA OPERADOR_SUBTRACAO
 %left OPERADOR_MULTIPLICACAO OPERADOR_DIVISAO
 %right OPERADOR_POTENCIA
-%precedence LOGICA_NOT
 %%
 // COMEÇO CODIGO COM BASE NA GRAMATICA DO PROFESSOR
 
@@ -147,27 +142,27 @@ Comando:
     ;
 
 Retorno:
-    COMANDO_RETURN Expressao
+    COMANDO_RETURN ExpressaoAritmetica
     | COMANDO_RETURN LITERAL
     | COMANDO_RETURN
     ;
 
 ComandoSe:
-    COMANDO_IF SIMBOLO_ABRE_PARENTESES Expressao SIMBOLO_FECHA_PARENTESES Bloco
-    | COMANDO_IF SIMBOLO_ABRE_PARENTESES Expressao SIMBOLO_FECHA_PARENTESES Bloco COMANDO_ELSE Bloco
+    COMANDO_IF SIMBOLO_ABRE_PARENTESES ExpressaoLogica SIMBOLO_FECHA_PARENTESES Bloco
+    | COMANDO_IF SIMBOLO_ABRE_PARENTESES ExpressaoLogica SIMBOLO_FECHA_PARENTESES Bloco COMANDO_ELSE Bloco
     ;
 
 ComandoEnquanto:
-    COMANDO_WHILE SIMBOLO_ABRE_PARENTESES Expressao SIMBOLO_FECHA_PARENTESES Bloco
+    COMANDO_WHILE SIMBOLO_ABRE_PARENTESES ExpressaoLogica SIMBOLO_FECHA_PARENTESES Bloco
     ;
 
 ComandoAtribuicao:
-    ID SIMBOLO_ATRIBUICAO Expressao
+    ID SIMBOLO_ATRIBUICAO ExpressaoAritmetica
     | ID SIMBOLO_ATRIBUICAO LITERAL
     ;
 
 ComandoEscrita:
-    COMANDO_PRINT SIMBOLO_ABRE_PARENTESES Expressao SIMBOLO_FECHA_PARENTESES
+    COMANDO_PRINT SIMBOLO_ABRE_PARENTESES ExpressaoAritmetica SIMBOLO_FECHA_PARENTESES
     | COMANDO_PRINT SIMBOLO_ABRE_PARENTESES LITERAL SIMBOLO_FECHA_PARENTESES
     ;
 
@@ -185,44 +180,47 @@ ChamadaFuncao:
     ;
 
 ListaParametros:
-    ListaParametros SIMBOLO_VIRGULA Expressao
+    ListaParametros SIMBOLO_VIRGULA ExpressaoAritmetica
     | ListaParametros SIMBOLO_VIRGULA LITERAL
-    | Expressao
+    | ExpressaoAritmetica
     | LITERAL
     ;
 
 // FIM CODIGO COM BASE NA GRAMATICA DO PROFESSOR
 
-Expressao:
+
+ExpressaoLogica:
+    ExpressaoLogica LOGICA_AND TermoLogico
+    | ExpressaoLogica LOGICA_OR TermoLogico
+    | TermoLogico
+    ;
+
+TermoLogico:
+    LOGICA_NOT TermoLogico
+    | ExpressaoRelacional
+    | SIMBOLO_ABRE_PARENTESES ExpressaoLogica SIMBOLO_FECHA_PARENTESES
+    ;
+
+ExpressaoRelacional:
+    ExpressaoAritmetica LOGICA_EQ ExpressaoAritmetica
+    | ExpressaoAritmetica LOGICA_NE ExpressaoAritmetica
+    | ExpressaoAritmetica LOGICA_LE ExpressaoAritmetica
+    | ExpressaoAritmetica LOGICA_GE ExpressaoAritmetica
+    | ExpressaoAritmetica LOGICA_LT ExpressaoAritmetica
+    | ExpressaoAritmetica LOGICA_GT ExpressaoAritmetica
+    ;
+
+ExpressaoAritmetica:
     CONSTANTE_INT
     | CONSTANTE_FLOAT
     | ID
-    | Expressao OPERADOR_SOMA Expressao
-    | Expressao OPERADOR_SUBTRACAO Expressao
-    | Expressao OPERADOR_MULTIPLICACAO Expressao
-    | Expressao OPERADOR_DIVISAO Expressao
-    | Expressao OPERADOR_POTENCIA Expressao
-    | Expressao LOGICA_LT Expressao
-    | Expressao LOGICA_GT Expressao
-    | Expressao LOGICA_LE Expressao
-    | Expressao LOGICA_GE Expressao
-    | Expressao LOGICA_AND Expressao
-    | Expressao LOGICA_OR Expressao
-    | Expressao LOGICA_EQ Expressao
-    | Expressao LOGICA_NE Expressao
-    | LOGICA_NOT Expressao
-    | SIMBOLO_ABRE_PARENTESES Expressao SIMBOLO_FECHA_PARENTESES
+    | ExpressaoAritmetica OPERADOR_SOMA ExpressaoAritmetica
+    | ExpressaoAritmetica OPERADOR_SUBTRACAO ExpressaoAritmetica
+    | ExpressaoAritmetica OPERADOR_MULTIPLICACAO ExpressaoAritmetica
+    | ExpressaoAritmetica OPERADOR_DIVISAO ExpressaoAritmetica
+    | ExpressaoAritmetica OPERADOR_POTENCIA ExpressaoAritmetica
+    | SIMBOLO_ABRE_PARENTESES ExpressaoAritmetica SIMBOLO_FECHA_PARENTESES
     ;
-
-// Relacional -> Aritimetica == Aritmetica
-//       | " ------------------"
-
-// ExpressaoLogica  -> ExpressaoLogica && TermoLogico
-//                  | ExpressaoLogica || TermoLogico
-//                  | TermoLogico
-// TermoLogico -> !TermoLogico
-//                  | ExpressaoRelacional
-//                  | (ExpressaoLogica)
 %%
 
 int yyerror(const char *str) {
