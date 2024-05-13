@@ -214,6 +214,7 @@ ExpressaoAritmetica:
     CONSTANTE_INT
     | CONSTANTE_FLOAT
     | ID
+    | ChamadaFuncao
     | ExpressaoAritmetica OPERADOR_SOMA ExpressaoAritmetica
     | ExpressaoAritmetica OPERADOR_SUBTRACAO ExpressaoAritmetica
     | ExpressaoAritmetica OPERADOR_MULTIPLICACAO ExpressaoAritmetica
