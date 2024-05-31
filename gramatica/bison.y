@@ -5,6 +5,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
+#include "ast.h"
+#define YYSTYPE struct No
 
 
 int yyerror(const char *);
@@ -13,9 +15,9 @@ int yylex();
 %}
 
 %union {
-    int inteiro;
-    float real;
-    char *string;
+    int valorInt;
+    float valorFloat;
+    char *valorString;
 }
 
 %define parse.error verbose

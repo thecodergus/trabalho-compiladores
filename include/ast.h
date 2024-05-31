@@ -51,11 +51,6 @@ struct NoExpressao {
       struct NoExpressao *esquerda;
       struct NoExpressao *direita;
     } igualdade;
-    union {
-      int valorInt;
-      float valorFloat;
-      char *valorString;
-    } valor;
   } expressao;
 };
 
