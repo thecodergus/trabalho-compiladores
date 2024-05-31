@@ -28,6 +28,8 @@ enum OperadorLog { OpAnd, OpOr };
 
 enum OperadorIgualdade { OpEqual, OpNot };
 
+enum Valor { Int, Float, String };
+
 struct NoExpressao {
   enum Expressao tipo;
   union {
@@ -52,9 +54,12 @@ struct NoExpressao {
       struct NoExpressao *direita;
     } igualdade;
     struct {
-      int valorInt;
-      float valorFloat;
-      char *valorString;
+      enum Valor tipo;
+      union {
+        int valorInt;
+        float valorFloat;
+        char *valorString;
+      } valor;
     } valor;
   } expressao;
 };
