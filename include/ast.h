@@ -53,14 +53,6 @@ struct NoExpressao {
       struct NoExpressao *esquerda;
       struct NoExpressao *direita;
     } igualdade;
-    struct {
-      enum Valor tipo;
-      union {
-        int valorInt;
-        float valorFloat;
-        char *valorString;
-      } valor;
-    } valor;
   } expressao;
 };
 

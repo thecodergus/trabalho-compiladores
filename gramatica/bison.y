@@ -14,12 +14,6 @@ int yylex();
 
 %}
 
-%union {
-    int valorInt;
-    float valorFloat;
-    char *valorString;
-}
-
 %define parse.error verbose
 %define parse.trace true
 
@@ -64,6 +58,16 @@ int yylex();
 %left OPERADOR_SOMA OPERADOR_SUBTRACAO
 %left OPERADOR_MULTIPLICACAO OPERADOR_DIVISAO
 %right OPERADOR_POTENCIA
+
+
+// Configurações
+%start InicioPrograma
+%union{
+    int valorInt;
+    float valorFloat;
+    char *valorString;
+}
+
 %%
 // COMEÇO CODIGO COM BASE NA GRAMATICA DO PROFESSOR
 

@@ -107,29 +107,7 @@ struct NoExpressao *criarExpressaoIgualdade(enum OperadorIgualdade operador, str
   return novaExpressao;
 }
 
-struct NoExpressao *criarValorInt(int valor) {
-  struct NoExpressao *novaExpressao = (struct NoExpressao *)malloc(sizeof(struct NoExpressao));
-  novaExpressao->expressao.valor.tipo = Int;
-  novaExpressao->expressao.valor.valor.valorInt = valor;
-  return novaExpressao;
-}
-
-struct NoExpressao *criarValorFloat(float valor) {
-  struct NoExpressao *novaExpressao = (struct NoExpressao *)malloc(sizeof(struct NoExpressao));
-  novaExpressao->expressao.valor.tipo = Float;
-  novaExpressao->expressao.valor.valor.valorFloat = valor;
-  return novaExpressao;
-}
-
-struct NoExpressao *criarValorString(char *valor) {
-  struct NoExpressao *novaExpressao = (struct NoExpressao *)malloc(sizeof(struct NoExpressao));
-  novaExpressao->expressao.valor.tipo = String;
-  novaExpressao->expressao.valor.valor.valorString = valor;
-  return novaExpressao;
-}
-
 // Funções para imprimir a AST
-
 void imprimirNoComando(struct NoComando *no, int nivel) {
   for (int i = 0; i < nivel; i++) {
     printf("  ");
