@@ -1,5 +1,11 @@
 #include "ast.h"
 
+struct Genesis *criarGenesis() {
+  struct Genesis *raiz = (struct Genesis *)malloc(sizeof(struct Genesis));
+  cvector_vector_init(raiz->comandos);
+  return raiz;
+}
+
 // Comandos
 struct NoComando *criarComandoIf(struct NoExpressao *condicao, cvector_vector_type(struct NoComando *) ifComandos,
                                  cvector_vector_type(struct NoComando *) elseComandos) {

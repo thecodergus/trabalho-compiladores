@@ -18,7 +18,7 @@ enum ComandoTipo {
   ComandoRead
 };
 
-enum Expressao { ExpressaoAritmetica, ExpressaoRelacional, ExpressaoLogica, ValorPuro, ExpressaoIgualdade };
+enum Expressao { ExpressaoAritmetica, ExpressaoRelacional, ExpressaoLogica, ExpressaoIgualdade };
 
 enum OperadorAr { OpSoma, OpSub, OpMult, OpDiv, OpPot };
 
@@ -105,6 +105,8 @@ struct Genesis {
 };
 
 // Funções para criar os nós da AST
+
+struct Genesis *criarGenesis();
 
 // Comandos
 struct NoComando *criarComandoIf(struct NoExpressao *condicao, cvector_vector_type(struct NoComando *) ifComandos,
