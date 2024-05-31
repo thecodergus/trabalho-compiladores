@@ -2,7 +2,7 @@
 
 struct Genesis *criarGenesis() {
   struct Genesis *raiz = (struct Genesis *)malloc(sizeof(struct Genesis));
-  cvector_vector_init(raiz->comandos);
+  raiz->comandos = NULL;
   return raiz;
 }
 

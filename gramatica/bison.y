@@ -6,7 +6,6 @@
 #include <string.h>
 #include <math.h>
 #include "ast.h"
-#define YYSTYPE struct Genesis
 
 
 int yyerror(const char *);
@@ -17,14 +16,20 @@ int yylex();
 
 // Configurações
 %start InicioPrograma
-%union{
-    int valorInt;
-    float valorFloat;
-    char *valorString;
-}
 
 %define parse.error verbose
 %define parse.trace true
+
+%union{
+    struct {
+        int tipo;
+        union {
+            int inteiro;
+            float flutuante;
+            char *texto;
+        } valor;
+    } token;
+}
 
 // Simbolos de comandos
 %token  COMANDO_PRINT COMANDO_READ COMANDO_IF COMANDO_ELSE COMANDO_WHILE COMANDO_RETURN

@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "bison.tab.h"
+#include "ast.h"
 
 #define yyterminate() return FIM
 %}
@@ -49,10 +50,26 @@ string          { return TIPO_STRING; }
 "-"             { return OPERADOR_SUBTRACAO; }
 "^"             { return OPERADOR_POTENCIA; }
 ","             { return SIMBOLO_VIRGULA; }
-{inteito}       { yylval.valorInt = atoi(yytext); return CONSTANTE_INT; }
-{float}         { yylval.valorFloat = atof(yytext); return CONSTANTE_FLOAT; }
-{id}            { yylval.valorString = strdup(yytext); return ID; }
-{string}        { yylval.valorString = strdup(yytext + 1); return LITERAL; }
+{inteito}       { 
+                    yylval.token.tipo = Inteiro;
+                    yylval.token.valor.inteiro = atoi(yytext); 
+                    return CONSTANTE_INT; 
+                }
+{float}         {   
+                    yylval.token.tipo = Flutuante;
+                    yylval.token.valor.flutuante = atof(yytext); 
+                    return CONSTANTE_FLOAT; 
+                }
+{id}            { 
+                    yylval.token.tipo = String;
+                    yylval.token.valor.texto = strdup(yytext); 
+                    return ID; 
+                }
+{string}        { 
+                    yylval.token.tipo = String;
+                    yylval.token.valor.texto = strdup(yytext + 1); 
+                    return LITERAL; 
+                }
 {delim}         {}
 #*              {}
 .               { printf("Caractere invalido: %c\\n", yytext[0]); return ERRO; }

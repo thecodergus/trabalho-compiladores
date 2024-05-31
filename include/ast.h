@@ -5,6 +5,17 @@
 #include <stdlib.h>
 #include <utils/cvector.h>
 
+enum ValorTipo { Inteiro, Flutuante, String };
+
+struct Valor {
+  enum ValorTipo tipo;
+  union {
+    int inteiro;
+    float flutuante;
+    char *texto;
+  } valor;
+};
+
 enum NoTipo { NoComando, NoExpressao, NoValor };
 
 enum ComandoTipo {
@@ -27,8 +38,6 @@ enum OperadorRel { OpIgual, OpDiferente, OpMaior, OpMenor, OpMaiorIgual, OpMenor
 enum OperadorLog { OpAnd, OpOr };
 
 enum OperadorIgualdade { OpEqual, OpNot };
-
-enum Valor { Int, Float, String };
 
 struct NoExpressao {
   enum Expressao tipo;
