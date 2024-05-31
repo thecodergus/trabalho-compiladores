@@ -16,7 +16,6 @@ inc = include_directories('include', '/usr/local/include')
 # Importa os arquivos de código fonte
 app_src = files(
  'src/main.c',
- 'src/utils/str.c',
  'src/ast.c'
 )
 
