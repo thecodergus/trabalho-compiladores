@@ -6,7 +6,7 @@
 #include <string.h>
 #include <math.h>
 #include "ast.h"
-#define YYSTYPE struct No
+#define YYSTYPE struct Genesis
 
 
 int yyerror(const char *);

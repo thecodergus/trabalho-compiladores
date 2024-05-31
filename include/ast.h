@@ -51,6 +51,11 @@ struct NoExpressao {
       struct NoExpressao *esquerda;
       struct NoExpressao *direita;
     } igualdade;
+    struct {
+      int valorInt;
+      float valorFloat;
+      char *valorString;
+    } valor;
   } expressao;
 };
 
@@ -59,7 +64,8 @@ struct NoComando {
   union {
     struct {
       struct NoExpressao *condicao;
-      cvector_vector_type(struct NoComando *) comandos;
+      cvector_vector_type(struct NoComando *) ifComandos;
+      cvector_vector_type(struct NoComando *) elseComandos;
     } ifComando;
     struct {
       struct NoExpressao *condicao;
@@ -89,17 +95,35 @@ struct NoComando {
   } comando;
 };
 
-struct No {
-  enum NoTipo tipo;
-  union {
-    struct NoComando *comando;
-    struct NoExpressao *expressao;
-    union {
-      int valorInt;
-      float valorFloat;
-      char *valorString;
-    } valor;
-  } no;
+struct Genesis {
+  cvector_vector_type(struct NoComando *) comandos;
 };
+
+// Funções para criar os nós da AST
+
+// Comandos
+struct NoComando *criarComandoIf(struct NoExpressao *condicao, cvector_vector_type(struct NoComando *) ifComandos,
+                                 cvector_vector_type(struct NoComando *) elseComandos);
+struct NoComando *criarComandoWhile(struct NoExpressao *condicao, cvector_vector_type(struct NoComando *) comandos);
+struct NoComando *criarComandoAtribuicao(char *id, struct NoExpressao *expressao);
+struct NoComando *criarComandoDeclaracao(char *id, struct NoExpressao *expressao);
+struct NoComando *criarComandoChamadaFuncao(char *id, cvector_vector_type(struct NoExpressao *) argumentos);
+struct NoComando *criarComandoRetorno(struct NoExpressao *expressao);
+struct NoComando *criarComandoPrint(struct NoExpressao *expressao);
+struct NoComando *criarComandoRead(char *id);
+
+// Expressões
+struct NoExpressao *criarExpressaoAritmetica(enum OperadorAr operador, struct NoExpressao *esquerda, struct NoExpressao *direita);
+struct NoExpressao *criarExpressaoRelacional(enum OperadorRel operador, struct NoExpressao *esquerda, struct NoExpressao *direita);
+struct NoExpressao *criarExpressaoLogica(enum OperadorLog operador, struct NoExpressao *esquerda, struct NoExpressao *direita);
+struct NoExpressao *criarExpressaoIgualdade(enum OperadorIgualdade operador, struct NoExpressao *esquerda, struct NoExpressao *direita);
+struct NoExpressao *criarValorInt(int valor);
+struct NoExpressao *criarValorFloat(float valor);
+struct NoExpressao *criarValorString(char *valor);
+
+// Funções para imprimir a AST
+void imprimirNoComando(struct NoComando *no, int nivel);
+void imprimirNoExpressao(struct NoExpressao *no, int nivel);
+void imprimirAST(struct Genesis *raiz);
 
 #endif
