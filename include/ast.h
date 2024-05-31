@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <utils/cvector.h>
 
-enum NoTipo { NoComando, NoExpressao };
+enum NoTipo { NoComando, NoExpressao, NoValor };
 
 enum Comando {
   ComandoIF,
@@ -46,8 +46,8 @@ struct ASTNode {
         enum OperadorLog operadorLog;
         enum OperadorIgualdade operadorIgualdade;
       } operador;
-      Valor valor;
     } expressao;
+    Valor valor;
   } tipoNo;
 
   union {
