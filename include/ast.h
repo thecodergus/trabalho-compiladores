@@ -94,4 +94,17 @@ struct NoComando {
   } comando;
 };
 
+struct No {
+  enum NoTipo tipo;
+  union {
+    struct NoComando *comando;
+    struct NoExpressao *expressao;
+    union {
+      int valorInt;
+      float valorFloat;
+      char *valorString;
+    } valor;
+  } no;
+};
+
 #endif
