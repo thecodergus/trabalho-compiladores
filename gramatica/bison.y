@@ -7,7 +7,7 @@
 
 %{
 #define YYPARSER
-#define YYSTYPE Token*
+#define YYSTYPE AST*
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -69,7 +69,7 @@ int yylex();
 %token OPERADOR_POTENCIA "^"
 
 // Simbolo de atribuicao
-%token <token> SIMBOLO_ATRIBUICAO "="
+%token SIMBOLO_ATRIBUICAO "="
 
 // Simbolocos de abre e fecha parenteses
 %token SIMBOLO_ABRE_PARENTESES "("
@@ -92,20 +92,20 @@ int yylex();
 %right OPERADOR_POTENCIA
 
 // Tipos e estruturas
-%type <Programa*> InicioPrograma
-%type <Programa*> Programa
-%type <vector_t(AST*)> ListaFuncoes
+%type <AST*> InicioPrograma
+%type <AST*> Programa
+%type <AST*> ListaFuncoes
 %type <AST*> Funcao
 %type <AST*> TipoRetorno
-%type <vector_t(AST*)> DeclaracaoParametros
+%type <AST*> DeclaracaoParametros
 %type <AST*> Parametro
-%type <vector_t(AST*)> BloboPrincipal
-%type <vector_t(AST*)>Declaracoes
+%type <AST*> BloboPrincipal
+%type <AST*>Declaracoes
 %type <AST*> Declaracao
 %type <AST*> Tipo
-%type <vector_t(AST*)> ListaId
-%type <vector_t(AST*)> Bloco
-%type <vector_t(AST*)> ListaComando
+%type <AST*> ListaId
+%type <AST*> Bloco
+%type <AST*> ListaComando
 %type <AST*> Comando
 %type <AST*> Retorno
 %type <AST*> ComandoSe
@@ -115,23 +115,57 @@ int yylex();
 %type <AST*> ComandoLeitura
 %type <AST*> ChamadaProc
 %type <AST*> ChamadaFuncao
-%type <vector_t(AST*)> ListaParametros
+%type <AST*> ListaParametros
 %type <AST*> ExpressaoLogica
 %type <AST*> TermoLogico
 %type <AST*> ExpressaoRelacional
 %type <AST*> ExpressaoAritmetica
+%type <AST*> LITERAL
+%type <AST*> ID
+%type <AST*> CONSTANTE_INT
+%type <AST*> CONSTANTE_FLOAT
+%type <AST*> LOGICA_EQ
+%type <AST*> LOGICA_NE
+%type <AST*> LOGICA_LE
+%type <AST*> LOGICA_GE
+%type <AST*> LOGICA_LT
+%type <AST*> LOGICA_GT
+%type <AST*> LOGICA_AND
+%type <AST*> LOGICA_OR
+%type <AST*> LOGICA_NOT
+%type <AST*> OPERADOR_SOMA
+%type <AST*> OPERADOR_SUBTRACAO
+%type <AST*> OPERADOR_MULTIPLICACAO
+%type <AST*> OPERADOR_DIVISAO
+%type <AST*> OPERADOR_POTENCIA
+%type <AST*> SIMBOLO_ABRE_PARENTESES
+%type <AST*> SIMBOLO_FECHA_PARENTESES
+%type <AST*> SIMBOLO_VIRGULA
+%type <AST*> SIMBOLO_PONTO_VIRGULA
+%type <AST*> SIMBOLO_ABRE_CHAVES
+%type <AST*> SIMBOLO_FECHA_CHAVES
+%type <AST*> SIMBOLO_ATRIBUICAO
+%type <AST*> FIM
+%type <AST*> TIPO_VOID
+%type <AST*> TIPO_FLOAT
+%type <AST*> TIPO_INT
+%type <AST*> TIPO_STRING
+%type <AST*> COMANDO_IF
+%type <AST*> COMANDO_ELSE
+%type <AST*> COMANDO_WHILE
+%type <AST*> COMANDO_RETURN
+%type <AST*> COMANDO_PRINT
+%type <AST*> COMANDO_READ
+
+
 
 
 %%
 // COMEÇO CODIGO COM BASE NA GRAMATICA DO PROFESSOR
 
 InicioPrograma:
-    Programa FIM{
-        $$ = $1;
-    }
-    | FIM{
-        $$ = NULL;
-    }
+    Programa FIM
+    | FIM
     ;
 
 Programa:
