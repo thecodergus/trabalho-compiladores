@@ -1,5 +1,12 @@
 #include "ast.h"
 
+struct Programa *criarPrograma(vector_t(AST *) declacaoFuncoes, vector_t(AST *) blocoPrincipal) {
+  struct Programa *novo = (struct Programa *)malloc(sizeof(struct Programa));
+  novo->declacaoFuncoes = declacaoFuncoes;
+  novo->blocoPrincipal = blocoPrincipal;
+  return novo;
+}
+
 AST *criarAST(Tipo tipo) {
   AST *novo = (AST *)malloc(sizeof(AST));
   novo->tipo = tipo;

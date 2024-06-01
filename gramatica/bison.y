@@ -35,7 +35,7 @@ int yylex();
 %token COMANDO_IF "if"
 %token COMANDO_ELSE "else"
 %token COMANDO_WHILE "while"
-%token 'COMANDO_RETURN "return"
+%token COMANDO_RETURN "return"
 
 // Simbolo de identificadores de variaveis e funcoes
 %token ID 
@@ -92,42 +92,46 @@ int yylex();
 %right OPERADOR_POTENCIA
 
 // Tipos e estruturas
-% InicioPrograma
-% Programa
-% ListaFuncoes
-% Funcao
-% TipoRetorno
-% DeclaracaoParametros
-% Parametro
-% BloboPrincipal
-% Declaracoes
-% Declaracao
-% Tipo
-% ListaId
-% Bloco
-% ListaComando
-% Comando
-% Retorno
-% ComandoSe
-% ComandoEnquanto
-% ComandoAtribuicao
-% ComandoEscrita
-% ComandoLeitura
-% ChamadaProc
-% ChamadaFuncao
-% ListaParametros
-% ExpressaoLogica
-% TermoLogico
-% ExpressaoRelacional
-% ExpressaoAritmetica
+%type <Programa*> InicioPrograma
+%type <Programa*> Programa
+%type <vector_t(AST*)> ListaFuncoes
+%type <AST*> Funcao
+%type <AST*> TipoRetorno
+%type <vector_t(AST*)> DeclaracaoParametros
+%type <AST*> Parametro
+%type <vector_t(AST*)> BloboPrincipal
+%type <vector_t(AST*)>Declaracoes
+%type <AST*> Declaracao
+%type <AST*> Tipo
+%type <vector_t(AST*)> ListaId
+%type <vector_t(AST*)> Bloco
+%type <vector_t(AST*)> ListaComando
+%type <AST*> Comando
+%type <AST*> Retorno
+%type <AST*> ComandoSe
+%type <AST*> ComandoEnquanto
+%type <AST*> ComandoAtribuicao
+%type <AST*> ComandoEscrita
+%type <AST*> ComandoLeitura
+%type <AST*> ChamadaProc
+%type <AST*> ChamadaFuncao
+%type <vector_t(AST*)> ListaParametros
+%type <AST*> ExpressaoLogica
+%type <AST*> TermoLogico
+%type <AST*> ExpressaoRelacional
+%type <AST*> ExpressaoAritmetica
 
 
 %%
 // COMEÇO CODIGO COM BASE NA GRAMATICA DO PROFESSOR
 
 InicioPrograma:
-    Programa FIM
-    | FIM
+    Programa FIM{
+        $$ = $1;
+    }
+    | FIM{
+        $$ = NULL;
+    }
     ;
 
 Programa:

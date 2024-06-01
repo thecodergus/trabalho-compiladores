@@ -157,6 +157,8 @@ typedef struct token {
   } valor;
 } Token;
 
+struct Programa *criarPrograma(vector_t(AST *) declacaoFuncoes, vector_t(AST *) blocoPrincipal);
+
 AST *criarAST(Tipo tipo);
 
 AST *criarASTPrograma(AST *bloco);
