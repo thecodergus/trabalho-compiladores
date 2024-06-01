@@ -7,7 +7,7 @@ struct Programa *criarPrograma(vector_t(AST *) declacaoFuncoes, vector_t(AST *) 
   return novo;
 }
 
-AST *criarAST(Tipo tipo) {
+AST *criarAST(NodeTipo tipo) {
   AST *novo = (AST *)malloc(sizeof(AST));
   novo->tipo = tipo;
   return novo;
