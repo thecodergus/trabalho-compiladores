@@ -92,7 +92,34 @@ int yylex();
 %right OPERADOR_POTENCIA
 
 // Tipos e estruturas
-
+% InicioPrograma
+% Programa
+% ListaFuncoes
+% Funcao
+% TipoRetorno
+% DeclaracaoParametros
+% Parametro
+% BloboPrincipal
+% Declaracoes
+% Declaracao
+% Tipo
+% ListaId
+% Bloco
+% ListaComando
+% Comando
+% Retorno
+% ComandoSe
+% ComandoEnquanto
+% ComandoAtribuicao
+% ComandoEscrita
+% ComandoLeitura
+% ChamadaProc
+% ChamadaFuncao
+% ListaParametros
+% ExpressaoLogica
+% TermoLogico
+% ExpressaoRelacional
+% ExpressaoAritmetica
 
 
 %%
