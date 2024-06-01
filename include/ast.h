@@ -8,6 +8,7 @@
 typedef enum Tipo {
   BlocoCom,
   ComIf,
+  ComElse,
   ComWhile,
   ComAtribuicao,
   ComPrint,
