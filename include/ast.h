@@ -27,8 +27,6 @@ typedef enum Tipo {
   TipIdentificador,
 } Tipo;
 
-typedef struct AST AST;
-
 typedef struct ComandoIf {
   AST *condicao;
   AST *comando;
@@ -95,7 +93,7 @@ typedef struct ExpressaoValorString {
   char *valor;
 } ExpressaoValorString;
 
-struct AST {
+typedef struct AST {
   Tipo tipo;
   union {
     ComandoIf comandoIf;
@@ -113,6 +111,6 @@ struct AST {
     ExpressaoValorFloat expressaoValorFloat;
     ExpressaoValorString expressaoValorString;
   } valor;
-};
+} AST;
 
 #endif
