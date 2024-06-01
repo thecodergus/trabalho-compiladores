@@ -109,7 +109,9 @@ int yylex();
 // COMEÇO CODIGO COM BASE NA GRAMATICA DO PROFESSOR
 
 InicioPrograma:
-    Programa FIM
+    Programa FIM{
+        $$.token.tipo = Programa;
+    }
     | FIM
     ;
 

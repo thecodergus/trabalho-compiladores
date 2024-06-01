@@ -6,6 +6,7 @@
 #include <utils/cvector.h>
 
 typedef enum Tipo {
+  Programa,
   BlocoCom,
   ComIf,
   ComElse,
@@ -137,6 +138,8 @@ typedef struct AST {
 } AST;
 
 AST *criarAST(Tipo tipo);
+
+// AST *criarASTProgramaPrincipal(cvector_vector_type(AST *) * declaracoesFuncoes, cvector_vector_type(AST *) * main);
 
 AST *criarASTComandoIf(AST *condicao, AST *comando);
 
