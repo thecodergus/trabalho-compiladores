@@ -1,0 +1,58 @@
+image: ubuntu:bionic
+
+before_script:
+  - apt-get update -qq && apt-get install -y -qq python3 python3-pip ninja-build gcc gcc-multilib flex bison valgrind time git zip gcovr
+  - pip3 install --user meson
+  - export PATH=$HOME/.local/bin:$PATH
+
+stages:
+  - Build
+  - Test
+  - Package
+
+Build:
+  stage: Build
+  artifacts:
+    paths:
+      - builddir/
+  script:
+    - meson builddir --buildtype=debug -Db_coverage=true
+    - ninja -C builddir
+
+UnitTests:
+  stage: Test
+  dependencies:
+    - Build
+  script:
+    - meson test -v -C builddir
+
+UnitTestsLeaks:
+  stage: Test
+  dependencies:
+    - Build
+  script:
+    - meson test --wrapper 'valgrind --error-exitcode=1 --leak-check=full --track-origins=yes' -v -C builddir
+
+IntegrationTests:
+  stage: Test
+  dependencies:
+    - Build
+  script:
+    - cd builddir
+    - ../scripts/run_integration_tests
+
+TestCoverage:
+  stage: Test
+  dependencies:
+    - Build
+  script:
+    - meson test -v -C builddir
+    - gcovr -e "builddir/../src/symbol_table_print.c" -e "builddir/../src/ast_print.c" -e "builddir/../app/mc_asm.c" -e "builddir/../app/mc_ast_to_dot.c" -e "builddir/../app/mc_ir.c" -e "builddir/../app/mc_semantic_check.c" -e "builddir/../app/mc_symbol_table.c" -e "builddir/../app/mcc.c" -e "builddir/../src/assembly.c"
+
+Package:
+  stage: Package
+  artifacts:
+    paths:
+      - team_02_final.zip
+  script:
+    - git archive --prefix=team_02_final/ --format=zip HEAD > team_02_final.zip
