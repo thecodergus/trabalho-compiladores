@@ -19,7 +19,6 @@ int yylex();
 
 
 // Configurações
-%start InicioPrograma
 
 %define parse.error verbose
 %define parse.trace true
@@ -36,6 +35,8 @@ int yylex();
         } valor;
     } token;
 }
+
+%start InicioPrograma
 
 
 // Simbolos de comandos
