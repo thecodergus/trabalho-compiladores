@@ -34,43 +34,43 @@ int yylex();
 
 
 // Simbolos de comandos
-%token <token> COMANDO_PRINT "print"
-%token <token> COMANDO_READ "read"
-%token <token> COMANDO_IF "if"
-%token <token> COMANDO_ELSE "else"
-%token <token> COMANDO_WHILE "while"
-%token <token> COMANDO_RETURN "return"
+%token COMANDO_PRINT "print"
+%token COMANDO_READ "read"
+%token COMANDO_IF "if"
+%token COMANDO_ELSE "else"
+%token COMANDO_WHILE "while"
+%token 'COMANDO_RETURN "return"
 
 // Simbolo de identificadores de variaveis e funcoes
-%token <string>ID 
+%token ID 
 
 // Simbolo de tipos
 %token TIPO_VOID TIPO_FLOAT TIPO_INT TIPO_STRING
-%token <real> CONSTANTE_FLOAT "Ponto Flutuante"
-%token <inteiro> CONSTANTE_INT "Inteiro"
-%token <string> LITERAL "Texto"
+%token CONSTANTE_FLOAT "Ponto Flutuante"
+%token CONSTANTE_INT "Inteiro"
+%token LITERAL "Texto"
 
 // Simbolos de abrir e fechar chaves
 %token SIMBOLO_ABRE_CHAVES "{"
 %token SIMBOLO_FECHA_CHAVES "}"
 
 // Simbolos de operadores logicos
-%token <token> LOGICA_EQ "=="
-%token <token> LOGICA_NE "!="
-%token <token> LOGICA_LE "<="
-%token <token> LOGICA_GE ">="
-%token <token> LOGICA_LT "<"
-%token <token> LOGICA_GT ">"
-%token <token> LOGICA_AND "&&"
-%token <token> LOGICA_OR "||"
-%token <token> LOGICA_NOT "!"
+%token LOGICA_EQ "=="
+%token LOGICA_NE "!="
+%token LOGICA_LE "<="
+%token LOGICA_GE ">="
+%token LOGICA_LT "<"
+%token LOGICA_GT ">"
+%token LOGICA_AND "&&"
+%token LOGICA_OR "||"
+%token LOGICA_NOT "!"
 
 // Simbolos de operadores aritmeticos
-%token <token> OPERADOR_MULTIPLICACAO "*"
-%token <token> OPERADOR_DIVISAO "/"
-%token <token> OPERADOR_SOMA "+"
-%token <token> OPERADOR_SUBTRACAO "-"
-%token <token> OPERADOR_POTENCIA "^"
+%token OPERADOR_MULTIPLICACAO "*"
+%token OPERADOR_DIVISAO "/"
+%token OPERADOR_SOMA "+"
+%token OPERADOR_SUBTRACAO "-"
+%token OPERADOR_POTENCIA "^"
 
 // Simbolo de atribuicao
 %token <token> SIMBOLO_ATRIBUICAO "="
