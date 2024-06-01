@@ -136,7 +136,7 @@ struct AST {
     ExpressaoValorInteiro expressaoValorInteiro;
     ExpressaoValorFloat expressaoValorFloat;
     ExpressaoValorString expressaoValorString;
-  } valor;
+  } token;
 };
 
 typedef struct token {
