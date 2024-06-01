@@ -7,11 +7,6 @@
 
 #define vector_t(T) cvector_vector_type(T)
 
-typedef struct Programa {
-  vector_t(struct AST *) declacaoFuncoes;
-  vector_t(struct AST *) blocoPrincipal;
-} Programa;
-
 typedef struct AST AST;
 
 typedef enum Tipo {
@@ -35,6 +30,7 @@ typedef enum Tipo {
   TipFloat,
   TipString,
   TipIdentificador,
+  TipVoid,
 } Tipo;
 
 enum OperadoresAritmeticos {
@@ -126,6 +122,14 @@ typedef struct ExpressaoValorString {
   char *valor;
 } ExpressaoValorString;
 
+typedef struct ExpresssaoValorVoid {
+} ExpresssaoValorVoid;
+
+typedef struct Programa {
+  vector_t(struct AST *) declacaoFuncoes;
+  vector_t(struct AST *) blocoPrincipal;
+} Programa;
+
 struct AST {
   Tipo tipo;
   union {
@@ -143,19 +147,10 @@ struct AST {
     ExpressaoValorInteiro expressaoValorInteiro;
     ExpressaoValorFloat expressaoValorFloat;
     ExpressaoValorString expressaoValorString;
+    ExpresssaoValorVoid expresssaoValorVoid;
+    Programa programa;
   } token;
 };
-
-typedef struct token {
-  int tipo;
-  union {
-    int inteiro;
-    float flutuante;
-    char *string, *id;
-    AST *ast;
-    cvector_vector_type(AST *) blocoComandos;
-  } valor;
-} Token;
 
 struct Programa *criarPrograma(vector_t(AST *) declacaoFuncoes, vector_t(AST *) blocoPrincipal);
 

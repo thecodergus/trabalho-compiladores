@@ -7,7 +7,7 @@
 
 %{
 #define YYPARSER
-#define YYSTYPE Token*
+#define YYSTYPE AST*
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -47,8 +47,8 @@ int yylex();
 %token LITERAL "Texto"
 
 // Simbolos de abrir e fechar chaves
-%token SIMBOLO_ABRE_CHAVES "{"
-%token SIMBOLO_FECHA_CHAVES "}"
+%token '{' "{"
+%token '}' "}"
 
 // Simbolos de operadores logicos
 %token LOGICA_EQ "=="
@@ -72,12 +72,12 @@ int yylex();
 %token <token> SIMBOLO_ATRIBUICAO "="
 
 // Simbolocos de abre e fecha parenteses
-%token SIMBOLO_ABRE_PARENTESES "("
-%token SIMBOLO_FECHA_PARENTESES ")"
+%token '(' "("
+%token ')' ")"
 
 // Simbolo de virgula e ponto e virgula
-%token SIMBOLO_VIRGULA ","
-%token SIMBOLO_PONTO_VIRGULA ";"
+%token ',' ","
+%token ';' ";"
 
 // Simbolo para erros
 %token ERRO
@@ -92,20 +92,20 @@ int yylex();
 %right OPERADOR_POTENCIA
 
 // Tipos e estruturas
-%type <Programa*> InicioPrograma
-%type <Programa*> Programa
-%type <vector_t(AST*)> ListaFuncoes
+%type <AST*> InicioPrograma
+%type <AST*> Programa
+%type <AST*> ListaFuncoes
 %type <AST*> Funcao
 %type <AST*> TipoRetorno
-%type <vector_t(AST*)> DeclaracaoParametros
+%type <AST*> DeclaracaoParametros
 %type <AST*> Parametro
-%type <vector_t(AST*)> BloboPrincipal
-%type <vector_t(AST*)>Declaracoes
+%type <AST*> BloboPrincipal
+%type <AST*>Declaracoes
 %type <AST*> Declaracao
 %type <AST*> Tipo
-%type <vector_t(AST*)> ListaId
-%type <vector_t(AST*)> Bloco
-%type <vector_t(AST*)> ListaComando
+%type <AST*> ListaId
+%type <AST*> Bloco
+%type <AST*> ListaComando
 %type <AST*> Comando
 %type <AST*> Retorno
 %type <AST*> ComandoSe
@@ -115,11 +115,40 @@ int yylex();
 %type <AST*> ComandoLeitura
 %type <AST*> ChamadaProc
 %type <AST*> ChamadaFuncao
-%type <vector_t(AST*)> ListaParametros
+%type <AST*> ListaParametros
 %type <AST*> ExpressaoLogica
 %type <AST*> TermoLogico
 %type <AST*> ExpressaoRelacional
 %type <AST*> ExpressaoAritmetica
+%type <AST*> TIPO_INT
+%type <AST*> TIPO_STRING
+%type <AST*> TIPO_FLOAT
+%type <AST*> TIPO_VOID
+%type <AST*> CONSTANTE_INT
+%type <AST*> CONSTANTE_FLOAT
+%type <AST*> LITERAL
+%type <AST*> ID
+%type <AST*> COMANDO_RETURN
+%type <AST*> COMANDO_IF
+%type <AST*> COMANDO_ELSE
+%type <AST*> COMANDO_WHILE
+%type <AST*> COMANDO_PRINT
+%type <AST*> COMANDO_READ
+%type <AST*> LOGICA_EQ
+%type <AST*> LOGICA_NE
+%type <AST*> LOGICA_LE
+%type <AST*> LOGICA_GE
+%type <AST*> LOGICA_LT
+%type <AST*> LOGICA_GT
+%type <AST*> LOGICA_AND
+%type <AST*> LOGICA_OR
+%type <AST*> LOGICA_NOT
+%type <AST*> OPERADOR_SOMA
+%type <AST*> OPERADOR_SUBTRACAO
+%type <AST*> OPERADOR_MULTIPLICACAO
+%type <AST*> OPERADOR_DIVISAO
+%type <AST*> OPERADOR_POTENCIA
+
 
 
 %%
@@ -145,8 +174,8 @@ ListaFuncoes:
     ;
 
 Funcao:
-    TipoRetorno ID SIMBOLO_ABRE_PARENTESES DeclaracaoParametros SIMBOLO_FECHA_PARENTESES BloboPrincipal
-    | TipoRetorno ID SIMBOLO_ABRE_PARENTESES SIMBOLO_FECHA_PARENTESES BloboPrincipal
+    TipoRetorno ID '(' DeclaracaoParametros ')' BloboPrincipal
+    | TipoRetorno ID '(' ')' BloboPrincipal
     ;
 
 TipoRetorno:
@@ -155,7 +184,7 @@ TipoRetorno:
     ;
 
 DeclaracaoParametros:
-    DeclaracaoParametros SIMBOLO_VIRGULA Parametro
+    DeclaracaoParametros ',' Parametro
     | Parametro
     ;
 
@@ -163,13 +192,13 @@ Parametro:
     Tipo ID
 
 BloboPrincipal:
-    SIMBOLO_ABRE_CHAVES Declaracoes ListaComando SIMBOLO_FECHA_CHAVES
-    | SIMBOLO_ABRE_CHAVES ListaComando SIMBOLO_FECHA_CHAVES
+    '{' Declaracoes ListaComando '}'
+    | '{' ListaComando '}'
     ;
 
 Declaracoes:
     Declaracoes Declaracao
-    | Declaracao SIMBOLO_PONTO_VIRGULA
+    | Declaracao ';'
     ;
 
 Declaracao:
@@ -183,12 +212,12 @@ Tipo:
     ;
 
 ListaId:
-    ListaId SIMBOLO_VIRGULA ID
+    ListaId ',' ID
     | ID
     ;
 
 Bloco: 
-    SIMBOLO_ABRE_CHAVES ListaComando SIMBOLO_FECHA_CHAVES
+    '{' ListaComando '}'
 
 ListaComando:
     ListaComando Comando
@@ -198,11 +227,11 @@ ListaComando:
 Comando:
     ComandoSe
     | ComandoEnquanto
-    | ComandoAtribuicao SIMBOLO_PONTO_VIRGULA
-    | ComandoEscrita SIMBOLO_PONTO_VIRGULA
-    | ComandoLeitura SIMBOLO_PONTO_VIRGULA
-    | ChamadaProc SIMBOLO_PONTO_VIRGULA
-    | Retorno SIMBOLO_PONTO_VIRGULA
+    | ComandoAtribuicao ';'
+    | ComandoEscrita ';'
+    | ComandoLeitura ';'
+    | ChamadaProc ';'
+    | Retorno ';'
     ;
 
 Retorno:
@@ -212,12 +241,12 @@ Retorno:
     ;
 
 ComandoSe:
-    COMANDO_IF SIMBOLO_ABRE_PARENTESES ExpressaoLogica SIMBOLO_FECHA_PARENTESES Bloco
-    | COMANDO_IF SIMBOLO_ABRE_PARENTESES ExpressaoLogica SIMBOLO_FECHA_PARENTESES Bloco COMANDO_ELSE Bloco
+    COMANDO_IF '(' ExpressaoLogica ')' Bloco
+    | COMANDO_IF '(' ExpressaoLogica ')' Bloco COMANDO_ELSE Bloco
     ;
 
 ComandoEnquanto:
-    COMANDO_WHILE SIMBOLO_ABRE_PARENTESES ExpressaoLogica SIMBOLO_FECHA_PARENTESES Bloco
+    COMANDO_WHILE '(' ExpressaoLogica ')' Bloco
     ;
 
 ComandoAtribuicao:
@@ -226,12 +255,12 @@ ComandoAtribuicao:
     ;
 
 ComandoEscrita:
-    COMANDO_PRINT SIMBOLO_ABRE_PARENTESES ExpressaoAritmetica SIMBOLO_FECHA_PARENTESES
-    | COMANDO_PRINT SIMBOLO_ABRE_PARENTESES LITERAL SIMBOLO_FECHA_PARENTESES
+    COMANDO_PRINT '(' ExpressaoAritmetica ')'
+    | COMANDO_PRINT '(' LITERAL ')'
     ;
 
 ComandoLeitura:
-    COMANDO_READ SIMBOLO_ABRE_PARENTESES ID SIMBOLO_FECHA_PARENTESES
+    COMANDO_READ '(' ID ')'
     ;
 
 ChamadaProc:
@@ -239,13 +268,13 @@ ChamadaProc:
     ;
 
 ChamadaFuncao:
-    ID SIMBOLO_ABRE_PARENTESES ListaParametros SIMBOLO_FECHA_PARENTESES
-    | ID SIMBOLO_ABRE_PARENTESES SIMBOLO_FECHA_PARENTESES
+    ID '(' ListaParametros ')'
+    | ID '(' ')'
     ;
 
 ListaParametros:
-    ListaParametros SIMBOLO_VIRGULA ExpressaoAritmetica
-    | ListaParametros SIMBOLO_VIRGULA LITERAL
+    ListaParametros ',' ExpressaoAritmetica
+    | ListaParametros ',' LITERAL
     | ExpressaoAritmetica
     | LITERAL
     ;
@@ -262,7 +291,7 @@ ExpressaoLogica:
 TermoLogico:
     LOGICA_NOT TermoLogico
     | ExpressaoRelacional
-    | SIMBOLO_ABRE_PARENTESES ExpressaoLogica SIMBOLO_FECHA_PARENTESES
+    | '(' ExpressaoLogica ')'
     ;
 
 ExpressaoRelacional:
@@ -284,7 +313,7 @@ ExpressaoAritmetica:
     | ExpressaoAritmetica OPERADOR_MULTIPLICACAO ExpressaoAritmetica
     | ExpressaoAritmetica OPERADOR_DIVISAO ExpressaoAritmetica
     | ExpressaoAritmetica OPERADOR_POTENCIA ExpressaoAritmetica
-    | SIMBOLO_ABRE_PARENTESES ExpressaoAritmetica SIMBOLO_FECHA_PARENTESES
+    | '(' ExpressaoAritmetica ')'
     ;
 %%
 
