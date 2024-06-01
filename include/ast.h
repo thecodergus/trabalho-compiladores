@@ -5,133 +5,113 @@
 #include <stdlib.h>
 #include <utils/cvector.h>
 
-enum ValorTipo { Inteiro, Flutuante, String };
+typedef enum Tipo {
+  BlocoCom,
+  ComIf,
+  ComWhile,
+  ComAtribuicao,
+  ComPrint,
+  ComRead,
+  ComReturn,
+  ComChamadaFuncao,
+  ExprAritmetica,
+  ExprRelacional,
+  ExprLogica,
+  ExprValorInteiro,
+  ExprValorFloat,
+  ExprValorString,
+  TipInteiro,
+  TipFloat,
+  TipString,
+  TipIdentificador,
+} Tipo;
 
-struct Valor {
-  enum ValorTipo tipo;
+typedef struct AST AST;
+
+typedef struct ComandoIf {
+  AST *condicao;
+  AST *comando;
+} ComandoIf;
+
+typedef struct ComandoElse {
+  AST *comando;
+} ComandoElse;
+
+typedef struct ComandoWhile {
+  AST *condicao;
+  AST *comando;
+} ComandoWhile;
+
+typedef struct ComandoAtribuicao {
+  char *id;
+  AST *expressao;
+} ComandoAtribuicao;
+
+typedef struct ComandoPrint {
+  AST *expressao;
+} ComandoPrint;
+
+typedef struct ComandoRead {
+  char *id;
+} ComandoRead;
+
+typedef struct ComandoReturn {
+  AST *expressao;
+} ComandoReturn;
+
+typedef struct ComandoChamadaFuncao {
+  char *id;
+  struct cvector *parametros;
+} ComandoChamadaFuncao;
+
+typedef struct ExpressaoAritmetica {
+  char *operador;
+  AST *esquerda;
+  AST *direita;
+} ExpressaoAritmetica;
+
+typedef struct ExpressaoRelacional {
+  char *operador;
+  AST *esquerda;
+  AST *direita;
+} ExpressaoRelacional;
+
+typedef struct ExpressaoLogica {
+  char *operador;
+  AST *esquerda;
+  AST *direita;
+} ExpressaoLogica;
+
+typedef struct ExpressaoValorInteiro {
+  int valor;
+} ExpressaoValorInteiro;
+
+typedef struct ExpressaoValorFloat {
+  float valor;
+} ExpressaoValorFloat;
+
+typedef struct ExpressaoValorString {
+  char *valor;
+} ExpressaoValorString;
+
+struct AST {
+  Tipo tipo;
   union {
-    int inteiro;
-    float flutuante;
-    char *texto;
+    ComandoIf comandoIf;
+    ComandoElse comandoElse;
+    ComandoWhile comandoWhile;
+    ComandoAtribuicao comandoAtribuicao;
+    ComandoPrint comandoPrint;
+    ComandoRead comandoRead;
+    ComandoReturn comandoReturn;
+    ComandoChamadaFuncao comandoChamadaFuncao;
+    ExpressaoAritmetica expressaoAritmetica;
+    ExpressaoRelacional expressaoRelacional;
+    ExpressaoLogica expressaoLogica;
+    ExpressaoValorInteiro expressaoValorInteiro;
+    ExpressaoValorFloat expressaoValorFloat;
+    ExpressaoValorString expressaoValorString;
   } valor;
 };
-
-enum NoTipo { NoComando, NoExpressao, NoValor };
-
-enum ComandoTipo {
-  ComandoIF,
-  ComandoWhile,
-  ComandoAtribuicao,
-  ComandoDeclaracao,
-  ComandoChamadaFuncao,
-  ComandoRetorno,
-  ComandoPrint,
-  ComandoRead
-};
-
-enum Expressao { ExpressaoAritmetica, ExpressaoRelacional, ExpressaoLogica, ExpressaoIgualdade };
-
-enum OperadorAr { OpSoma, OpSub, OpMult, OpDiv, OpPot };
-
-enum OperadorRel { OpIgual, OpDiferente, OpMaior, OpMenor, OpMaiorIgual, OpMenorIgual };
-
-enum OperadorLog { OpAnd, OpOr };
-
-enum OperadorIgualdade { OpEqual, OpNot };
-
-struct NoExpressao {
-  enum Expressao tipo;
-  union {
-    struct {
-      enum OperadorAr operador;
-      struct NoExpressao *esquerda;
-      struct NoExpressao *direita;
-    } aritmetica;
-    struct {
-      enum OperadorRel operador;
-      struct NoExpressao *esquerda;
-      struct NoExpressao *direita;
-    } relacional;
-    struct {
-      enum OperadorLog operador;
-      struct NoExpressao *esquerda;
-      struct NoExpressao *direita;
-    } logica;
-    struct {
-      enum OperadorIgualdade operador;
-      struct NoExpressao *esquerda;
-      struct NoExpressao *direita;
-    } igualdade;
-  } expressao;
-};
-
-struct NoComando {
-  enum ComandoTipo tipo;
-  union {
-    struct {
-      struct NoExpressao *condicao;
-      cvector_vector_type(struct NoComando *) ifComandos;
-      cvector_vector_type(struct NoComando *) elseComandos;
-    } ifComando;
-    struct {
-      struct NoExpressao *condicao;
-      cvector_vector_type(struct NoComando *) comandos;
-    } whileComando;
-    struct {
-      char *id;
-      struct NoExpressao *expressao;
-    } atribuicao;
-    struct {
-      char *id;
-      struct NoExpressao *expressao;
-    } declaracao;
-    struct {
-      char *id;
-      cvector_vector_type(struct NoExpressao *) argumentos;
-    } chamadaFuncao;
-    struct {
-      struct NoExpressao *expressao;
-    } retorno;
-    struct {
-      struct NoExpressao *expressao;
-    } print;
-    struct {
-      char *id;
-    } read;
-  } comando;
-};
-
-struct Genesis {
-  cvector_vector_type(struct NoComando *) comandos;
-};
-
-// Funções para criar os nós da AST
-
-struct Genesis *criarGenesis();
-
-// Comandos
-struct NoComando *criarComandoIf(struct NoExpressao *condicao, cvector_vector_type(struct NoComando *) ifComandos,
-                                 cvector_vector_type(struct NoComando *) elseComandos);
-struct NoComando *criarComandoWhile(struct NoExpressao *condicao, cvector_vector_type(struct NoComando *) comandos);
-struct NoComando *criarComandoAtribuicao(char *id, struct NoExpressao *expressao);
-struct NoComando *criarComandoDeclaracao(char *id, struct NoExpressao *expressao);
-struct NoComando *criarComandoChamadaFuncao(char *id, cvector_vector_type(struct NoExpressao *) argumentos);
-struct NoComando *criarComandoRetorno(struct NoExpressao *expressao);
-struct NoComando *criarComandoPrint(struct NoExpressao *expressao);
-struct NoComando *criarComandoRead(char *id);
-
-// Expressões
-struct NoExpressao *criarExpressaoAritmetica(enum OperadorAr operador, struct NoExpressao *esquerda, struct NoExpressao *direita);
-struct NoExpressao *criarExpressaoRelacional(enum OperadorRel operador, struct NoExpressao *esquerda, struct NoExpressao *direita);
-struct NoExpressao *criarExpressaoLogica(enum OperadorLog operador, struct NoExpressao *esquerda, struct NoExpressao *direita);
-struct NoExpressao *criarExpressaoIgualdade(enum OperadorIgualdade operador, struct NoExpressao *esquerda, struct NoExpressao *direita);
-struct NoExpressao *criarValorInt(int valor);
-struct NoExpressao *criarValorFloat(float valor);
-struct NoExpressao *criarValorString(char *valor);
-
-// Funções para imprimir a AST
-void imprimirNoComando(struct NoComando *no, int nivel);
-void imprimirNoExpressao(struct NoExpressao *no, int nivel);
-void imprimirAST(struct Genesis *raiz);
 
 #endif

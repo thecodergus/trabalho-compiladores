@@ -24,6 +24,20 @@ int yylex();
 %define parse.error verbose
 %define parse.trace true
 
+%union{
+    struct {
+        int tipo;
+        union {
+            int inteiro;
+            float flutuante;
+            char *string, *id;
+            AST *ast;
+            cvector_vector_type(AST*) blocoComandos;
+        } valor;
+    } token;
+}
+
+
 // Simbolos de comandos
 %token COMANDO_PRINT "print"
 %token COMANDO_READ "read"
