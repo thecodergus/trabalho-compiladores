@@ -1,11 +1,14 @@
 %language "c"
 
+%code requires{
+#include "ast.h"
+}
+
 %{
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-#include "ast.h"
 
 
 int yyerror(const char *);
@@ -20,16 +23,13 @@ int yylex();
 %define parse.error verbose
 %define parse.trace true
 
-%union{
-    struct {
-        int tipo;
-        union {
-            int inteiro;
-            float flutuante;
-            char *texto;
-        } valor;
-    } token;
+%union {
+    int inteiro;
+    float flutuante;
+    char *texto;
 }
+
+%type<struct Genesis*> InicioPrograma
 
 // Simbolos de comandos
 %token  COMANDO_PRINT COMANDO_READ COMANDO_IF COMANDO_ELSE COMANDO_WHILE COMANDO_RETURN
@@ -39,27 +39,42 @@ int yylex();
 
 // Simbolo de tipos
 %token TIPO_VOID TIPO_FLOAT TIPO_INT TIPO_STRING
-%token <real> CONSTANTE_FLOAT 
-%token <inteiro> CONSTANTE_INT 
-%token <string> LITERAL
+%token <real> CONSTANTE_FLOAT "Ponto Flutuante"
+%token <inteiro> CONSTANTE_INT "Inteiro"
+%token <string> LITERAL "Texto"
 
 // Simbolos de abrir e fechar chaves
-%token SIMBOLO_ABRE_CHAVES SIMBOLO_FECHA_CHAVES
+%token SIMBOLO_ABRE_CHAVES "{"
+%token SIMBOLO_FECHA_CHAVES "}"
 
 // Simbolos de operadores logicos
-%token LOGICA_EQ LOGICA_NE LOGICA_LE LOGICA_GE LOGICA_LT LOGICA_GT LOGICA_AND LOGICA_OR LOGICA_NOT
+%token LOGICA_EQ "=="
+%token LOGICA_NE "!="
+%token LOGICA_LE "<="
+%token LOGICA_GE ">="
+%token LOGICA_LT "<"
+%token LOGICA_GT ">"
+%token LOGICA_AND "&&"
+%token LOGICA_OR "||"
+%token LOGICA_NOT "!"
 
 // Simbolos de operadores aritmeticos
-%token OPERADOR_MULTIPLICACAO OPERADOR_DIVISAO OPERADOR_SOMA OPERADOR_SUBTRACAO OPERADOR_POTENCIA
+%token OPERADOR_MULTIPLICACAO "*"
+%token OPERADOR_DIVISAO "/"
+%token OPERADOR_SOMA "+"
+%token OPERADOR_SUBTRACAO "-"
+%token OPERADOR_POTENCIA "^"
 
 // Simbolo de atribuicao
-%token SIMBOLO_ATRIBUICAO
+%token SIMBOLO_ATRIBUICAO "="
 
 // Simbolocos de abre e fecha parenteses
-%token SIMBOLO_ABRE_PARENTESES SIMBOLO_FECHA_PARENTESES
+%token SIMBOLO_ABRE_PARENTESES "("
+%token SIMBOLO_FECHA_PARENTESES ")"
 
 // Simbolo de virgula e ponto e virgula
-%token SIMBOLO_VIRGULA SIMBOLO_PONTO_VIRGULA
+%token SIMBOLO_VIRGULA ","
+%token SIMBOLO_PONTO_VIRGULA ";"
 
 // Simbolo para erros
 %token ERRO
@@ -75,11 +90,14 @@ int yylex();
 
 
 
+
 %%
 // COMEÇO CODIGO COM BASE NA GRAMATICA DO PROFESSOR
 
 InicioPrograma:
-    Programa FIM
+    Programa FIM {
+        $$ = criarGenesis();
+    }
     | FIM
     ;
 
