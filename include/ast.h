@@ -5,6 +5,13 @@
 #include <stdlib.h>
 #include <utils/cvector.h>
 
+#define vector_t(T) cvector_vector_type(T)
+
+typedef struct Programa {
+  vector_t(struct AST *) declacaoFuncoes;
+  vector_t(struct AST *) blocoPrincipal;
+} Programa;
+
 typedef struct AST AST;
 
 typedef enum Tipo {
@@ -168,7 +175,7 @@ AST *criarASTComandoRead(char *id);
 
 AST *criarASTComandoReturn(AST *expressao);
 
-AST *criarASTComandoChamadaFuncao(char *id, cvector_vector_type(AST *) * parametros);
+AST *criarASTComandoChamadaFuncao(char *id, vector_t(AST *) * parametros);
 
 AST *criarASTExpressaoAritmetica(enum OperadoresAritmeticos operador, AST *esquerda, AST *direita);
 
