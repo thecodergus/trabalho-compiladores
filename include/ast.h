@@ -15,7 +15,7 @@ typedef struct Programa {
 typedef struct AST AST;
 
 typedef enum Tipo {
-  Programa,
+  ProgramaPrincipal,
   BlocoCom,
   ComIf,
   ComElse,
