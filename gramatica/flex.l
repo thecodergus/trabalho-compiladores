@@ -51,29 +51,26 @@ string          { return TIPO_STRING; }
 "^"             { return OPERADOR_POTENCIA; }
 ","             { return SIMBOLO_VIRGULA; }
 {inteito}       { 
-                    yylval.token.tipo = Inteiro;
-                    yylval.token.valor.inteiro = atoi(yytext); 
+                    yylval.inteiro = atoi(yytext); 
                     return CONSTANTE_INT; 
                 }
-{float}         {   
-                    yylval.token.tipo = Flutuante;
-                    yylval.token.valor.flutuante = atof(yytext); 
+{float}         {  
+                    yylval.flutuante = atof(yytext); 
                     return CONSTANTE_FLOAT; 
                 }
 {id}            { 
-                    yylval.token.tipo = String;
-                    yylval.token.valor.texto = strdup(yytext); 
+                    yylval.texto = strdup(yytext); 
                     return ID; 
                 }
 {string}        { 
-                    yylval.token.tipo = String;
-                    yylval.token.valor.texto = strdup(yytext + 1); 
+                    
+                    yylval.texto = strdup(yytext + 1); 
                     return LITERAL; 
                 }
 {delim}         {}
 #*              {}
-.               { printf("Caractere invalido: %c\\n", yytext[0]); return ERRO; }
 <<EOF>>         { return FIM; }
+.               { printf("Caractere invalido: %c\\n", yytext[0]); return ERRO; }
 
 
 %%
