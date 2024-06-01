@@ -51,23 +51,15 @@ string          { return TIPO_STRING; }
 "^"             { return OPERADOR_POTENCIA; }
 ","             { return SIMBOLO_VIRGULA; }
 {inteito}       { 
-                    yylval.token.tipo = TipInteiro;
-                    yylval.token.valor.inteiro = atoi(yytext); 
                     return CONSTANTE_INT; 
                 }
 {float}         {  
-                    yylval.token.tipo = TipFloat;
-                    yylval.token.valor.flutuante = atof(yytext); 
                     return CONSTANTE_FLOAT; 
                 }
 {id}            { 
-                    yylval.token.tipo = TipIdentificador;
-                    yylval.token.valor.id = strdup(yytext); 
                     return ID; 
                 }
-{string}        { 
-                    yylval.token.tipo = TipString;
-                    yylval.token.valor.string = strdup(yytext + 1); 
+{string}        {  
                     return LITERAL; 
                 }
 {delim}         {}

@@ -5,6 +5,8 @@
 #include <stdlib.h>
 #include <utils/cvector.h>
 
+typedef struct AST AST;
+
 typedef enum Tipo {
   Programa,
   BlocoCom,
@@ -117,7 +119,7 @@ typedef struct ExpressaoValorString {
   char *valor;
 } ExpressaoValorString;
 
-typedef struct AST {
+struct AST {
   Tipo tipo;
   union {
     ComandoIf comandoIf;
@@ -135,11 +137,22 @@ typedef struct AST {
     ExpressaoValorFloat expressaoValorFloat;
     ExpressaoValorString expressaoValorString;
   } valor;
-} AST;
+};
+
+typedef struct token {
+  int tipo;
+  union {
+    int inteiro;
+    float flutuante;
+    char *string, *id;
+    AST *ast;
+    cvector_vector_type(AST *) blocoComandos;
+  } valor;
+} Token;
 
 AST *criarAST(Tipo tipo);
 
-// AST *criarASTProgramaPrincipal(cvector_vector_type(AST *) * declaracoesFuncoes, cvector_vector_type(AST *) * main);
+AST *criarASTPrograma(AST *bloco);
 
 AST *criarASTComandoIf(AST *condicao, AST *comando);
 

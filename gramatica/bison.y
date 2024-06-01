@@ -6,6 +6,9 @@
 }
 
 %{
+#define YYPARSER
+#define YYSTYPE Token*
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -24,16 +27,7 @@ int yylex();
 %define parse.trace true
 
 %union{
-    struct {
-        int tipo;
-        union {
-            int inteiro;
-            float flutuante;
-            char *string, *id;
-            AST *ast;
-            cvector_vector_type(AST*) blocoComandos;
-        } valor;
-    } token;
+    
 }
 
 %start InicioPrograma
@@ -109,9 +103,7 @@ int yylex();
 // COMEÇO CODIGO COM BASE NA GRAMATICA DO PROFESSOR
 
 InicioPrograma:
-    Programa FIM{
-        $$.token.tipo = Programa;
-    }
+    Programa FIM
     | FIM
     ;
 
