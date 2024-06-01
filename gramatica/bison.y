@@ -26,10 +26,6 @@ int yylex();
 %define parse.error verbose
 %define parse.trace true
 
-%union{
-    
-}
-
 %start InicioPrograma
 
 
