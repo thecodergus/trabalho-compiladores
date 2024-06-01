@@ -10,9 +10,6 @@ if cc.get_id() == 'gcc' or cc.get_id() == 'clang'
  c_args += '-Wno-deprecated'
 endif
 
-# Importa as pastas de cabeçalho
-inc = include_directories('include', '/usr/local/include')
-
 # Importa os arquivos de código fonte
 app_src = files(
  'src/main.c',
@@ -52,7 +49,7 @@ pgen = generator(bison_program,
                               '-Wall',
                               '--output=@OUTPUT0@',
                               '--defines=@OUTPUT1@',
-                              '@INPUT@' 
+                              '@INPUT@'                              
                             ]
                 )
 
@@ -61,10 +58,14 @@ pgen = generator(bison_program,
 executable('main',
    sources : [
      app_src,
-    lgen.process('gramatica/flex.l'),
-    pgen.process('gramatica/bison.y')
+      lgen.process('gramatica/flex.l'),
+      pgen.process('gramatica/bison.y')
    ],
-   include_directories : inc,
+   include_directories : [
+    include_directories('include'),
+    include_directories('gramatica'),
+    include_directories('src')
+  ],
    dependencies: [
       
    ],
