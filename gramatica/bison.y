@@ -2,6 +2,7 @@
 
 %code requires{
 #include "ast.h"
+#include "utils/cvector.h"
 }
 
 %{
@@ -23,16 +24,13 @@ int yylex();
 %define parse.error verbose
 %define parse.trace true
 
-%union {
-    int inteiro;
-    float flutuante;
-    char *texto;
-}
-
-%type<struct Genesis*> InicioPrograma
-
 // Simbolos de comandos
-%token  COMANDO_PRINT COMANDO_READ COMANDO_IF COMANDO_ELSE COMANDO_WHILE COMANDO_RETURN
+%token COMANDO_PRINT "print"
+%token COMANDO_READ "read"
+%token COMANDO_IF "if"
+%token COMANDO_ELSE "else"
+%token COMANDO_WHILE "while"
+%token COMANDO_RETURN "return"
 
 // Simbolo de identificadores de variaveis e funcoes
 %token <string>ID 
@@ -88,6 +86,7 @@ int yylex();
 %left OPERADOR_MULTIPLICACAO OPERADOR_DIVISAO
 %right OPERADOR_POTENCIA
 
+// Tipos e estruturas
 
 
 
@@ -95,9 +94,7 @@ int yylex();
 // COMEÇO CODIGO COM BASE NA GRAMATICA DO PROFESSOR
 
 InicioPrograma:
-    Programa FIM {
-        $$ = criarGenesis();
-    }
+    Programa FIM
     | FIM
     ;
 
