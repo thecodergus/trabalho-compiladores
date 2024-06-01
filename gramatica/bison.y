@@ -25,6 +25,7 @@ int yylex();
 
 %define parse.error verbose
 %define parse.trace true
+%define api.value.type {AST*}
 
 %start InicioPrograma
 
