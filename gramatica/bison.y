@@ -181,7 +181,9 @@ Tipo:
     ;
 
 ListaId:
-    ListaId SIMBOLO_VIRGULA ID
+    ListaId SIMBOLO_VIRGULA ID{
+        $$ = criar_lista_identificadores($1, $3);
+    }
     | ID
     ;
 

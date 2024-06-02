@@ -140,4 +140,6 @@ AST *criar_bloco_principal(AST *declaracoes, AST *comandos);
 
 AST *criar_declaracao(AST *tipo, AST *ids);
 
+AST *criar_lista_identificadores(AST *identificadores, AST *id);
+
 #endif

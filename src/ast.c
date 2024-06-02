@@ -126,3 +126,14 @@ AST *criar_declaracao(AST *tipo, AST *ids) {
   declaracao->u.arvore.right = ids;
   return declaracao;
 }
+
+AST *criar_lista_identificadores(AST *identificadores, AST *id) {
+  if (identificadores == NULL) {
+    identificadores = (AST *)malloc(sizeof(AST));
+    identificadores->tipo = Vetor;
+    identificadores->token.tipo = IdentifierList;
+    identificadores->u.filhos = NULL;
+  }
+  cvector_push_back(identificadores->u.filhos, id);
+  return identificadores;
+}
