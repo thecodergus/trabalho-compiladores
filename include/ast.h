@@ -56,6 +56,18 @@ struct Type {
   enum TipoDados tipo;
 };
 
+struct ConstanteInt {
+  int valor;
+};
+
+struct ConstanteFloat {
+  float valor;
+};
+
+struct ConstanteString {
+  str valor;
+};
+
 // Criação dos tokens
 typedef struct Token Token;
 
@@ -66,6 +78,9 @@ struct Token {
     struct Parametro parametro;
     struct Type type;
     void *nada;
+    struct ConstanteInt constInt;
+    struct ConstanteFloat constFloat;
+    struct ConstanteString constString;
   } u;
 };
 
