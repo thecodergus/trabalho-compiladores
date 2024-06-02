@@ -6,9 +6,6 @@
 }
 
 %{
-#define YYPARSER
-#define YYSTYPE AST*
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
