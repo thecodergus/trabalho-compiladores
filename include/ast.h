@@ -18,7 +18,8 @@ typedef struct TipoDado TipoDado;
 enum TipoToken {
   Program,
   DeclarationFunction,
-  Parameter,
+  DeclarationParameter,
+  DeclarationParameterList,
   ParameterList,
   Block,
   DeclarationVariable,

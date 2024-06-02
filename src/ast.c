@@ -21,7 +21,7 @@ AST *criar_lista_funcoes(AST *funcoes, AST *funcao) {
 AST *criar_parametro(AST *tipo, AST *id) {
   AST *parametro = (AST *)malloc(sizeof(AST));
   parametro->tipo = Arvore;
-  parametro->token.tipo = Parameter;
+  parametro->token.tipo = DeclarationParameter;
   parametro->u.arvore.left = tipo;
   parametro->u.arvore.right = id;
   return parametro;
@@ -31,7 +31,7 @@ AST *criar_declaracao_parametros(AST *declaracaoAnterior, AST *parametro) {
   if (declaracaoAnterior == NULL) {
     declaracaoAnterior = (AST *)malloc(sizeof(AST));
     declaracaoAnterior->tipo = Vetor;
-    declaracaoAnterior->token.tipo = ParameterList;
+    declaracaoAnterior->token.tipo = DeclarationParameterList;
     declaracaoAnterior->u.filhos = NULL;
   }
   cvector_push_back(declaracaoAnterior->u.filhos, parametro);
