@@ -62,6 +62,7 @@ struct Token {
     struct Funcao funcao;
     struct Parametro parametro;
     struct Type type;
+    void *nada;
   } u;
 };
 
