@@ -8,20 +8,20 @@ void imprimir_arvore(AST* raiz, int nivel) {
   switch (raiz->tipo) {
     case Arvore:
       printf("Arvore:\n");
-      imprimir_token(raiz->token, nivel);
-      imprimir_arvore(raiz->u.arvore.left, nivel + 1);
-      imprimir_arvore(raiz->u.arvore.right, nivel + 1);
+      imprimir_token(raiz->token, nivel + 1);
+      imprimir_arvore(raiz->u.arvore.left, nivel + 2);
+      imprimir_arvore(raiz->u.arvore.right, nivel + 2);
       break;
     case Vetor:
       printf("Vetor:\n");
       imprimir_token(raiz->token, nivel);
       for (AST** i = cvector_begin(raiz->u.filhos); i != cvector_end(raiz->u.filhos); i++) {
-        imprimir_arvore(*i, nivel + 1);
+        imprimir_arvore(*i, nivel + 2);
       }
       break;
     case Folha:
-      printf("Folha: ");
-      imprimir_token(raiz->token, nivel);
+      printf("Folha: \n");
+      imprimir_token(raiz->token, nivel + 1);
       break;
   }
 }
@@ -82,13 +82,14 @@ void imprimir_token(Token token, int nivel) {
 
   switch (token.tipo) {
     case Program:
-      printf("Program\n");
+      printf("Programa\n");
       break;
     case DeclarationFunction:
-      printf("Declaracao de funcao, ID: %s, Type: %s\n", str_ptr(token.u.funcao.id), tipo_dado_str(token.u.funcao.tipo));
+      // printf("Declaracao de funcao, ID: %s, Type: %s\n", str_ptr(token.u.funcao.id), tipo_dado_str(token.u.funcao.tipo));
+      printf("Declaracao de funcao, Tipo: %s\n", tipo_dado_str(token.u.funcao.tipo));
       break;
     case DeclarationParameter:
-      printf("Declaracao de parametro, ID: %s, Type: %s\n", str_ptr(token.u.parametro.id), tipo_dado_str(token.u.parametro.tipo));
+      printf("Declaracao de parametro, Tipo: %s\n", tipo_dado_str(token.u.parametro.tipo));
       break;
     case DeclarationParameterList:
       printf("Declaracao de parametro em lista\n");
@@ -100,7 +101,7 @@ void imprimir_token(Token token, int nivel) {
       printf("Bloco\n");
       break;
     case DeclarationVariable:
-      printf("Declaracao de variavel, ID: %s, Tipo: %sS\n", str_ptr(token.u.idenfier.id), tipo_dado_str(token.u.type.tipo));
+      printf("Declaracao de variavel, Tipo: %s\n", tipo_dado_str(token.u.type.tipo));
       break;
     case DeclarationList:
       printf("Lisa de declaracoes\n");
@@ -164,7 +165,7 @@ void imprimir_token(Token token, int nivel) {
       printf("Constante Void\n");
       break;
     case Identifier:
-      printf("ID: %s\n", str_ptr(token.u.idenfier.id));
+      printf("ID\n");
       break;
     case IdentifierList:
       printf("Lista de IDs\n");
