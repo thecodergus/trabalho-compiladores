@@ -62,6 +62,7 @@ string          { return TIPO_STRING; }
                     return CONSTANTE_FLOAT; 
                 }
 {id}            { 
+                    printf("ID{id}: %s\\n", yytext);
                     yylval = criar_idenfier(yytext);
                     return ID; 
                 }

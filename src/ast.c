@@ -102,6 +102,7 @@ AST *criar_constante_void() {
 }
 
 AST *criar_idenfier(const char *input) {
+  printf("criar_idenfier(): %s\n", input);
   AST *idenfier = (AST *)malloc(sizeof(AST));
   idenfier->tipo = Folha;
   idenfier->token.tipo = Identifier;
