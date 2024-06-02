@@ -3,7 +3,7 @@
 void imprimir_arvore(AST* raiz, int nivel) {
   if (raiz == NULL) return;
 
-  for (int i = 0; i < nivel; i++) printf("-");
+  imprimir_traco(nivel);
 
   switch (raiz->tipo) {
     case Arvore:
@@ -78,7 +78,7 @@ void printar_folhas(AST* arvore) {
 }
 
 void imprimir_token(Token token, int nivel) {
-  for (int i = 0; i < nivel; i++) printf("-");
+  imprimir_traco(nivel);
 
   switch (token.tipo) {
     case Program:
@@ -175,4 +175,8 @@ void imprimir_token(Token token, int nivel) {
     default:
       printf("Unknown\n");
   }
+}
+
+void imprimir_traco(int nivel) {
+  for (int i = 0; i < nivel; i++) printf("-");
 }
