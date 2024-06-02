@@ -160,12 +160,18 @@ BloboPrincipal:
     ;
 
 Declaracoes:
-    Declaracoes Declaracao
-    | Declaracao SIMBOLO_PONTO_VIRGULA
+    Declaracoes Declaracao{
+        $$ = criar_declaracoes($1, $2);
+    }
+    | Declaracao SIMBOLO_PONTO_VIRGULA{
+        $$ = criar_declaracoes(NULL, $1);
+    }
     ;
 
 Declaracao:
-    Tipo ListaId
+    Tipo ListaId{
+        $$ = criar_declaracao($1, $2);
+    }
     ;
 
 Tipo: 
@@ -184,7 +190,9 @@ ListaId:
     ListaId SIMBOLO_VIRGULA ID{
         $$ = criar_lista_identificadores($1, $3);
     }
-    | ID
+    | ID{
+        $$ = criar_lista_identificadores(NULL, $1);
+    }
     ;
 
 Bloco: 

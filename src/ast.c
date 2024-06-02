@@ -118,15 +118,6 @@ AST *criar_bloco_principal(AST *declaracoes, AST *comandos) {
   return blocoPrincipal;
 }
 
-AST *criar_declaracao(AST *tipo, AST *ids) {
-  AST *declaracao = (AST *)malloc(sizeof(AST));
-  declaracao->tipo = Arvore;
-  declaracao->token.tipo = DeclarationVariable;
-  declaracao->u.arvore.left = tipo;
-  declaracao->u.arvore.right = ids;
-  return declaracao;
-}
-
 AST *criar_lista_identificadores(AST *identificadores, AST *id) {
   if (identificadores == NULL) {
     identificadores = (AST *)malloc(sizeof(AST));
@@ -136,4 +127,24 @@ AST *criar_lista_identificadores(AST *identificadores, AST *id) {
   }
   cvector_push_back(identificadores->u.filhos, id);
   return identificadores;
+}
+
+AST *criar_declaracao(AST *tipo, AST *ids) {
+  AST *declaracao = (AST *)malloc(sizeof(AST));
+  declaracao->tipo = Arvore;
+  declaracao->token.tipo = DeclarationVariable;
+  declaracao->u.arvore.left = tipo;
+  declaracao->u.arvore.right = ids;
+  return declaracao;
+}
+
+AST *criar_declaracoes(AST *declaracoes, AST *declaracao) {
+  if (declaracoes == NULL) {
+    declaracoes = (AST *)malloc(sizeof(AST));
+    declaracoes->tipo = Vetor;
+    declaracoes->token.tipo = DeclarationList;
+    declaracoes->u.filhos = NULL;
+  }
+  cvector_push_back(declaracoes->u.filhos, declaracao);
+  return declaracoes;
 }

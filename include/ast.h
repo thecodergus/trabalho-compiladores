@@ -22,6 +22,7 @@ enum TipoToken {
   ParameterList,
   Block,
   DeclarationVariable,
+  DeclarationList,
   Assignment,
   If,
   Else,
@@ -138,8 +139,10 @@ AST *criar_idenfier(const char *input);
 
 AST *criar_bloco_principal(AST *declaracoes, AST *comandos);
 
+AST *criar_lista_identificadores(AST *identificadores, AST *id);
+
 AST *criar_declaracao(AST *tipo, AST *ids);
 
-AST *criar_lista_identificadores(AST *identificadores, AST *id);
+AST *criar_declaracoes(AST *declaracoes, AST *declaracao);
 
 #endif
