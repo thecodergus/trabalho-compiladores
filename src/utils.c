@@ -24,13 +24,73 @@ void imprimir_arvore(AST* raiz, int nivel) {
           printf("Program\n");
           break;
         case DeclarationFunction:
-          printf("DeclarationFunction, Type: %d\n", raiz->token.u.funcao.tipo);
+          printf("DeclarationFunction, ID: %s, Type: %d\n", raiz->token.u.funcao.id, raiz->token.u.funcao.tipo);
           break;
         case DeclarationParameter:
-          printf("DeclarationParameter, Type: %d\n", raiz->token.u.parametro.tipo);
+          printf("DeclarationParameter, ID: %s, Type: %d\n", raiz->token.u.parametro.id, raiz->token.u.parametro.tipo);
+          break;
+        case DeclarationParameterList:
+          printf("DeclarationParameterList\n");
+          break;
+        case ParameterList:
+          printf("ParameterList\n");
+          break;
+        case Block:
+          printf("Block\n");
           break;
         case DeclarationVariable:
-          printf("DeclarationVariable, Type: %d\n", raiz->token.u.type.tipo);
+          printf("DeclarationVariable, ID: %s, Type: %d\n", raiz->token.u.idenfier.id, raiz->token.u.type.tipo);
+          break;
+        case DeclarationList:
+          printf("DeclarationList\n");
+          break;
+        case Assignment:
+          printf("Assignment\n");
+          break;
+        case If:
+          printf("If\n");
+          break;
+        case IfBlock:
+          printf("IfBlock\n");
+          break;
+        case While:
+          printf("While\n");
+          break;
+        case Return:
+          printf("Return\n");
+          break;
+        case Print:
+          printf("Print\n");
+          break;
+        case Read:
+          printf("Read\n");
+          break;
+        case Function:
+          printf("Function\n");
+          break;
+        case FunctionList:
+          printf("FunctionList\n");
+          break;
+        case FunctionCall:
+          printf("FunctionCall\n");
+          break;
+        case ExpressionArithmetic:
+          printf("ArithmeticExpression, Operator: %d\n", raiz->token.u.arithmeticExpression.operator);
+          break;
+        case ExpressionRelational:
+          printf("RelationalExpression, Operator: %d\n", raiz->token.u.relationalExpression.operator);
+          break;
+        case ExpressionLogical:
+          printf("LogicalExpression, Operator: %d\n", raiz->token.u.logicalExpression.operator);
+          break;
+        case Variable:
+          printf("Variable\n");
+          break;
+        case Type:
+          printf("Type, Type: %d\n", raiz->token.u.type.tipo);
+          break;
+        case Literal:
+          printf("Literal\n");
           break;
         case ConstantInt:
           printf("ConstantInt: %d\n", raiz->token.u.constInt.valor);
@@ -39,12 +99,24 @@ void imprimir_arvore(AST* raiz, int nivel) {
           printf("ConstantFloat: %f\n", raiz->token.u.constFloat.valor);
           break;
         case ConstantString:
-          printf("ConstantString: %s\n", str_ptr(raiz->token.u.constString.valor));
+          printf("ConstantString: %s\n", raiz->token.u.constString.valor);
           break;
-        // Add cases for other tokens as needed
+        case ConstantVoid:
+          printf("ConstantVoid\n");
+          break;
+        case Identifier:
+          printf("Identifier: %s\n", raiz->token.u.idenfier.id);
+          break;
+        case IdentifierList:
+          printf("IdentifierList\n");
+          break;
+        case CommandList:
+          printf("CommandList\n");
+          break;
         default:
           printf("Unknown\n");
       }
+
       break;
   }
 }
