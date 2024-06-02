@@ -15,7 +15,7 @@ enum TipoDados { Int, Float, String, Void };
 // Criação dos tipos de dados
 typedef struct TipoDado TipoDado;
 
-enum TipoNo {
+enum TipoToken {
   Program,
   DeclarationFunction,
   Block,
@@ -32,9 +32,7 @@ enum TipoNo {
   ExpressionRelational,
   ExpressionLogical,
   Variable,
-  Number,
-  String,
-  Void
+  Literal
 };
 
 // Estrutura de dados para os tokens
@@ -54,7 +52,7 @@ struct Parametro {
 typedef struct Token Token;
 
 struct Token {
-  enum TipoNo tipo;
+  enum TipoToken tipo;
   union {
     struct Funcao funcao;
     struct Parametro parametro;
