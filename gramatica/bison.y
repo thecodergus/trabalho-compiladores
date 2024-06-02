@@ -2,6 +2,7 @@
 
 %code requires{
 #include "ast.h"
+#include "astUtils.h"
 #include "utils/cvector.h"
 }
 
@@ -93,68 +94,68 @@ int yylex();
 /*
 %type <AST> InicioPrograma
 %type <AST> Programa
-%type <AST*> ListaFuncoes
-%type <AST*> Funcao
-%type <AST*> TipoRetorno
-%type <AST*> DeclaracaoParametros
-%type <AST*> Parametro
-%type <AST*> BloboPrincipal
-%type <AST*>Declaracoes
-%type <AST*> Declaracao
-%type <AST*> Tipo
-%type <AST*> ListaId
-%type <AST*> Bloco
-%type <AST*> ListaComando
-%type <AST*> Comando
-%type <AST*> Retorno
-%type <AST*> ComandoSe
-%type <AST*> ComandoEnquanto
-%type <AST*> ComandoAtribuicao
-%type <AST*> ComandoEscrita
-%type <AST*> ComandoLeitura
-%type <AST*> ChamadaProc
-%type <AST*> ChamadaFuncao
-%type <AST*> ListaParametros
-%type <AST*> ExpressaoLogica
-%type <AST*> TermoLogico
-%type <AST*> ExpressaoRelacional
-%type <AST*> ExpressaoAritmetica
-%type <AST*> LITERAL
-%type <AST*> ID
-%type <AST*> CONSTANTE_INT
-%type <AST*> CONSTANTE_FLOAT
-%type <AST*> LOGICA_EQ
-%type <AST*> LOGICA_NE
-%type <AST*> LOGICA_LE
-%type <AST*> LOGICA_GE
-%type <AST*> LOGICA_LT
-%type <AST*> LOGICA_GT
-%type <AST*> LOGICA_AND
-%type <AST*> LOGICA_OR
-%type <AST*> LOGICA_NOT
-%type <AST*> OPERADOR_SOMA
-%type <AST*> OPERADOR_SUBTRACAO
-%type <AST*> OPERADOR_MULTIPLICACAO
-%type <AST*> OPERADOR_DIVISAO
-%type <AST*> OPERADOR_POTENCIA
-%type <AST*> SIMBOLO_ABRE_PARENTESES
-%type <AST*> SIMBOLO_FECHA_PARENTESES
-%type <AST*> SIMBOLO_VIRGULA
-%type <AST*> SIMBOLO_PONTO_VIRGULA
-%type <AST*> SIMBOLO_ABRE_CHAVES
-%type <AST*> SIMBOLO_FECHA_CHAVES
-%type <AST*> SIMBOLO_ATRIBUICAO
-%type <AST*> FIM
-%type <AST*> TIPO_VOID
-%type <AST*> TIPO_FLOAT
-%type <AST*> TIPO_INT
-%type <AST*> TIPO_STRING
-%type <AST*> COMANDO_IF
-%type <AST*> COMANDO_ELSE
-%type <AST*> COMANDO_WHILE
-%type <AST*> COMANDO_RETURN
-%type <AST*> COMANDO_PRINT
-%type <AST*> COMANDO_READ
+%type <AST> ListaFuncoes
+%type <AST> Funcao
+%type <AST> TipoRetorno
+%type <AST> DeclaracaoParametros
+%type <AST> Parametro
+%type <AST> BloboPrincipal
+%type <AST>Declaracoes
+%type <AST> Declaracao
+%type <AST> Tipo
+%type <AST> ListaId
+%type <AST> Bloco
+%type <AST> ListaComando
+%type <AST> Comando
+%type <AST> Retorno
+%type <AST> ComandoSe
+%type <AST> ComandoEnquanto
+%type <AST> ComandoAtribuicao
+%type <AST> ComandoEscrita
+%type <AST> ComandoLeitura
+%type <AST> ChamadaProc
+%type <AST> ChamadaFuncao
+%type <AST> ListaParametros
+%type <AST> ExpressaoLogica
+%type <AST> TermoLogico
+%type <AST> ExpressaoRelacional
+%type <AST> ExpressaoAritmetica
+%type <AST> LITERAL
+%type <AST> ID
+%type <AST> CONSTANTE_INT
+%type <AST> CONSTANTE_FLOAT
+%type <AST> LOGICA_EQ
+%type <AST> LOGICA_NE
+%type <AST> LOGICA_LE
+%type <AST> LOGICA_GE
+%type <AST> LOGICA_LT
+%type <AST> LOGICA_GT
+%type <AST> LOGICA_AND
+%type <AST> LOGICA_OR
+%type <AST> LOGICA_NOT
+%type <AST> OPERADOR_SOMA
+%type <AST> OPERADOR_SUBTRACAO
+%type <AST> OPERADOR_MULTIPLICACAO
+%type <AST> OPERADOR_DIVISAO
+%type <AST> OPERADOR_POTENCIA
+%type <AST> SIMBOLO_ABRE_PARENTESES
+%type <AST> SIMBOLO_FECHA_PARENTESES
+%type <AST> SIMBOLO_VIRGULA
+%type <AST> SIMBOLO_PONTO_VIRGULA
+%type <AST> SIMBOLO_ABRE_CHAVES
+%type <AST> SIMBOLO_FECHA_CHAVES
+%type <AST> SIMBOLO_ATRIBUICAO
+%type <AST> FIM
+%type <AST> TIPO_VOID
+%type <AST> TIPO_FLOAT
+%type <AST> TIPO_INT
+%type <AST> TIPO_STRING
+%type <AST> COMANDO_IF
+%type <AST> COMANDO_ELSE
+%type <AST> COMANDO_WHILE
+%type <AST> COMANDO_RETURN
+%type <AST> COMANDO_PRINT
+%type <AST> COMANDO_READ
 */
 
 
@@ -179,7 +180,11 @@ Programa:
     ;
 
 ListaFuncoes:
-    ListaFuncoes Funcao
+    ListaFuncoes Funcao{
+        cvector_push_back($1.u.filhos, $2);
+
+        $$ = $1;
+    }
     | Funcao
     ;
 

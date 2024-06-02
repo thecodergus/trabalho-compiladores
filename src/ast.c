@@ -1,4 +1,4 @@
-#include "ast.h"
+#include "astUtils.h"
 
 AST criar_programa(vector(struct AST) funcoes, vector(struct AST) blocoPrincipal) {
   AST programa;

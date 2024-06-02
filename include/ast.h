@@ -15,11 +15,15 @@ struct AST {
   enum Tipo tipo;
   union {
     struct {
-      struct AST left;
-      struct AST right;
+      struct AST *left;
+      struct AST *right;
     } arvore;
     vector(struct AST) filhos;
   } u;
 };
+
+AST criar_programa(vector(struct AST) funcoes, vector(struct AST) blocoPrincipal);
+
+vector(AST) concat_vectors(vector(AST) a, vector(AST) b);
 
 #endif
