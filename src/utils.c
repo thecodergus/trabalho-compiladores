@@ -86,10 +86,10 @@ void imprimir_token(Token token, int nivel) {
       break;
     case DeclarationFunction:
       // printf("Declaracao de funcao, ID: %s, Type: %s\n", str_ptr(token.u.funcao.id), tipo_dado_str(token.u.funcao.tipo));
-      printf("Declaracao de funcao, Tipo: %s\n", tipo_dado_str(token.u.funcao.tipo));
+      printf("Declaracao de funcao {%s}\n", tipo_dado_str(token.u.funcao.tipo));
       break;
     case DeclarationParameter:
-      printf("Declaracao de parametro, Tipo: %s\n", tipo_dado_str(token.u.parametro.tipo));
+      printf("Declaracao de parametro {%s}\n", tipo_dado_str(token.u.parametro.tipo));
       break;
     case DeclarationParameterList:
       printf("Declaracao de parametro em lista\n");
@@ -101,7 +101,7 @@ void imprimir_token(Token token, int nivel) {
       printf("Bloco\n");
       break;
     case DeclarationVariable:
-      printf("Declaracao de variavel, Tipo: %s\n", tipo_dado_str(token.u.type.tipo));
+      printf("Declaracao de variavel {%s}\n", tipo_dado_str(token.u.type.tipo));
       break;
     case DeclarationList:
       printf("Lisa de declaracoes\n");
