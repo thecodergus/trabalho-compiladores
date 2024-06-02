@@ -32,6 +32,7 @@ enum TipoToken {
   ExpressionRelational,
   ExpressionLogical,
   Variable,
+  Type,
   Literal
 };
 
@@ -48,6 +49,10 @@ struct Parametro {
   enum TipoDados tipo;
 };
 
+struct Type {
+  enum TipoDados tipo;
+};
+
 // Criação dos tokens
 typedef struct Token Token;
 
@@ -56,6 +61,7 @@ struct Token {
   union {
     struct Funcao funcao;
     struct Parametro parametro;
+    struct Type type;
   } u;
 };
 
