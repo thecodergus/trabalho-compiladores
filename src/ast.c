@@ -203,3 +203,13 @@ AST *criar_comando_read(AST *id) {
 
   return comandoRead;
 }
+
+AST *criar_comando_print(AST *expressao) {
+  AST *comandoPrint = (AST *)malloc(sizeof(AST));
+  comandoPrint->tipo = Arvore;
+  comandoPrint->token.tipo = Print;
+  comandoPrint->u.arvore.left = expressao;
+  comandoPrint->u.arvore.right = NULL;
+
+  return comandoPrint;
+}

@@ -156,4 +156,6 @@ AST* criar_comando_atribuicao(AST *id, AST *expressao);
 
 AST* criar_comando_read(AST *id);
 
+AST* criar_comando_print(AST *expressao);
+
 #endif
