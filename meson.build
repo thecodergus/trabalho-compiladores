@@ -13,7 +13,7 @@ endif
 # Importa os arquivos de código fonte
 app_src = files(
  'src/main.c',
- 'src/ast.c'
+ 'src/astUtils.c'
 )
 
 # Local para importar as dependencias
