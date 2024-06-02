@@ -8,15 +8,15 @@ void imprimir_arvore(AST* raiz, int nivel) {
   switch (raiz->tipo) {
     case Arvore:
       printf("Arvore:\n");
-      imprimir_token(raiz->token, nivel + 1);
-      imprimir_arvore(raiz->u.arvore.left, nivel + 2);
-      imprimir_arvore(raiz->u.arvore.right, nivel + 2);
+      imprimir_token(raiz->token, nivel);
+      imprimir_arvore(raiz->u.arvore.left, nivel + 1);
+      imprimir_arvore(raiz->u.arvore.right, nivel + 1);
       break;
     case Vetor:
       printf("Vetor:\n");
       imprimir_token(raiz->token, nivel);
       for (AST** i = cvector_begin(raiz->u.filhos); i != cvector_end(raiz->u.filhos); i++) {
-        imprimir_arvore(*i, nivel + 2);
+        imprimir_arvore(*i, nivel + 1);
       }
       break;
     case Folha:
