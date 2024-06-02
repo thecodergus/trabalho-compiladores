@@ -160,4 +160,6 @@ AST *criar_comando_print(AST *expressao);
 
 AST *criar_comando_chamada_funcao(AST *id, AST *parametros);
 
+AST *criar_lista_parametros(AST *parametros, AST *parametro);
+
 #endif

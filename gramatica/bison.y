@@ -300,8 +300,12 @@ ChamadaFuncao:
     ;
 
 ListaParametros:
-    ListaParametros SIMBOLO_VIRGULA ExpressaoAritmetica
-    | ListaParametros SIMBOLO_VIRGULA CONSTANTE_STRING
+    ListaParametros SIMBOLO_VIRGULA ExpressaoAritmetica{
+        $$ = criar_lista_parametros($1, $3);
+    }
+    | ListaParametros SIMBOLO_VIRGULA CONSTANTE_STRING{
+        $$ = criar_lista_parametros($1, $3);
+    }
     | ExpressaoAritmetica
     | CONSTANTE_STRING
     | ID

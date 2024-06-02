@@ -223,3 +223,14 @@ AST *criar_comando_chamada_funcao(AST *id, AST *parametros) {
 
   return comandoChamadaFuncao;
 }
+
+AST *criar_lista_parametros(AST *parametros, AST *parametro) {
+  if (parametros == NULL) {
+    parametros = (AST *)malloc(sizeof(AST));
+    parametros->tipo = Vetor;
+    parametros->token.tipo = ParameterList;
+    parametros->u.filhos = NULL;
+  }
+  cvector_push_back(parametros->u.filhos, parametro);
+  return parametros;
+}
