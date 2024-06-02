@@ -134,3 +134,39 @@ char* tipo_dado_str(enum TipoDados tipo) {
       return "Unknown";
   }
 }
+
+void printar_folhas(AST* arvore) {
+  if (!arvore) return;
+
+  switch (arvore->tipo) {
+    case Folha:
+      switch (arvore->token.tipo) {
+        case ConstantInt:
+          printf("ConstantInt: %d\n", arvore->token.u.constInt.valor);
+          break;
+        case ConstantFloat:
+          printf("ConstantFloat: %f\n", arvore->token.u.constFloat.valor);
+          break;
+        case ConstantString:
+          printf("ConstantString: %s\n", str_ptr(arvore->token.u.constString.valor));
+          break;
+        case Identifier:
+          printf("Identifier: %s\n", str_ptr(arvore->token.u.idenfier.id));
+          break;
+        default:
+          break;
+      }
+      break;
+    case Arvore:
+      if (!arvore->u.arvore.left) printar_folhas(arvore->u.arvore.left);
+      if (!arvore->u.arvore.right) printar_folhas(arvore->u.arvore.right);
+      break;
+    case Vetor:
+      if (arvore->u.filhos) {
+        for (AST** i = cvector_begin(arvore->u.filhos); i != cvector_end(arvore->u.filhos); i++) {
+          printar_folhas(*i);
+        }
+      }
+      break;
+  }
+}
