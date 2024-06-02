@@ -59,4 +59,6 @@ AST criar_programa(vector(struct AST) funcoes, vector(struct AST) blocoPrincipal
 
 vector(AST) concat_vectors(vector(AST) a, vector(AST) b);
 
+AST criar_lista_funcoes(AST funcoes, AST funcao);
+
 #endif

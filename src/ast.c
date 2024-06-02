@@ -26,3 +26,14 @@ vector(AST) concat_vectors(vector(AST) a, vector(AST) b) {
 
   return result;
 }
+
+AST criar_lista_funcoes(AST funcoes, AST funcao) {
+  AST listaFuncoes;
+  listaFuncoes.tipo = Vetor;
+  listaFuncoes.token.tipo = DeclarationFunction;
+  listaFuncoes.u.filhos = funcoes.u.filhos;
+
+  cvector_push_back(listaFuncoes.u.filhos, funcoes);
+
+  return listaFuncoes;
+}

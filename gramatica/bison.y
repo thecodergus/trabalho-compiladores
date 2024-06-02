@@ -181,12 +181,10 @@ Programa:
 
 ListaFuncoes:
     ListaFuncoes Funcao{
-        cvector_push_back($1.u.filhos, $2);
-
-        $$ = $1;
+        $$ = criar_lista_funcoes($1, $2);
     }
     | Funcao{
-        cvector_push_back($$.u.filhos, $1);
+        $$ = criar_lista_funcoes($$, $1);
     }
     ;
 
