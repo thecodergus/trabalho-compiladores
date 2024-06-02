@@ -210,13 +210,27 @@ ListaComando:
     ;
 
 Comando:
-    ComandoSe
-    | ComandoEnquanto
-    | ComandoAtribuicao SIMBOLO_PONTO_VIRGULA
-    | ComandoEscrita SIMBOLO_PONTO_VIRGULA
-    | ComandoLeitura SIMBOLO_PONTO_VIRGULA
-    | ChamadaProc SIMBOLO_PONTO_VIRGULA
-    | Retorno SIMBOLO_PONTO_VIRGULA
+    ComandoSe{
+        $$ = $1;
+    }
+    | ComandoEnquanto{
+        $$ = $1;
+    }
+    | ComandoAtribuicao SIMBOLO_PONTO_VIRGULA{
+        $$ = $1;
+    }
+    | ComandoEscrita SIMBOLO_PONTO_VIRGULA{
+        $$ = $1;
+    }
+    | ComandoLeitura SIMBOLO_PONTO_VIRGULA{
+        $$ = $1;
+    }
+    | ChamadaProc SIMBOLO_PONTO_VIRGULA{
+        $$ = $1;
+    }
+    | Retorno SIMBOLO_PONTO_VIRGULA{
+        $$ = $1;
+    }
     ;
 
 Retorno:
