@@ -3,11 +3,18 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <utils/cvector.h>
+
+#include "utils/cvector.h"
+#include "utils/str.h"
 
 #define vector(T) cvector_vector_type(T)
 
+// Tipos de dados
+enum TipoDados { Int, Float, String, Void };
+
 // Criação dos tipos de dados
+typedef struct TipoDado TipoDado;
+
 enum TipoNo {
   Program,
   DeclarationFunction,
@@ -30,20 +37,37 @@ enum TipoNo {
   Void
 };
 
+// Estrutura de dados para os tokens
+struct Funcao {
+  str id;
+  enum TipoDados tipo;
+  vector(struct AST) parametros;
+  vector(struct AST) bloco;
+};
+
+struct Parametro {
+  str id;
+  enum TipoDados tipo;
+};
+
 // Criação dos tokens
 typedef struct Token Token;
 
 struct Token {
   enum TipoNo tipo;
+  union {
+    struct Funcao funcao;
+    struct Parametro parametro;
+  } u;
 };
 
 // Criação do AST
-enum TipoDado { Arvore, Vetor };
+enum TipoNo { Arvore, Vetor };
 
 typedef struct AST AST;
 
 struct AST {
-  enum TipoDado tipo;
+  enum TipoNo tipo;
   Token token;
   union {
     struct {
