@@ -14,14 +14,14 @@ void imprimir_arvore(AST* raiz, int nivel) {
       break;
     case Vetor:
       printf("Vetor:\n");
-      imprimir_token(raiz->token, nivel);
+      imprimir_token(raiz->token, nivel + 1);
       for (AST** i = cvector_begin(raiz->u.filhos); i != cvector_end(raiz->u.filhos); i++) {
         imprimir_arvore(*i, nivel + 2);
       }
       break;
     case Folha:
       printf("Folha: \n");
-      imprimir_token(raiz->token, nivel + 2);
+      imprimir_token(raiz->token, nivel + 1);
       break;
   }
 }
@@ -179,6 +179,7 @@ void imprimir_token(Token token, int nivel) {
 }
 
 void imprimir_traco(int nivel) {
+  printf("{%04d}", nivel);
   for (int i = 0; i < nivel; i++) printf("-");
 }
 
