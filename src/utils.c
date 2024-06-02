@@ -135,13 +135,13 @@ void imprimir_token(Token token, int nivel) {
       printf("Chamada de funcao\n");
       break;
     case ExpressionArithmetic:
-      printf("Expressao Aritimetica, Operator: %d\n", operador_aritmetico_str(token.u.arithmeticExpression.operator));
+      printf("Expressao Aritimetica, Operator: %s\n", operador_aritmetico_str(token.u.arithmeticExpression.operator));
       break;
     case ExpressionRelational:
-      printf("Expressao Relacional, Operator: %d\n", operador_relacional_str(token.u.relationalExpression.operator));
+      printf("Expressao Relacional, Operator: %s\n", operador_relacional_str(token.u.relationalExpression.operator));
       break;
     case ExpressionLogical:
-      printf("Expressao Logica, Operator: %d\n", operador_logico_str(token.u.logicalExpression.operator));
+      printf("Expressao Logica, Operator: %s\n", operador_logico_str(token.u.logicalExpression.operator));
       break;
     case Variable:
       printf("Variavel\n");
