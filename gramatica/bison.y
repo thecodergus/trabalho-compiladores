@@ -335,12 +335,24 @@ TermoLogico:
     ;
 
 ExpressaoRelacional:
-    ExpressaoAritmetica LOGICA_EQ ExpressaoAritmetica
-    | ExpressaoAritmetica LOGICA_NE ExpressaoAritmetica
-    | ExpressaoAritmetica LOGICA_LE ExpressaoAritmetica
-    | ExpressaoAritmetica LOGICA_GE ExpressaoAritmetica
-    | ExpressaoAritmetica LOGICA_LT ExpressaoAritmetica
-    | ExpressaoAritmetica LOGICA_GT ExpressaoAritmetica
+    ExpressaoAritmetica LOGICA_EQ ExpressaoAritmetica{
+        $$ = criar_expressao_relacional(Igual, $1, $3);
+    }
+    | ExpressaoAritmetica LOGICA_NE ExpressaoAritmetica{
+        $$ = criar_expressao_relacional(Diferente, $1, $3);
+    }
+    | ExpressaoAritmetica LOGICA_LE ExpressaoAritmetica{
+        $$ = criar_expressao_relacional(MenorIgual, $1, $3);
+    }
+    | ExpressaoAritmetica LOGICA_GE ExpressaoAritmetica{
+        $$ = criar_expressao_relacional(MaiorIgual, $1, $3);
+    }
+    | ExpressaoAritmetica LOGICA_LT ExpressaoAritmetica{
+        $$ = criar_expressao_relacional(Menor, $1, $3);
+    }
+    | ExpressaoAritmetica LOGICA_GT ExpressaoAritmetica{
+        $$ = criar_expressao_relacional(Maior, $1, $3);
+    }
     ;
 
 ExpressaoAritmetica:
