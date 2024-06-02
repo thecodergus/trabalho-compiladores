@@ -201,8 +201,12 @@ TipoRetorno:
     ;
 
 DeclaracaoParametros:
-    DeclaracaoParametros SIMBOLO_VIRGULA Parametro
-    | Parametro
+    DeclaracaoParametros SIMBOLO_VIRGULA Parametro{
+        $$ = criar_declaracao_parametros($1, $3);
+    }
+    | Parametro{
+        $$ = $1;
+    }
     ;
 
 Parametro:

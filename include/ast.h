@@ -127,4 +127,6 @@ AST criar_constante_void();
 
 AST criar_parametro(AST tipo, AST id);
 
+AST criar_declaracao_parametros(AST declaracaoAnterior, AST parametro);
+
 #endif

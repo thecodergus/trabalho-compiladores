@@ -110,3 +110,14 @@ AST criar_parametro(AST tipo, AST id) {
 
   return parametro;
 }
+
+AST criar_declaracao_parametros(AST declaracaoAnterior, AST parametro) {
+  AST declaracaoParametros;
+  declaracaoParametros.tipo = Vetor;
+  declaracaoParametros.token.tipo = Parameters;
+  declaracaoParametros.u.filhos = declaracaoAnterior.u.filhos;
+
+  cvector_push_back(declaracaoParametros.u.filhos, parametro);
+
+  return declaracaoParametros;
+}
