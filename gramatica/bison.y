@@ -185,7 +185,9 @@ ListaFuncoes:
 
         $$ = $1;
     }
-    | Funcao
+    | Funcao{
+        cvector_push_back($$.u.filhos, $1);
+    }
     ;
 
 Funcao:
