@@ -179,7 +179,7 @@ void imprimir_token(Token token, int nivel) {
 }
 
 void imprimir_traco(int nivel) {
-  printf("{%04d}", nivel);
+  printf("{%02d}", nivel);
   for (int i = 0; i < nivel; i++) printf("-");
 }
 
