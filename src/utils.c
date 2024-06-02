@@ -135,13 +135,13 @@ void imprimir_token(Token token, int nivel) {
       printf("Chamada de funcao\n");
       break;
     case ExpressionArithmetic:
-      printf("Expressao Aritimetica, Operator: %s\n", operador_aritmetico_str(token.u.arithmeticExpression.operator));
+      printf("Expressao Aritimetica {%s}\n", operador_aritmetico_str(token.u.arithmeticExpression.operator));
       break;
     case ExpressionRelational:
-      printf("Expressao Relacional, Operator: %s\n", operador_relacional_str(token.u.relationalExpression.operator));
+      printf("Expressao Relacional {%s}\n", operador_relacional_str(token.u.relationalExpression.operator));
       break;
     case ExpressionLogical:
-      printf("Expressao Logica, Operator: %s\n", operador_logico_str(token.u.logicalExpression.operator));
+      printf("Expressao Logica {%s}\n", operador_logico_str(token.u.logicalExpression.operator));
       break;
     case Variable:
       printf("Variavel\n");
@@ -153,13 +153,13 @@ void imprimir_token(Token token, int nivel) {
       printf("Literal\n");
       break;
     case ConstantInt:
-      printf("Constante Int: %d\n", token.u.constInt.valor);
+      printf("Constante Int {%d}\n", token.u.constInt.valor);
       break;
     case ConstantFloat:
-      printf("Constante Float: %f\n", token.u.constFloat.valor);
+      printf("Constante Float {%f}\n", token.u.constFloat.valor);
       break;
     case ConstantString:
-      printf("Constante String: %s\n", str_ptr(token.u.constString.valor));
+      printf("Constante String {%s}\n", str_ptr(token.u.constString.valor));
       break;
     case ConstantVoid:
       printf("Constante Void\n");
