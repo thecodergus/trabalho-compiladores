@@ -98,7 +98,7 @@ int yylex();
 InicioPrograma:
     Programa FIM{
         $$ = $1;
-        imprimir_arvore($1, 0);
+        // imprimir_arvore($1, 0);
     }
     | FIM
     ;
@@ -131,7 +131,9 @@ Funcao:
     ;
 
 TipoRetorno:
-    Tipo
+    Tipo{
+        $$ = $1;
+    }
     | TIPO_VOID{
         $$ = criar_tipo(Void);
     }
@@ -308,9 +310,15 @@ ListaParametros:
     | ListaParametros SIMBOLO_VIRGULA CONSTANTE_STRING{
         $$ = criar_lista_parametros($1, $3);
     }
-    | ExpressaoAritmetica
-    | CONSTANTE_STRING
-    | ID
+    | ExpressaoAritmetica{
+        $$ = $1;
+    }
+    | CONSTANTE_STRING{
+        $$ = $1;
+    }
+    | ID{
+        $$ = $1;
+    }
     ;
 
 // FIM CODIGO COM BASE NA GRAMATICA DO PROFESSOR
