@@ -25,7 +25,7 @@ enum TipoToken {
   DeclarationList,
   Assignment,
   If,
-  Else,
+  IfBlock,
   While,
   Return,
   Print,
@@ -147,5 +147,7 @@ AST *criar_declaracao(AST *tipo, AST *ids);
 AST *criar_declaracoes(AST *declaracoes, AST *declaracao);
 
 AST *criar_lista_comandos(AST *comandos, AST *comando);
+
+AST *criar_comando_if(AST *condicao, AST *blocoIf, AST *blocoElse);
 
 #endif
