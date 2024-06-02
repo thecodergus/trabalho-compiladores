@@ -24,10 +24,11 @@ void imprimir_arvore(AST* raiz, int nivel) {
           printf("Program\n");
           break;
         case DeclarationFunction:
-          printf("DeclarationFunction, ID: %s, Type: %s\n", raiz->token.u.funcao.id, tipo_dado_str(raiz->token.u.funcao.tipo));
+          printf("DeclarationFunction, ID: %s, Type: %s\n", str_ptr(raiz->token.u.funcao.id), tipo_dado_str(raiz->token.u.funcao.tipo));
           break;
         case DeclarationParameter:
-          printf("DeclarationParameter, ID: %s, Type: %s\n", raiz->token.u.parametro.id, tipo_dado_str(raiz->token.u.parametro.tipo));
+          printf("DeclarationParameter, ID: %s, Type: %s\n", str_ptr(raiz->token.u.parametro.id),
+                 tipo_dado_str(raiz->token.u.parametro.tipo));
           break;
         case DeclarationParameterList:
           printf("DeclarationParameterList\n");
@@ -39,7 +40,7 @@ void imprimir_arvore(AST* raiz, int nivel) {
           printf("Block\n");
           break;
         case DeclarationVariable:
-          printf("DeclarationVariable, ID: %s, Type: %sS\n", raiz->token.u.idenfier.id, tipo_dado_str(raiz->token.u.type.tipo));
+          printf("DeclarationVariable, ID: %s, Type: %sS\n", str_ptr(raiz->token.u.idenfier.id), tipo_dado_str(raiz->token.u.type.tipo));
           break;
         case DeclarationList:
           printf("DeclarationList\n");
@@ -99,13 +100,13 @@ void imprimir_arvore(AST* raiz, int nivel) {
           printf("ConstantFloat: %f\n", raiz->token.u.constFloat.valor);
           break;
         case ConstantString:
-          printf("ConstantString: %s\n", raiz->token.u.constString.valor);
+          printf("ConstantString: %s\n", str_ptr(raiz->token.u.constString.valor));
           break;
         case ConstantVoid:
           printf("ConstantVoid\n");
           break;
         case Identifier:
-          printf("Identifier: %s\n", raiz->token.u.idenfier.id);
+          printf("Identifier: %s\n", str_ptr(raiz->token.u.idenfier.id));
           break;
         case IdentifierList:
           printf("IdentifierList\n");
