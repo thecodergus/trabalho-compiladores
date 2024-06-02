@@ -24,10 +24,10 @@ void imprimir_arvore(AST* raiz, int nivel) {
           printf("Program\n");
           break;
         case DeclarationFunction:
-          printf("DeclarationFunction, ID: %s, Type: %d\n", raiz->token.u.funcao.id, raiz->token.u.funcao.tipo);
+          printf("DeclarationFunction, ID: %s, Type: %s\n", raiz->token.u.funcao.id, tipo_dado_str(raiz->token.u.funcao.tipo));
           break;
         case DeclarationParameter:
-          printf("DeclarationParameter, ID: %s, Type: %d\n", raiz->token.u.parametro.id, raiz->token.u.parametro.tipo);
+          printf("DeclarationParameter, ID: %s, Type: %s\n", raiz->token.u.parametro.id, tipo_dado_str(raiz->token.u.parametro.tipo));
           break;
         case DeclarationParameterList:
           printf("DeclarationParameterList\n");
@@ -39,7 +39,7 @@ void imprimir_arvore(AST* raiz, int nivel) {
           printf("Block\n");
           break;
         case DeclarationVariable:
-          printf("DeclarationVariable, ID: %s, Type: %d\n", raiz->token.u.idenfier.id, raiz->token.u.type.tipo);
+          printf("DeclarationVariable, ID: %s, Type: %sS\n", raiz->token.u.idenfier.id, tipo_dado_str(raiz->token.u.type.tipo));
           break;
         case DeclarationList:
           printf("DeclarationList\n");
@@ -87,7 +87,7 @@ void imprimir_arvore(AST* raiz, int nivel) {
           printf("Variable\n");
           break;
         case Type:
-          printf("Type, Type: %d\n", raiz->token.u.type.tipo);
+          printf("Type, Type: %s\n", tipo_dado_str(raiz->token.u.type.tipo));
           break;
         case Literal:
           printf("Literal\n");
@@ -118,5 +118,20 @@ void imprimir_arvore(AST* raiz, int nivel) {
       }
 
       break;
+  }
+}
+
+char* tipo_dado_str(enum TipoDados tipo) {
+  switch (tipo) {
+    case Int:
+      return "Inteiro";
+    case Float:
+      return "Flutuante";
+    case String:
+      return "String";
+    case Void:
+      return "Void";
+    default:
+      return "Unknown";
   }
 }

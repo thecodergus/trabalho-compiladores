@@ -5,6 +5,8 @@
 #include "libraries/cvector.h"
 #include "libraries/str.h"
 
-void imprimir_arvore(AST *arvore, int nivel);
+void imprimir_arvore(AST* arvore, int nivel);
+
+char* tipo_dado_str(enum TipoDados tipo);
 
 #endif /* CCDA0A80_6C57_42F9_805F_FE00EACEF858 */

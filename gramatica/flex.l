@@ -12,9 +12,11 @@
 
 delim     [ \t\r\n\f]+
 digito    [0-9]
+minuscula [a-z]
+maiuscula [A-Z]
 inteito    -?({digito})+
 float       -?({digito})+("."{digito}*)?("e"[+-]?{digito}+)?
-id        [a-zA-Z_][a-zA-Z0-9_]*
+id        ({maiuscula}|{minuscula})({maiuscula}|{minuscula}|{digito}|-)*
 string    \"([^\\\n]|(\\.))*?\"
 
 %%
