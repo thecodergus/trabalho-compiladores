@@ -98,6 +98,7 @@ int yylex();
 InicioPrograma:
     Programa FIM{
         $$ = $1;
+        imprimir_arvore($1, 0);
     }
     | FIM
     ;
