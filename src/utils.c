@@ -118,6 +118,9 @@ void imprimir_token(Token token, int nivel) {
     case IfBlock:
       printf("IfBloco\n");
       break;
+    case Else:
+      printf("ElseBloco\n");
+      break;
     case While:
       printf("While\n");
       break;
@@ -150,7 +153,7 @@ void imprimir_token(Token token, int nivel) {
       printf("Variavel\n");
       break;
     case Type:
-      printf("Tipo: %s\n", tipo_dado_str(token.u.type.tipo));
+      printf("Tipo {%s}\n", tipo_dado_str(token.u.type.tipo));
       break;
     case Literal:
       printf("Literal\n");

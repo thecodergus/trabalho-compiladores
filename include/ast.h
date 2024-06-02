@@ -36,6 +36,7 @@ enum TipoToken {
   Assignment,
   If,
   IfBlock,
+  ElseBlock,
   While,
   Return,
   Print,
