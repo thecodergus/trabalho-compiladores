@@ -173,3 +173,13 @@ AST *criar_comando_if(AST *condicao, AST *blocoIf, AST *blocoElse) {
 
   return comandoIf;
 }
+
+AST *criar_comando_while(AST *condicao, AST *bloco) {
+  AST *comandoWhile = (AST *)malloc(sizeof(AST));
+  comandoWhile->tipo = Arvore;
+  comandoWhile->token.tipo = While;
+  comandoWhile->u.arvore.left = condicao;
+  comandoWhile->u.arvore.right = bloco;
+
+  return comandoWhile;
+}

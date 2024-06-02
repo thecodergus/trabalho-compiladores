@@ -255,7 +255,9 @@ ComandoSe:
     ;
 
 ComandoEnquanto:
-    COMANDO_WHILE SIMBOLO_ABRE_PARENTESES ExpressaoLogica SIMBOLO_FECHA_PARENTESES Bloco
+    COMANDO_WHILE SIMBOLO_ABRE_PARENTESES ExpressaoLogica SIMBOLO_FECHA_PARENTESES Bloco{
+        $$ = criar_comando_while($3, $5);
+    }
     ;
 
 ComandoAtribuicao:
