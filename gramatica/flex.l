@@ -51,15 +51,20 @@ string          { return TIPO_STRING; }
 "^"             { return OPERADOR_POTENCIA; }
 ","             { return SIMBOLO_VIRGULA; }
 {inteito}       { 
+                    yylval = criar_constante_int(yytext);
                     return CONSTANTE_INT; 
                 }
 {float}         {  
+                    
+                    yylval = criar_constante_float(yytext);
                     return CONSTANTE_FLOAT; 
                 }
 {id}            { 
+                    yylval = criar_constante_string(yytext);
                     return ID; 
                 }
 {string}        {  
+                    yylval = criar_constante_string(yytext);
                     return LITERAL; 
                 }
 {delim}         {}
