@@ -3,7 +3,7 @@
 AST criar_programa(vector(struct AST *) funcoes, vector(struct AST *) blocoPrincipal) {
   AST programa;
   programa.tipo = Vetor;
-  programa.u.filhos = NULL;
+  programa.u.filhos = concat_vectors(funcoes, blocoPrincipal);
 
   return programa;
 }
@@ -11,12 +11,16 @@ AST criar_programa(vector(struct AST *) funcoes, vector(struct AST *) blocoPrinc
 vector(AST *) concat_vectors(vector(AST *) a, vector(AST *) b) {
   vector(AST *) result = NULL;
 
-  for (AST *it = cvector_begin(a); it != cvector_end(a); ++it) {
-    cvector_push_back(result, it);
+  if (a) {
+    for (AST *it = cvector_begin(a); it != cvector_end(a); ++it) {
+      cvector_push_back(result, it);
+    }
   }
 
-  for (AST *it = cvector_begin(b); it != cvector_end(b); ++it) {
-    cvector_push_back(result, it);
+  if (b) {
+    for (AST *it = cvector_begin(b); it != cvector_end(b); ++it) {
+      cvector_push_back(result, it);
+    }
   }
 
   return result;
