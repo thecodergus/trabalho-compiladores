@@ -234,9 +234,15 @@ Comando:
     ;
 
 Retorno:
-    COMANDO_RETURN ExpressaoAritmetica
-    | COMANDO_RETURN CONSTANTE_STRING
-    | COMANDO_RETURN
+    COMANDO_RETURN ExpressaoAritmetica{
+        $$ = $2;
+    }
+    | COMANDO_RETURN CONSTANTE_STRING{
+        $$ = $2;
+    }
+    | COMANDO_RETURN{
+        $$ = criar_constante_void();
+    }
     ;
 
 ComandoSe:
