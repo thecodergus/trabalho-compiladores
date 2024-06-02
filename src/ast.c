@@ -3,6 +3,7 @@
 AST criar_programa(vector(struct AST) funcoes, vector(struct AST) blocoPrincipal) {
   AST programa;
   programa.tipo = Vetor;
+  programa.token.tipo = Program;
   programa.u.filhos = concat_vectors(funcoes, blocoPrincipal);
 
   return programa;
