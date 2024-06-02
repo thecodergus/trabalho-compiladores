@@ -43,7 +43,7 @@ int yylex();
 %token TIPO_VOID TIPO_FLOAT TIPO_INT TIPO_STRING
 %token CONSTANTE_FLOAT "Ponto Flutuante"
 %token CONSTANTE_INT "Inteiro"
-%token LITERAL "Texto"
+%token CONSTANTE_STRING "Texto"
 
 // Simbolos de abrir e fechar chaves
 %token SIMBOLO_ABRE_CHAVES "{"
@@ -120,7 +120,7 @@ int yylex();
 %type <AST> TermoLogico
 %type <AST> ExpressaoRelacional
 %type <AST> ExpressaoAritmetica
-%type <AST> LITERAL
+%type <AST> CONSTANTE_STRING
 %type <AST> ID
 %type <AST> CONSTANTE_INT
 %type <AST> CONSTANTE_FLOAT
@@ -259,7 +259,7 @@ Comando:
 
 Retorno:
     COMANDO_RETURN ExpressaoAritmetica
-    | COMANDO_RETURN LITERAL
+    | COMANDO_RETURN CONSTANTE_STRING
     | COMANDO_RETURN
     ;
 
@@ -274,12 +274,12 @@ ComandoEnquanto:
 
 ComandoAtribuicao:
     ID SIMBOLO_ATRIBUICAO ExpressaoAritmetica
-    | ID SIMBOLO_ATRIBUICAO LITERAL
+    | ID SIMBOLO_ATRIBUICAO CONSTANTE_STRING
     ;
 
 ComandoEscrita:
     COMANDO_PRINT SIMBOLO_ABRE_PARENTESES ExpressaoAritmetica SIMBOLO_FECHA_PARENTESES
-    | COMANDO_PRINT SIMBOLO_ABRE_PARENTESES LITERAL SIMBOLO_FECHA_PARENTESES
+    | COMANDO_PRINT SIMBOLO_ABRE_PARENTESES CONSTANTE_STRING SIMBOLO_FECHA_PARENTESES
     ;
 
 ComandoLeitura:
@@ -297,9 +297,9 @@ ChamadaFuncao:
 
 ListaParametros:
     ListaParametros SIMBOLO_VIRGULA ExpressaoAritmetica
-    | ListaParametros SIMBOLO_VIRGULA LITERAL
+    | ListaParametros SIMBOLO_VIRGULA CONSTANTE_STRING
     | ExpressaoAritmetica
-    | LITERAL
+    | CONSTANTE_STRING
     ;
 
 // FIM CODIGO COM BASE NA GRAMATICA DO PROFESSOR

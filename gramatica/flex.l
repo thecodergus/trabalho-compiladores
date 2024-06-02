@@ -65,7 +65,7 @@ string          { return TIPO_STRING; }
                 }
 {string}        {  
                     yylval = criar_constante_string(yytext);
-                    return LITERAL; 
+                    return CONSTANTE_STRING; 
                 }
 {delim}         {}
 #*              {}
