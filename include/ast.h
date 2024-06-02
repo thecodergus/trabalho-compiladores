@@ -19,7 +19,7 @@ enum LogicalOperators { E, Ou, Nao };
 enum RelationsOperators { Igual, Diferente, Menor, MenorIgual, Maior, MaiorIgual };
 
 // Operadores aritméticos
-enum ArithmeticOperators { Soma, Subtracao, Multiplicacao, Divisao, Potenciacao };
+enum ArithmeticOperators { Soma, Subtracao, Multiplicacao, Divisao, Potencia };
 
 // Criação dos tipos de dados
 typedef struct TipoDado TipoDado;

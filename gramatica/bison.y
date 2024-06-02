@@ -360,12 +360,24 @@ ExpressaoAritmetica:
     | CONSTANTE_FLOAT
     | ID
     | ChamadaFuncao
-    | ExpressaoAritmetica OPERADOR_SOMA ExpressaoAritmetica
-    | ExpressaoAritmetica OPERADOR_SUBTRACAO ExpressaoAritmetica
-    | ExpressaoAritmetica OPERADOR_MULTIPLICACAO ExpressaoAritmetica
-    | ExpressaoAritmetica OPERADOR_DIVISAO ExpressaoAritmetica
-    | ExpressaoAritmetica OPERADOR_POTENCIA ExpressaoAritmetica
-    | SIMBOLO_ABRE_PARENTESES ExpressaoAritmetica SIMBOLO_FECHA_PARENTESES
+    | ExpressaoAritmetica OPERADOR_SOMA ExpressaoAritmetica{
+        $$ = criar_expressao_aritmetica(Soma, $1, $3);
+    }
+    | ExpressaoAritmetica OPERADOR_SUBTRACAO ExpressaoAritmetica{
+        $$ = criar_expressao_aritmetica(Subtracao, $1, $3);
+    }
+    | ExpressaoAritmetica OPERADOR_MULTIPLICACAO ExpressaoAritmetica{
+        $$ = criar_expressao_aritmetica(Multiplicacao, $1, $3);
+    }
+    | ExpressaoAritmetica OPERADOR_DIVISAO ExpressaoAritmetica{
+        $$ = criar_expressao_aritmetica(Divisao, $1, $3);
+    }
+    | ExpressaoAritmetica OPERADOR_POTENCIA ExpressaoAritmetica{
+        $$ = criar_expressao_aritmetica(Potencia, $1, $3);
+    }
+    | SIMBOLO_ABRE_PARENTESES ExpressaoAritmetica SIMBOLO_FECHA_PARENTESES{
+        $$ = $2;
+    }
     ;
 %%
 
