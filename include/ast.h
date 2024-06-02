@@ -18,7 +18,6 @@ typedef struct TipoDado TipoDado;
 enum TipoToken {
   Program,
   DeclarationFunction,
-  Parameter,
   Parameters,
   Block,
   Declaration,
@@ -29,6 +28,7 @@ enum TipoToken {
   Return,
   Print,
   Read,
+  Function,
   CallFuncion,
   ExpressionArithmetic,
   ExpressionRelational,
@@ -38,7 +38,8 @@ enum TipoToken {
   Literal,
   ConstantInt,
   ConstantFloat,
-  ConstantString
+  ConstantString,
+  Idenfier
 };
 
 // Estrutura de dados para os tokens
@@ -68,6 +69,10 @@ struct ConstanteString {
   str valor;
 };
 
+struct Indentificador {
+  str id;
+};
+
 // Criação dos tokens
 typedef struct Token Token;
 
@@ -81,11 +86,12 @@ struct Token {
     struct ConstanteInt constInt;
     struct ConstanteFloat constFloat;
     struct ConstanteString constString;
+    struct Indentificador idenfier;
   } u;
 };
 
 // Criação do AST
-enum TipoNo { Arvore, Vetor };
+enum TipoNo { Arvore, Vetor, Folha };
 
 typedef struct AST AST;
 
@@ -108,6 +114,14 @@ vector(AST) concat_vectors(vector(AST) a, vector(AST) b);
 
 AST criar_lista_funcoes(AST funcoes, AST funcao);
 
-AST criar_funcao(AST parametros, AST bloco);
+AST criar_tipo(enum TipoDados tipo);
+
+AST criar_constante_int(const char *input);
+
+AST criar_constante_float(const char *input);
+
+AST criar_constante_string(const char *input);
+
+AST criar_constante_void();
 
 #endif

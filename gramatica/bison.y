@@ -120,10 +120,10 @@ int yylex();
 %type <AST> TermoLogico
 %type <AST> ExpressaoRelacional
 %type <AST> ExpressaoAritmetica
-%type <AST> LITERAL
-%type <AST> ID
-%type <AST> CONSTANTE_INT
-%type <AST> CONSTANTE_FLOAT
+%type <const char*> LITERAL
+%type <const char*> ID
+%type <const char*> CONSTANTE_INT
+%type <const char*> CONSTANTE_FLOAT
 %type <AST> LOGICA_EQ
 %type <AST> LOGICA_NE
 %type <AST> LOGICA_LE
@@ -195,7 +195,9 @@ Funcao:
 
 TipoRetorno:
     Tipo
-    | TIPO_VOID
+    | TIPO_VOID{
+        $$ = criar_tipo(Void);
+    }
     ;
 
 DeclaracaoParametros:
@@ -221,9 +223,15 @@ Declaracao:
     ;
 
 Tipo: 
-    TIPO_INT
-    | TIPO_STRING
-    | TIPO_FLOAT
+    TIPO_INT{
+        $$ = criar_tipo(Int);
+    }
+    | TIPO_STRING{
+        $$ = criar_tipo(String);
+    }
+    | TIPO_FLOAT{
+        $$ = criar_tipo(Float);
+    }
     ;
 
 ListaId:
