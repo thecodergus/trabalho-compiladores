@@ -120,10 +120,10 @@ int yylex();
 %type <AST> TermoLogico
 %type <AST> ExpressaoRelacional
 %type <AST> ExpressaoAritmetica
-%type <const char*> LITERAL
-%type <const char*> ID
-%type <const char*> CONSTANTE_INT
-%type <const char*> CONSTANTE_FLOAT
+%type <AST> LITERAL
+%type <AST> ID
+%type <AST> CONSTANTE_INT
+%type <AST> CONSTANTE_FLOAT
 %type <AST> LOGICA_EQ
 %type <AST> LOGICA_NE
 %type <AST> LOGICA_LE
