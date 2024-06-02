@@ -60,7 +60,7 @@ string          { return TIPO_STRING; }
                     return CONSTANTE_FLOAT; 
                 }
 {id}            { 
-                    yylval = criar_constante_string(yytext);
+                    yylval = criar_idenfier(yytext);
                     return ID; 
                 }
 {string}        {  

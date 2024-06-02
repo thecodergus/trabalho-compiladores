@@ -14,7 +14,7 @@ endif
 app_src = files(
  'src/main.c',
  'src/ast.c',
- 'src/utils/str.c'
+ 'src/libraries/str.c'
 )
 
 # Local para importar as dependencias

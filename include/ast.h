@@ -4,8 +4,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "utils/cvector.h"
-#include "utils/str.h"
+#include "libraries/cvector.h"
+#include "libraries/str.h"
 
 #define vector(T) cvector_vector_type(T)
 
@@ -40,7 +40,7 @@ enum TipoToken {
   ConstantInt,
   ConstantFloat,
   ConstantString,
-  Idenfier
+  Identifier
 };
 
 // Estrutura de dados para os tokens
@@ -104,32 +104,32 @@ struct AST {
       struct AST *left;
       struct AST *right;
     } arvore;
-    vector(struct AST) filhos;
+    vector(struct AST *) filhos;
   } u;
 };
 
 // Definição das funções de criação de AST
-AST criar_programa(vector(struct AST) funcoes, vector(struct AST) blocoPrincipal);
+AST *criar_programa(AST *funcoes, AST *blocoPrincipal);
 
-vector(AST) concat_vectors(vector(AST) a, vector(AST) b);
+AST *criar_lista_funcoes(AST *funcoes, AST *funcao);
 
-AST criar_lista_funcoes(AST funcoes, AST funcao);
+AST *criar_parametro(AST *tipo, AST *id);
 
-AST criar_parametro(AST tipo, AST id);
+AST *criar_declaracao_parametros(AST *declaracaoAnterior, AST *parametro);
 
-AST criar_declaracao_parametros(AST declaracaoAnterior, AST parametro);
+AST *criar_funcao(AST *tipo, AST *id, AST *parametros, AST *bloco);
 
-AST criar_funcao(AST tipo, AST id, AST parametros, AST bloco);
+AST *criar_funcao_input_void(AST *tipo, AST *id, AST *bloco);
 
-AST criar_funcao_input_void(AST tipo, AST id, AST bloco);
+AST *criar_tipo(enum TipoDados tipo);
 
-AST criar_tipo(enum TipoDados tipo);
+AST *criar_constante_int(const char *input);
 
-AST criar_constante_int(const char *input);
+AST *criar_constante_float(const char *input);
 
-AST criar_constante_float(const char *input);
+AST *criar_constante_string(const char *input);
 
-AST criar_constante_string(const char *input);
+AST *criar_constante_void();
 
-AST criar_constante_void();
+AST *criar_idenfier(const char *input);
 #endif

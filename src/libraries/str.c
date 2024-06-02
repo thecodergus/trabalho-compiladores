@@ -33,7 +33,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define _DEFAULT_SOURCE  // for strncasecmp()
 #define _XOPEN_SOURCE
 
-#include "utils/str.h"
+#include "libraries/str.h"
 
 #include <errno.h>
 #include <fcntl.h>

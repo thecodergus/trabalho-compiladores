@@ -1,150 +1,96 @@
-#include "astUtils.h"
+#include "ast.h"
 
-AST criar_programa(vector(struct AST) funcoes, vector(struct AST) blocoPrincipal) {
-  AST programa;
-  programa.tipo = Vetor;
-  programa.token.tipo = Program;
-  programa.token.u.nada = NULL;
-  programa.u.filhos = concat_vectors(funcoes, blocoPrincipal);
-
+AST *criar_programa(AST *funcoes, AST *blocoPrincipal) {
+  AST *programa = (AST *)malloc(sizeof(AST));
+  programa->tipo = Arvore;
+  programa->u.arvore.left = funcoes;
+  programa->u.arvore.right = blocoPrincipal;
   return programa;
 }
 
-vector(AST) concat_vectors(vector(AST) a, vector(AST) b) {
-  vector(AST) result = NULL;
-
-  if (a) {
-    for (AST *it = cvector_begin(a); it != cvector_end(a); ++it) {
-      cvector_push_back(result, *it);
-    }
-  }
-
-  if (b) {
-    for (AST *it = cvector_begin(b); it != cvector_end(b); ++it) {
-      cvector_push_back(result, *it);
-    }
-  }
-
-  return result;
-}
-
-AST criar_lista_funcoes(AST funcoes, AST funcao) {
-  AST listaFuncoes;
-  listaFuncoes.tipo = Vetor;
-  listaFuncoes.token.tipo = DeclarationFunction;
-  listaFuncoes.u.filhos = funcoes.u.filhos;
-
-  cvector_push_back(listaFuncoes.u.filhos, funcoes);
-
+AST *criar_lista_funcoes(AST *funcoes, AST *funcao) {
+  AST *listaFuncoes = (AST *)malloc(sizeof(AST));
+  listaFuncoes->tipo = Vetor;
+  listaFuncoes->u.filhos = funcoes;
+  cvector_push_back(listaFuncoes->u.filhos, funcao);
   return listaFuncoes;
 }
 
-AST criar_parametro(AST tipo, AST id) {
-  AST parametro;
-  parametro.tipo = Arvore;
-  parametro.token.tipo = Parameter;
-
-  AST *left = malloc(sizeof(AST));
-  AST *right = malloc(sizeof(AST));
-
-  *left = tipo;
-  *right = id;
-
-  parametro.u.arvore.left = left;
-  parametro.u.arvore.right = right;
-
+AST *criar_parametro(AST *tipo, AST *id) {
+  AST *parametro = (AST *)malloc(sizeof(AST));
+  parametro->tipo = Arvore;
+  parametro->u.arvore.left = tipo;
+  parametro->u.arvore.right = id;
   return parametro;
 }
 
-AST criar_declaracao_parametros(AST declaracaoAnterior, AST parametro) {
-  AST declaracaoParametros;
-  declaracaoParametros.tipo = Vetor;
-  declaracaoParametros.token.tipo = Parameters;
-  declaracaoParametros.u.filhos = declaracaoAnterior.u.filhos;
-
-  cvector_push_back(declaracaoParametros.u.filhos, parametro);
-
-  return declaracaoParametros;
+AST *criar_declaracao_parametros(AST *declaracaoAnterior, AST *parametro) {
+  if (declaracaoAnterior == NULL) {
+    return parametro;
+  }
+  cvector_push_back(declaracaoAnterior->u.filhos, parametro);
+  return declaracaoAnterior;
 }
 
-AST criar_funcao(AST tipo, AST id, AST parametros, AST bloco) {
-  AST funcao;
-  funcao.tipo = Vetor;
-  funcao.token.tipo = Function;
-  funcao.u.filhos = NULL;
-
-  cvector_push_back(funcao.u.filhos, tipo);
-  cvector_push_back(funcao.u.filhos, id);
-  cvector_push_back(funcao.u.filhos, parametros);
-  cvector_push_back(funcao.u.filhos, bloco);
-
+AST *criar_funcao(AST *tipo, AST *id, AST *parametros, AST *bloco) {
+  AST *funcao = (AST *)malloc(sizeof(AST));
+  funcao->tipo = Vetor;
+  funcao->u.filhos = NULL;
+  cvector_push_back(funcao->u.filhos, tipo);
+  cvector_push_back(funcao->u.filhos, id);
+  cvector_push_back(funcao->u.filhos, parametros);
+  cvector_push_back(funcao->u.filhos, bloco);
   return funcao;
 }
 
-AST criar_funcao_input_void(AST tipo, AST id, AST bloco) {
-  AST funcao;
-  funcao.tipo = Vetor;
-  funcao.token.tipo = Function;
-  funcao.u.filhos = NULL;
-
-  cvector_push_back(funcao.u.filhos, tipo);
-  cvector_push_back(funcao.u.filhos, id);
-  cvector_push_back(funcao.u.filhos, bloco);
-
+AST *criar_funcao_input_void(AST *tipo, AST *id, AST *bloco) {
+  AST *funcao = (AST *)malloc(sizeof(AST));
+  funcao->tipo = Vetor;
+  funcao->u.filhos = NULL;
+  cvector_push_back(funcao->u.filhos, tipo);
+  cvector_push_back(funcao->u.filhos, id);
+  cvector_push_back(funcao->u.filhos, bloco);
   return funcao;
 }
 
-AST criar_tipo(enum TipoDados tipo) {
-  AST tipoAST;
-  tipoAST.tipo = Folha;
-  tipoAST.token.tipo = Type;
-  tipoAST.token.u.type.tipo = tipo;
-  tipoAST.u.arvore.left = NULL;
-  tipoAST.u.arvore.right = NULL;
-
+AST *criar_tipo(enum TipoDados tipo) {
+  AST *tipoAST = (AST *)malloc(sizeof(AST));
+  tipoAST->tipo = Folha;
+  tipoAST->token.tipo = Type;
+  tipoAST->token.u.type.tipo = tipo;
   return tipoAST;
 }
 
-AST criar_constante_int(const char *input) {
-  AST tipoInt;
-  tipoInt.tipo = Folha;
-  tipoInt.token.tipo = ConstantInt;
-  tipoInt.token.u.constInt.valor = atoi(input);
-  tipoInt.u.arvore.left = NULL;
-  tipoInt.u.arvore.right = NULL;
-
-  return tipoInt;
+AST *criar_constante_int(const char *input) {
+  AST *constanteInt = (AST *)malloc(sizeof(AST));
+  constanteInt->tipo = Folha;
+  constanteInt->token.tipo = ConstantInt;
+  constanteInt->token.u.constInt.valor = atoi(input);
+  return constanteInt;
 }
 
-AST criar_constante_float(const char *input) {
-  AST tipoFloat;
-  tipoFloat.tipo = Folha;
-  tipoFloat.token.tipo = ConstantFloat;
-  tipoFloat.token.u.constFloat.valor = atof(input);
-  tipoFloat.u.arvore.left = NULL;
-  tipoFloat.u.arvore.right = NULL;
-
-  return tipoFloat;
+AST *criar_constante_float(const char *input) {
+  AST *constanteFloat = (AST *)malloc(sizeof(AST));
+  constanteFloat->tipo = Folha;
+  constanteFloat->token.tipo = ConstantFloat;
+  constanteFloat->token.u.constFloat.valor = atof(input);
+  return constanteFloat;
 }
 
-AST criar_constante_string(const char *input) {
-  AST tipoString;
-  tipoString.tipo = Folha;
-  tipoString.token.tipo = ConstantString;
-  tipoString.token.u.constString.valor = str_acquire(input);
-  tipoString.u.arvore.left = NULL;
-  tipoString.u.arvore.right = NULL;
-
-  return tipoString;
+AST *criar_constante_string(const char *input) {
+  AST *constanteString = (AST *)malloc(sizeof(AST));
+  constanteString->tipo = Folha;
+  constanteString->token.tipo = ConstantString;
+  constanteString->token.u.constString.valor = str_acquire(input);
+  return constanteString;
 }
 
-AST criar_constante_void() {
-  AST tipoVoid;
-  tipoVoid.tipo = Folha;
-  tipoVoid.token.tipo = Void;
-  tipoVoid.token.u.nada = NULL;
-  tipoVoid.u.arvore.left = NULL;
-  tipoVoid.u.arvore.right = NULL;
+AST *criar_constante_void();
 
-  return tipoVoid;
+AST *criar_idenfier(const char *input) {
+  AST *idenfier = (AST *)malloc(sizeof(AST));
+  idenfier->tipo = Folha;
+  idenfier->token.tipo = Identifier;
+  idenfier->token.u.idenfier.id = str_acquire(input);
+  return idenfier;
 }
