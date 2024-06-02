@@ -99,7 +99,7 @@ InicioPrograma:
     Programa FIM{
         $$ = $1;
         // imprimir_arvore($1, 0);
-        printar_folhas($1);
+        // printar_folhas($1);
     }
     | FIM
     ;
@@ -118,7 +118,7 @@ ListaFuncoes:
         $$ = criar_lista_funcoes($1, $2);
     }
     | Funcao{
-        $$ = $1;
+        $$ = criar_lista_funcoes(NULL, $2);
     }
     ;
 
@@ -141,6 +141,7 @@ TipoRetorno:
 DeclaracaoParametros:
     DeclaracaoParametros SIMBOLO_VIRGULA Parametro{
         $$ = criar_declaracao_parametros($1, $3);
+        
     }
     | Parametro{
         $$ = criar_declaracao_parametros(NULL, $1);

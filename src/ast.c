@@ -10,12 +10,14 @@ AST *criar_programa(AST *funcoes, AST *blocoPrincipal) {
 }
 
 AST *criar_lista_funcoes(AST *funcoes, AST *funcao) {
-  AST *listaFuncoes = (AST *)malloc(sizeof(AST));
-  listaFuncoes->tipo = Vetor;
-  listaFuncoes->token.tipo = DeclarationFunctionList;
-  listaFuncoes->u.filhos = funcoes;
-  cvector_push_back(listaFuncoes->u.filhos, funcao);
-  return listaFuncoes;
+  if (funcoes == NULL) {
+    funcoes = (AST *)malloc(sizeof(AST));
+    funcoes->tipo = Vetor;
+    funcoes->token.tipo = DeclarationFunctionList;
+    funcoes->u.filhos = NULL;
+  }
+  cvector_push_back(funcoes->u.filhos, funcao);
+  return funcoes;
 }
 
 AST *criar_parametro(AST *tipo, AST *id) {
