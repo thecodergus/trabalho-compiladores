@@ -118,7 +118,7 @@ void imprimir_token(Token token, int nivel) {
     case IfBlock:
       printf("IfBloco\n");
       break;
-    case Else:
+    case ElseBlock:
       printf("ElseBloco\n");
       break;
     case While:
