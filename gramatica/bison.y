@@ -285,12 +285,18 @@ ComandoLeitura:
     ;
 
 ChamadaProc:
-    ChamadaFuncao
+    ChamadaFuncao{
+        $$ = $1;
+    }
     ;
 
 ChamadaFuncao:
-    ID SIMBOLO_ABRE_PARENTESES ListaParametros SIMBOLO_FECHA_PARENTESES
-    | ID SIMBOLO_ABRE_PARENTESES SIMBOLO_FECHA_PARENTESES
+    ID SIMBOLO_ABRE_PARENTESES ListaParametros SIMBOLO_FECHA_PARENTESES{
+        $$ = criar_comando_chamada_funcao($1, $3);
+    }
+    | ID SIMBOLO_ABRE_PARENTESES SIMBOLO_FECHA_PARENTESES{
+        $$ = criar_comando_chamada_funcao($1, criar_constante_void());
+    }
     ;
 
 ListaParametros:

@@ -32,7 +32,7 @@ enum TipoToken {
   Read,
   Function,
   FunctionList,
-  CallFuncion,
+  FunctionCall,
   ExpressionArithmetic,
   ExpressionRelational,
   ExpressionLogical,
@@ -150,12 +150,14 @@ AST *criar_lista_comandos(AST *comandos, AST *comando);
 
 AST *criar_comando_if(AST *condicao, AST *blocoIf, AST *blocoElse);
 
-AST* criar_comando_while(AST *condicao, AST *bloco);
+AST *criar_comando_while(AST *condicao, AST *bloco);
 
-AST* criar_comando_atribuicao(AST *id, AST *expressao);
+AST *criar_comando_atribuicao(AST *id, AST *expressao);
 
-AST* criar_comando_read(AST *id);
+AST *criar_comando_read(AST *id);
 
-AST* criar_comando_print(AST *expressao);
+AST *criar_comando_print(AST *expressao);
+
+AST *criar_comando_chamada_funcao(AST *id, AST *parametros);
 
 #endif

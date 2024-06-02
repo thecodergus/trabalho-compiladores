@@ -213,3 +213,13 @@ AST *criar_comando_print(AST *expressao) {
 
   return comandoPrint;
 }
+
+AST *criar_comando_chamada_funcao(AST *id, AST *parametros) {
+  AST *comandoChamadaFuncao = (AST *)malloc(sizeof(AST));
+  comandoChamadaFuncao->tipo = Arvore;
+  comandoChamadaFuncao->token.tipo = FunctionCall;
+  comandoChamadaFuncao->u.arvore.left = id;
+  comandoChamadaFuncao->u.arvore.right = parametros;
+
+  return comandoChamadaFuncao;
+}
