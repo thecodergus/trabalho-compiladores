@@ -22,4 +22,8 @@ struct AST {
   } u;
 };
 
+AST criar_programa(vector(struct AST*) funcoes, vector(struct AST*) blocoPrincipal);
+
+vector(AST*) concat_vectors(vector(AST*) a, vector(AST*) b);
+
 #endif
