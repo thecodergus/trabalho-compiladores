@@ -133,4 +133,6 @@ AST *criar_constante_string(const char *input);
 AST *criar_constante_void();
 
 AST *criar_idenfier(const char *input);
+
+AST *criar_bloco_principal(AST *declaracoes, AST *comandos);
 #endif

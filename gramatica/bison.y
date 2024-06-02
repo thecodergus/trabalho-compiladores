@@ -151,8 +151,12 @@ Parametro:
     }
 
 BloboPrincipal:
-    SIMBOLO_ABRE_CHAVES Declaracoes ListaComando SIMBOLO_FECHA_CHAVES
-    | SIMBOLO_ABRE_CHAVES ListaComando SIMBOLO_FECHA_CHAVES
+    SIMBOLO_ABRE_CHAVES Declaracoes ListaComando SIMBOLO_FECHA_CHAVES{
+        $$ = criar_bloco_principal($2, $3);
+    }
+    | SIMBOLO_ABRE_CHAVES ListaComando SIMBOLO_FECHA_CHAVES{
+        $$ = criar_bloco_principal(NULL, $2);
+    }
     ;
 
 Declaracoes:

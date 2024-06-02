@@ -100,3 +100,11 @@ AST *criar_idenfier(const char *input) {
   idenfier->token.u.idenfier.id = str_acquire(input);
   return idenfier;
 }
+
+AST *criar_bloco_principal(AST *declaracoes, AST *comandos) {
+  AST *blocoPrincipal = (AST *)malloc(sizeof(AST));
+  blocoPrincipal->tipo = Arvore;
+  blocoPrincipal->u.arvore.left = declaracoes;
+  blocoPrincipal->u.arvore.right = comandos;
+  return blocoPrincipal;
+}
