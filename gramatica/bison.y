@@ -261,14 +261,12 @@ ComandoSe:
 ComandoEnquanto:
     COMANDO_WHILE SIMBOLO_ABRE_PARENTESES ExpressaoLogica SIMBOLO_FECHA_PARENTESES Bloco{
         $$ = criar_comando_while($3, $5);
-        imprimir_arvore($$, 0);
     }
     ;
 
 ComandoAtribuicao:
     ID SIMBOLO_ATRIBUICAO ExpressaoAritmetica{
         $$ = criar_comando_atribuicao($1, $3);
-        
     }
     | ID SIMBOLO_ATRIBUICAO CONSTANTE_STRING{
         $$ = criar_comando_atribuicao($1, $3);
