@@ -158,8 +158,8 @@ void printar_folhas(AST* arvore) {
       }
       break;
     case Arvore:
-      if (!arvore->u.arvore.left) printar_folhas(arvore->u.arvore.left);
-      if (!arvore->u.arvore.right) printar_folhas(arvore->u.arvore.right);
+      if (arvore->u.arvore.left) printar_folhas(arvore->u.arvore.left);
+      if (arvore->u.arvore.right) printar_folhas(arvore->u.arvore.right);
       break;
     case Vetor:
       if (arvore->u.filhos) {
