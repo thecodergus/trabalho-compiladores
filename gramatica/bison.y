@@ -141,7 +141,7 @@ DeclaracaoParametros:
         $$ = criar_declaracao_parametros($1, $3);
     }
     | Parametro{
-        $$ = $1;
+        $$ = criar_declaracao_parametros(NULL, $1);
     }
     ;
 
