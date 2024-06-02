@@ -206,7 +206,9 @@ DeclaracaoParametros:
     ;
 
 Parametro:
-    Tipo ID
+    Tipo ID{
+        $$ = criar_parametro($1, $2);
+    }
 
 BloboPrincipal:
     SIMBOLO_ABRE_CHAVES Declaracoes ListaComando SIMBOLO_FECHA_CHAVES

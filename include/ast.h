@@ -18,6 +18,7 @@ typedef struct TipoDado TipoDado;
 enum TipoToken {
   Program,
   DeclarationFunction,
+  Parameter,
   Parameters,
   Block,
   Declaration,
@@ -123,5 +124,7 @@ AST criar_constante_float(const char *input);
 AST criar_constante_string(const char *input);
 
 AST criar_constante_void();
+
+AST criar_parametro(AST tipo, AST id);
 
 #endif

@@ -93,3 +93,20 @@ AST criar_constante_void() {
 
   return tipoVoid;
 }
+
+AST criar_parametro(AST tipo, AST id) {
+  AST parametro;
+  parametro.tipo = Arvore;
+  parametro.token.tipo = Parameter;
+
+  AST *left = malloc(sizeof(AST));
+  AST *right = malloc(sizeof(AST));
+
+  *left = tipo;
+  *right = id;
+
+  parametro.u.arvore.left = left;
+  parametro.u.arvore.right = right;
+
+  return parametro;
+}
