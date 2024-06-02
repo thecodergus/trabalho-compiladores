@@ -110,7 +110,7 @@ void imprimir_token(Token token, int nivel) {
       printf("Lisa de declaracoes\n");
       break;
     case Assignment:
-      printf("Atribuicai\n");
+      printf("Atribuicao\n");
       break;
     case If:
       printf("If\n");
