@@ -18,6 +18,8 @@ typedef struct TipoDado TipoDado;
 enum TipoToken {
   Program,
   DeclarationFunction,
+  Parameter,
+  Parameters,
   Block,
   Declaration,
   Assignment,
@@ -33,15 +35,16 @@ enum TipoToken {
   ExpressionLogical,
   Variable,
   Type,
-  Literal
+  Literal,
+  ConstantInt,
+  ConstantFloat,
+  ConstantString
 };
 
 // Estrutura de dados para os tokens
 struct Funcao {
   str id;
   enum TipoDados tipo;
-  vector(struct AST) parametros;
-  vector(struct AST) bloco;
 };
 
 struct Parametro {
@@ -89,5 +92,7 @@ AST criar_programa(vector(struct AST) funcoes, vector(struct AST) blocoPrincipal
 vector(AST) concat_vectors(vector(AST) a, vector(AST) b);
 
 AST criar_lista_funcoes(AST funcoes, AST funcao);
+
+AST criar_funcao(AST parametros, AST bloco);
 
 #endif

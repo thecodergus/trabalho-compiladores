@@ -121,9 +121,9 @@ int yylex();
 %type <AST> ExpressaoRelacional
 %type <AST> ExpressaoAritmetica
 %type <AST> LITERAL
-%type <const char*> ID
-%type <int> CONSTANTE_INT
-%type <float> CONSTANTE_FLOAT
+%type <AST> ID
+%type <AST> CONSTANTE_INT
+%type <AST> CONSTANTE_FLOAT
 %type <AST> LOGICA_EQ
 %type <AST> LOGICA_NE
 %type <AST> LOGICA_LE
