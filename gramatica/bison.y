@@ -196,11 +196,17 @@ ListaId:
     ;
 
 Bloco: 
-    SIMBOLO_ABRE_CHAVES ListaComando SIMBOLO_FECHA_CHAVES
+    SIMBOLO_ABRE_CHAVES ListaComando SIMBOLO_FECHA_CHAVES{
+        $$ = $2;
+    }
 
 ListaComando:
-    ListaComando Comando
-    | Comando
+    ListaComando Comando{
+        $$ = criar_lista_comandos($1, $2);
+    }
+    | Comando{
+        $$ = criar_lista_comandos(NULL, $1);
+    }
     ;
 
 Comando:

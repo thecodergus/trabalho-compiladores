@@ -148,3 +148,14 @@ AST *criar_declaracoes(AST *declaracoes, AST *declaracao) {
   cvector_push_back(declaracoes->u.filhos, declaracao);
   return declaracoes;
 }
+
+AST *criar_lista_comandos(AST *comandos, AST *comando) {
+  if (comandos == NULL) {
+    comandos = (AST *)malloc(sizeof(AST));
+    comandos->tipo = Vetor;
+    comandos->token.tipo = CommandList;
+    comandos->u.filhos = NULL;
+  }
+  cvector_push_back(comandos->u.filhos, comando);
+  return comandos;
+}

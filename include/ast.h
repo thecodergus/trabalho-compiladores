@@ -45,6 +45,7 @@ enum TipoToken {
   ConstantVoid,
   Identifier,
   IdentifierList,
+  CommandList
 };
 
 // Estrutura de dados para os tokens
@@ -144,5 +145,7 @@ AST *criar_lista_identificadores(AST *identificadores, AST *id);
 AST *criar_declaracao(AST *tipo, AST *ids);
 
 AST *criar_declaracoes(AST *declaracoes, AST *declaracao);
+
+AST *criar_lista_comandos(AST *comandos, AST *comando);
 
 #endif
