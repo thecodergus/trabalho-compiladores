@@ -261,8 +261,12 @@ ComandoEnquanto:
     ;
 
 ComandoAtribuicao:
-    ID SIMBOLO_ATRIBUICAO ExpressaoAritmetica
-    | ID SIMBOLO_ATRIBUICAO CONSTANTE_STRING
+    ID SIMBOLO_ATRIBUICAO ExpressaoAritmetica{
+        $$ = criar_comando_atribuicao($1, $3);
+    }
+    | ID SIMBOLO_ATRIBUICAO CONSTANTE_STRING{
+        $$ = criar_comando_atribuicao($1, $3);
+    }
     ;
 
 ComandoEscrita:

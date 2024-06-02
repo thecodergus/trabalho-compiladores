@@ -183,3 +183,13 @@ AST *criar_comando_while(AST *condicao, AST *bloco) {
 
   return comandoWhile;
 }
+
+AST *criar_comando_atribuicao(AST *id, AST *expressao) {
+  AST *comandoAtribuicao = (AST *)malloc(sizeof(AST));
+  comandoAtribuicao->tipo = Arvore;
+  comandoAtribuicao->token.tipo = Assignment;
+  comandoAtribuicao->u.arvore.left = id;
+  comandoAtribuicao->u.arvore.right = expressao;
+
+  return comandoAtribuicao;
+}
