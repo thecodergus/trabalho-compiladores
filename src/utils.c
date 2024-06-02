@@ -104,7 +104,7 @@ void imprimir_arvore(AST* raiz, int nivel) {
           printf("ConstantVoid\n");
           break;
         case Identifier:
-          // printf("Identifier: %s\n", str_ptr(raiz->token.u.idenfier.id));
+          printf("Identifier: %s\n", str_ptr(raiz->token.u.idenfier.id));
           break;
         case IdentifierList:
           printf("IdentifierList\n");
