@@ -8,115 +8,119 @@ void imprimir_arvore(AST* raiz, int nivel) {
   switch (raiz->tipo) {
     case Arvore:
       printf("Arvore:\n");
+      imprimir_token(raiz->token, nivel);
       imprimir_arvore(raiz->u.arvore.left, nivel + 1);
       imprimir_arvore(raiz->u.arvore.right, nivel + 1);
       break;
     case Vetor:
       printf("Vetor:\n");
+      imprimir_token(raiz->token, nivel);
       for (AST** i = cvector_begin(raiz->u.filhos); i != cvector_end(raiz->u.filhos); i++) {
         imprimir_arvore(*i, nivel + 1);
       }
       break;
     case Folha:
       printf("Folha: ");
-      switch (raiz->token.tipo) {
-        case Program:
-          printf("Program\n");
-          break;
-        case DeclarationFunction:
-          printf("DeclarationFunction, ID: %s, Type: %s\n", str_ptr(raiz->token.u.funcao.id), tipo_dado_str(raiz->token.u.funcao.tipo));
-          break;
-        case DeclarationParameter:
-          printf("DeclarationParameter, ID: %s, Type: %s\n", str_ptr(raiz->token.u.parametro.id),
-                 tipo_dado_str(raiz->token.u.parametro.tipo));
-          break;
-        case DeclarationParameterList:
-          printf("DeclarationParameterList\n");
-          break;
-        case ParameterList:
-          printf("ParameterList\n");
-          break;
-        case Block:
-          printf("Block\n");
-          break;
-        case DeclarationVariable:
-          printf("DeclarationVariable, ID: %s, Type: %sS\n", str_ptr(raiz->token.u.idenfier.id), tipo_dado_str(raiz->token.u.type.tipo));
-          break;
-        case DeclarationList:
-          printf("DeclarationList\n");
-          break;
-        case Assignment:
-          printf("Assignment\n");
-          break;
-        case If:
-          printf("If\n");
-          break;
-        case IfBlock:
-          printf("IfBlock\n");
-          break;
-        case While:
-          printf("While\n");
-          break;
-        case Return:
-          printf("Return\n");
-          break;
-        case Print:
-          printf("Print\n");
-          break;
-        case Read:
-          printf("Read\n");
-          break;
-          break;
-        case DeclarationFunctionList:
-          printf("DeclarationFunctionList\n");
-          break;
-        case FunctionCall:
-          printf("FunctionCall\n");
-          break;
-        case ExpressionArithmetic:
-          printf("ArithmeticExpression, Operator: %d\n", raiz->token.u.arithmeticExpression.operator);
-          break;
-        case ExpressionRelational:
-          printf("RelationalExpression, Operator: %d\n", raiz->token.u.relationalExpression.operator);
-          break;
-        case ExpressionLogical:
-          printf("LogicalExpression, Operator: %d\n", raiz->token.u.logicalExpression.operator);
-          break;
-        case Variable:
-          printf("Variable\n");
-          break;
-        case Type:
-          printf("Type, Type: %s\n", tipo_dado_str(raiz->token.u.type.tipo));
-          break;
-        case Literal:
-          printf("Literal\n");
-          break;
-        case ConstantInt:
-          printf("ConstantInt: %d\n", raiz->token.u.constInt.valor);
-          break;
-        case ConstantFloat:
-          printf("ConstantFloat: %f\n", raiz->token.u.constFloat.valor);
-          break;
-        case ConstantString:
-          printf("ConstantString: %s\n", str_ptr(raiz->token.u.constString.valor));
-          break;
-        case ConstantVoid:
-          printf("ConstantVoid\n");
-          break;
-        case Identifier:
-          printf("Identifier: %s\n", str_ptr(raiz->token.u.idenfier.id));
-          break;
-        case IdentifierList:
-          printf("IdentifierList\n");
-          break;
-        case CommandList:
-          printf("CommandList\n");
-          break;
-        default:
-          printf("Unknown\n");
-      }
-
+      imprimir_token(raiz->token, nivel);
       break;
+  }
+}
+
+void imprimir_token(struct Token token, int nivel) {
+  switch (token.tipo) {
+    case Program:
+      printf("Program\n");
+      break;
+    case DeclarationFunction:
+      printf("DeclarationFunction, ID: %s, Type: %s\n", str_ptr(token.u.funcao.id), tipo_dado_str(token.u.funcao.tipo));
+      break;
+    case DeclarationParameter:
+      printf("DeclarationParameter, ID: %s, Type: %s\n", str_ptr(token.u.parametro.id), tipo_dado_str(token.u.parametro.tipo));
+      break;
+    case DeclarationParameterList:
+      printf("DeclarationParameterList\n");
+      break;
+    case ParameterList:
+      printf("ParameterList\n");
+      break;
+    case Block:
+      printf("Block\n");
+      break;
+    case DeclarationVariable:
+      printf("DeclarationVariable, ID: %s, Type: %sS\n", str_ptr(token.u.idenfier.id), tipo_dado_str(token.u.type.tipo));
+      break;
+    case DeclarationList:
+      printf("DeclarationList\n");
+      break;
+    case Assignment:
+      printf("Assignment\n");
+      break;
+    case If:
+      printf("If\n");
+      break;
+    case IfBlock:
+      printf("IfBlock\n");
+      break;
+    case While:
+      printf("While\n");
+      break;
+    case Return:
+      printf("Return\n");
+      break;
+    case Print:
+      printf("Print\n");
+      break;
+    case Read:
+      printf("Read\n");
+      break;
+      break;
+    case DeclarationFunctionList:
+      printf("DeclarationFunctionList\n");
+      break;
+    case FunctionCall:
+      printf("FunctionCall\n");
+      break;
+    case ExpressionArithmetic:
+      printf("ArithmeticExpression, Operator: %d\n", token.u.arithmeticExpression.operator);
+      break;
+    case ExpressionRelational:
+      printf("RelationalExpression, Operator: %d\n", token.u.relationalExpression.operator);
+      break;
+    case ExpressionLogical:
+      printf("LogicalExpression, Operator: %d\n", token.u.logicalExpression.operator);
+      break;
+    case Variable:
+      printf("Variable\n");
+      break;
+    case Type:
+      printf("Type, Type: %s\n", tipo_dado_str(token.u.type.tipo));
+      break;
+    case Literal:
+      printf("Literal\n");
+      break;
+    case ConstantInt:
+      printf("ConstantInt: %d\n", token.u.constInt.valor);
+      break;
+    case ConstantFloat:
+      printf("ConstantFloat: %f\n", token.u.constFloat.valor);
+      break;
+    case ConstantString:
+      printf("ConstantString: %s\n", str_ptr(token.u.constString.valor));
+      break;
+    case ConstantVoid:
+      printf("ConstantVoid\n");
+      break;
+    case Identifier:
+      printf("Identifier: %s\n", str_ptr(token.u.idenfier.id));
+      break;
+    case IdentifierList:
+      printf("IdentifierList\n");
+      break;
+    case CommandList:
+      printf("CommandList\n");
+      break;
+    default:
+      printf("Unknown\n");
   }
 }
 
