@@ -193,3 +193,13 @@ AST *criar_comando_atribuicao(AST *id, AST *expressao) {
 
   return comandoAtribuicao;
 }
+
+AST *criar_comando_read(AST *id) {
+  AST *comandoRead = (AST *)malloc(sizeof(AST));
+  comandoRead->tipo = Arvore;
+  comandoRead->token.tipo = Read;
+  comandoRead->u.arvore.left = id;
+  comandoRead->u.arvore.right = NULL;
+
+  return comandoRead;
+}

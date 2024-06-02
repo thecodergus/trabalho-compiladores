@@ -151,6 +151,9 @@ AST *criar_lista_comandos(AST *comandos, AST *comando);
 AST *criar_comando_if(AST *condicao, AST *blocoIf, AST *blocoElse);
 
 AST* criar_comando_while(AST *condicao, AST *bloco);
+
 AST* criar_comando_atribuicao(AST *id, AST *expressao);
+
+AST* criar_comando_read(AST *id);
 
 #endif

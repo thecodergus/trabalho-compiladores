@@ -275,7 +275,9 @@ ComandoEscrita:
     ;
 
 ComandoLeitura:
-    COMANDO_READ SIMBOLO_ABRE_PARENTESES ID SIMBOLO_FECHA_PARENTESES
+    COMANDO_READ SIMBOLO_ABRE_PARENTESES ID SIMBOLO_FECHA_PARENTESES{
+        $$ = criar_comando_read($3); 
+    }
     ;
 
 ChamadaProc:
