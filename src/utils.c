@@ -85,34 +85,34 @@ void imprimir_token(Token token, int nivel) {
       printf("Program\n");
       break;
     case DeclarationFunction:
-      printf("DeclarationFunction, ID: %s, Type: %s\n", str_ptr(token.u.funcao.id), tipo_dado_str(token.u.funcao.tipo));
+      printf("Declaracao de funcao, ID: %s, Type: %s\n", str_ptr(token.u.funcao.id), tipo_dado_str(token.u.funcao.tipo));
       break;
     case DeclarationParameter:
-      printf("DeclarationParameter, ID: %s, Type: %s\n", str_ptr(token.u.parametro.id), tipo_dado_str(token.u.parametro.tipo));
+      printf("Declaracao de parametro, ID: %s, Type: %s\n", str_ptr(token.u.parametro.id), tipo_dado_str(token.u.parametro.tipo));
       break;
     case DeclarationParameterList:
-      printf("DeclarationParameterList\n");
+      printf("Declaracao de parametro em lista\n");
       break;
     case ParameterList:
-      printf("ParameterList\n");
+      printf("Lista de parametros\n");
       break;
     case Block:
-      printf("Block\n");
+      printf("Bloco\n");
       break;
     case DeclarationVariable:
-      printf("DeclarationVariable, ID: %s, Type: %sS\n", str_ptr(token.u.idenfier.id), tipo_dado_str(token.u.type.tipo));
+      printf("Declaracao de variavel, ID: %s, Tipo: %sS\n", str_ptr(token.u.idenfier.id), tipo_dado_str(token.u.type.tipo));
       break;
     case DeclarationList:
-      printf("DeclarationList\n");
+      printf("Lisa de declaracoes\n");
       break;
     case Assignment:
-      printf("Assignment\n");
+      printf("Atribuicai\n");
       break;
     case If:
       printf("If\n");
       break;
     case IfBlock:
-      printf("IfBlock\n");
+      printf("IfBloco\n");
       break;
     case While:
       printf("While\n");
@@ -128,52 +128,52 @@ void imprimir_token(Token token, int nivel) {
       break;
       break;
     case DeclarationFunctionList:
-      printf("DeclarationFunctionList\n");
+      printf("Lista de declaracao de funcoes\n");
       break;
     case FunctionCall:
-      printf("FunctionCall\n");
+      printf("Chamada de funcao\n");
       break;
     case ExpressionArithmetic:
-      printf("ArithmeticExpression, Operator: %d\n", token.u.arithmeticExpression.operator);
+      printf("Expressao Aritimetica, Operator: %d\n", token.u.arithmeticExpression.operator);
       break;
     case ExpressionRelational:
-      printf("RelationalExpression, Operator: %d\n", token.u.relationalExpression.operator);
+      printf("Expressao Relacional, Operator: %d\n", token.u.relationalExpression.operator);
       break;
     case ExpressionLogical:
-      printf("LogicalExpression, Operator: %d\n", token.u.logicalExpression.operator);
+      printf("Expressao Locica, Operator: %d\n", token.u.logicalExpression.operator);
       break;
     case Variable:
-      printf("Variable\n");
+      printf("Variavel\n");
       break;
     case Type:
-      printf("Type, Type: %s\n", tipo_dado_str(token.u.type.tipo));
+      printf("Tipo: %s\n", tipo_dado_str(token.u.type.tipo));
       break;
     case Literal:
       printf("Literal\n");
       break;
     case ConstantInt:
-      printf("ConstantInt: %d\n", token.u.constInt.valor);
+      printf("Constante Int: %d\n", token.u.constInt.valor);
       break;
     case ConstantFloat:
-      printf("ConstantFloat: %f\n", token.u.constFloat.valor);
+      printf("Constante Float: %f\n", token.u.constFloat.valor);
       break;
     case ConstantString:
-      printf("ConstantString: %s\n", str_ptr(token.u.constString.valor));
+      printf("Constante String: %s\n", str_ptr(token.u.constString.valor));
       break;
     case ConstantVoid:
-      printf("ConstantVoid\n");
+      printf("Constante Void\n");
       break;
     case Identifier:
-      printf("Identifier: %s\n", str_ptr(token.u.idenfier.id));
+      printf("ID: %s\n", str_ptr(token.u.idenfier.id));
       break;
     case IdentifierList:
-      printf("IdentifierList\n");
+      printf("Lista de IDs\n");
       break;
     case CommandList:
-      printf("CommandList\n");
+      printf("Lista de comandos\n");
       break;
     default:
-      printf("Unknown\n");
+      printf("Desconhecido\n");
   }
 }
 
