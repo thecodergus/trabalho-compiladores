@@ -7,21 +7,24 @@ void imprimir_arvore(AST* raiz, int nivel) {
 
   switch (raiz->tipo) {
     case Arvore:
+      imprimir_token(raiz->token, nivel);
+      imprimir_traco(nivel + 1);
       printf("Arvore:\n");
-      imprimir_token(raiz->token, nivel + 1);
       imprimir_arvore(raiz->u.arvore.left, nivel + 2);
       imprimir_arvore(raiz->u.arvore.right, nivel + 2);
       break;
     case Vetor:
+      imprimir_token(raiz->token, nivel);
+      imprimir_traco(nivel + 1);
       printf("Vetor:\n");
-      imprimir_token(raiz->token, nivel + 1);
       for (AST** i = cvector_begin(raiz->u.filhos); i != cvector_end(raiz->u.filhos); i++) {
         imprimir_arvore(*i, nivel + 2);
       }
       break;
     case Folha:
-      printf("Folha: \n");
-      imprimir_token(raiz->token, nivel + 1);
+      imprimir_token(raiz->token, nivel);
+      imprimir_traco(nivel + 1);
+      printf("Folha. \n");
       break;
   }
 }
@@ -78,7 +81,7 @@ void printar_folhas(AST* arvore) {
 }
 
 void imprimir_token(Token token, int nivel) {
-  imprimir_traco(nivel);
+  // imprimir_traco(nivel);
 
   switch (token.tipo) {
     case Program:
