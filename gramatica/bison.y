@@ -189,8 +189,12 @@ ListaFuncoes:
     ;
 
 Funcao:
-    TipoRetorno ID SIMBOLO_ABRE_PARENTESES DeclaracaoParametros SIMBOLO_FECHA_PARENTESES BloboPrincipal
-    | TipoRetorno ID SIMBOLO_ABRE_PARENTESES SIMBOLO_FECHA_PARENTESES BloboPrincipal
+    TipoRetorno ID SIMBOLO_ABRE_PARENTESES DeclaracaoParametros SIMBOLO_FECHA_PARENTESES BloboPrincipal{
+        $$ = criar_funcao($1, $2, $4, $6);
+    }
+    | TipoRetorno ID SIMBOLO_ABRE_PARENTESES SIMBOLO_FECHA_PARENTESES BloboPrincipal{
+        $$ = criar_funcao_input_void($1, $2, $5);
+    }
     ;
 
 TipoRetorno:

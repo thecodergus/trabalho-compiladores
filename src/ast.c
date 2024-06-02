@@ -39,6 +39,61 @@ AST criar_lista_funcoes(AST funcoes, AST funcao) {
   return listaFuncoes;
 }
 
+AST criar_parametro(AST tipo, AST id) {
+  AST parametro;
+  parametro.tipo = Arvore;
+  parametro.token.tipo = Parameter;
+
+  AST *left = malloc(sizeof(AST));
+  AST *right = malloc(sizeof(AST));
+
+  *left = tipo;
+  *right = id;
+
+  parametro.u.arvore.left = left;
+  parametro.u.arvore.right = right;
+
+  return parametro;
+}
+
+AST criar_declaracao_parametros(AST declaracaoAnterior, AST parametro) {
+  AST declaracaoParametros;
+  declaracaoParametros.tipo = Vetor;
+  declaracaoParametros.token.tipo = Parameters;
+  declaracaoParametros.u.filhos = declaracaoAnterior.u.filhos;
+
+  cvector_push_back(declaracaoParametros.u.filhos, parametro);
+
+  return declaracaoParametros;
+}
+
+AST criar_funcao(AST tipo, AST id, AST parametros, AST bloco) {
+  AST funcao;
+  funcao.tipo = Vetor;
+  funcao.token.tipo = Function;
+  funcao.u.filhos = NULL;
+
+  cvector_push_back(funcao.u.filhos, tipo);
+  cvector_push_back(funcao.u.filhos, id);
+  cvector_push_back(funcao.u.filhos, parametros);
+  cvector_push_back(funcao.u.filhos, bloco);
+
+  return funcao;
+}
+
+AST criar_funcao_input_void(AST tipo, AST id, AST bloco) {
+  AST funcao;
+  funcao.tipo = Vetor;
+  funcao.token.tipo = Function;
+  funcao.u.filhos = NULL;
+
+  cvector_push_back(funcao.u.filhos, tipo);
+  cvector_push_back(funcao.u.filhos, id);
+  cvector_push_back(funcao.u.filhos, bloco);
+
+  return funcao;
+}
+
 AST criar_tipo(enum TipoDados tipo) {
   AST tipoAST;
   tipoAST.tipo = Folha;
@@ -92,32 +147,4 @@ AST criar_constante_void() {
   tipoVoid.u.arvore.right = NULL;
 
   return tipoVoid;
-}
-
-AST criar_parametro(AST tipo, AST id) {
-  AST parametro;
-  parametro.tipo = Arvore;
-  parametro.token.tipo = Parameter;
-
-  AST *left = malloc(sizeof(AST));
-  AST *right = malloc(sizeof(AST));
-
-  *left = tipo;
-  *right = id;
-
-  parametro.u.arvore.left = left;
-  parametro.u.arvore.right = right;
-
-  return parametro;
-}
-
-AST criar_declaracao_parametros(AST declaracaoAnterior, AST parametro) {
-  AST declaracaoParametros;
-  declaracaoParametros.tipo = Vetor;
-  declaracaoParametros.token.tipo = Parameters;
-  declaracaoParametros.u.filhos = declaracaoAnterior.u.filhos;
-
-  cvector_push_back(declaracaoParametros.u.filhos, parametro);
-
-  return declaracaoParametros;
 }
