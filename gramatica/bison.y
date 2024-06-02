@@ -304,6 +304,7 @@ ListaParametros:
     | ListaParametros SIMBOLO_VIRGULA CONSTANTE_STRING
     | ExpressaoAritmetica
     | CONSTANTE_STRING
+    | ID
     ;
 
 // FIM CODIGO COM BASE NA GRAMATICA DO PROFESSOR
