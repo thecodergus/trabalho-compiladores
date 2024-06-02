@@ -19,9 +19,9 @@ enum TipoToken {
   Program,
   DeclarationFunction,
   Parameter,
-  Parameters,
+  ParameterList,
   Block,
-  Declaration,
+  DeclarationVariable,
   Assignment,
   If,
   Else,
@@ -30,6 +30,7 @@ enum TipoToken {
   Print,
   Read,
   Function,
+  FunctionList,
   CallFuncion,
   ExpressionArithmetic,
   ExpressionRelational,
@@ -41,7 +42,8 @@ enum TipoToken {
   ConstantFloat,
   ConstantString,
   ConstantVoid,
-  Identifier
+  Identifier,
+  IdentifierList,
 };
 
 // Estrutura de dados para os tokens
@@ -135,4 +137,7 @@ AST *criar_constante_void();
 AST *criar_idenfier(const char *input);
 
 AST *criar_bloco_principal(AST *declaracoes, AST *comandos);
+
+AST *criar_declaracao(AST *tipo, AST *ids);
+
 #endif

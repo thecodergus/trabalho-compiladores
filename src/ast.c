@@ -3,6 +3,7 @@
 AST *criar_programa(AST *funcoes, AST *blocoPrincipal) {
   AST *programa = (AST *)malloc(sizeof(AST));
   programa->tipo = Arvore;
+  programa->token.tipo = Program;
   programa->u.arvore.left = funcoes;
   programa->u.arvore.right = blocoPrincipal;
   return programa;
@@ -11,6 +12,7 @@ AST *criar_programa(AST *funcoes, AST *blocoPrincipal) {
 AST *criar_lista_funcoes(AST *funcoes, AST *funcao) {
   AST *listaFuncoes = (AST *)malloc(sizeof(AST));
   listaFuncoes->tipo = Vetor;
+  listaFuncoes->token.tipo = FunctionList;
   listaFuncoes->u.filhos = funcoes;
   cvector_push_back(listaFuncoes->u.filhos, funcao);
   return listaFuncoes;
@@ -19,6 +21,7 @@ AST *criar_lista_funcoes(AST *funcoes, AST *funcao) {
 AST *criar_parametro(AST *tipo, AST *id) {
   AST *parametro = (AST *)malloc(sizeof(AST));
   parametro->tipo = Arvore;
+  parametro->token.tipo = Parameter;
   parametro->u.arvore.left = tipo;
   parametro->u.arvore.right = id;
   return parametro;
@@ -26,7 +29,10 @@ AST *criar_parametro(AST *tipo, AST *id) {
 
 AST *criar_declaracao_parametros(AST *declaracaoAnterior, AST *parametro) {
   if (declaracaoAnterior == NULL) {
-    return parametro;
+    declaracaoAnterior = (AST *)malloc(sizeof(AST));
+    declaracaoAnterior->tipo = Vetor;
+    declaracaoAnterior->token.tipo = ParameterList;
+    declaracaoAnterior->u.filhos = NULL;
   }
   cvector_push_back(declaracaoAnterior->u.filhos, parametro);
   return declaracaoAnterior;
@@ -35,6 +41,7 @@ AST *criar_declaracao_parametros(AST *declaracaoAnterior, AST *parametro) {
 AST *criar_funcao(AST *tipo, AST *id, AST *parametros, AST *bloco) {
   AST *funcao = (AST *)malloc(sizeof(AST));
   funcao->tipo = Vetor;
+  funcao->token.tipo = Function;
   funcao->u.filhos = NULL;
   cvector_push_back(funcao->u.filhos, tipo);
   cvector_push_back(funcao->u.filhos, id);
@@ -46,6 +53,7 @@ AST *criar_funcao(AST *tipo, AST *id, AST *parametros, AST *bloco) {
 AST *criar_funcao_input_void(AST *tipo, AST *id, AST *bloco) {
   AST *funcao = (AST *)malloc(sizeof(AST));
   funcao->tipo = Vetor;
+  funcao->token.tipo = Function;
   funcao->u.filhos = NULL;
   cvector_push_back(funcao->u.filhos, tipo);
   cvector_push_back(funcao->u.filhos, id);
@@ -103,8 +111,18 @@ AST *criar_idenfier(const char *input) {
 
 AST *criar_bloco_principal(AST *declaracoes, AST *comandos) {
   AST *blocoPrincipal = (AST *)malloc(sizeof(AST));
+  blocoPrincipal->token.tipo = Block;
   blocoPrincipal->tipo = Arvore;
   blocoPrincipal->u.arvore.left = declaracoes;
   blocoPrincipal->u.arvore.right = comandos;
   return blocoPrincipal;
+}
+
+AST *criar_declaracao(AST *tipo, AST *ids) {
+  AST *declaracao = (AST *)malloc(sizeof(AST));
+  declaracao->tipo = Arvore;
+  declaracao->token.tipo = DeclarationVariable;
+  declaracao->u.arvore.left = tipo;
+  declaracao->u.arvore.right = ids;
+  return declaracao;
 }
