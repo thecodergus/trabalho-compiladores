@@ -40,6 +40,7 @@ enum TipoToken {
   ConstantInt,
   ConstantFloat,
   ConstantString,
+  ConstantVoid,
   Identifier
 };
 

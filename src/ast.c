@@ -85,7 +85,13 @@ AST *criar_constante_string(const char *input) {
   return constanteString;
 }
 
-AST *criar_constante_void();
+AST *criar_constante_void() {
+  AST *constanteVoid = (AST *)malloc(sizeof(AST));
+  constanteVoid->tipo = Folha;
+  constanteVoid->token.tipo = ConstantVoid;
+  constanteVoid->token.u.nada = NULL;
+  return constanteVoid;
+}
 
 AST *criar_idenfier(const char *input) {
   AST *idenfier = (AST *)malloc(sizeof(AST));
