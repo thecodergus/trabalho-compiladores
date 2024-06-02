@@ -315,15 +315,23 @@ ListaParametros:
 
 
 ExpressaoLogica:
-    ExpressaoLogica LOGICA_AND TermoLogico
-    | ExpressaoLogica LOGICA_OR TermoLogico
+    ExpressaoLogica LOGICA_AND TermoLogico{
+        $$ = criar_expressao_logica(E, $1, $3);
+    }
+    | ExpressaoLogica LOGICA_OR TermoLogico{
+        $$ = criar_expressao_logica(Ou, $1, $3);
+    }
     | TermoLogico
     ;
 
 TermoLogico:
-    LOGICA_NOT TermoLogico
+    LOGICA_NOT TermoLogico{
+        $$ = criar_expressao_logica(Nao, $2, NULL);
+    }
     | ExpressaoRelacional
-    | SIMBOLO_ABRE_PARENTESES ExpressaoLogica SIMBOLO_FECHA_PARENTESES
+    | SIMBOLO_ABRE_PARENTESES ExpressaoLogica SIMBOLO_FECHA_PARENTESES{
+        $$ = $2;
+    }
     ;
 
 ExpressaoRelacional:

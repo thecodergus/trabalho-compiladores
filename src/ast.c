@@ -234,3 +234,33 @@ AST *criar_lista_parametros(AST *parametros, AST *parametro) {
   cvector_push_back(parametros->u.filhos, parametro);
   return parametros;
 }
+
+AST *criar_expressao_logica(enum LogicalOperators operator, AST * left, AST *right) {
+  AST *expressaoLogica = (AST *)malloc(sizeof(AST));
+  expressaoLogica->tipo = Arvore;
+  expressaoLogica->token.tipo = ExpressionLogical;
+  expressaoLogica->u.arvore.left = left;
+  expressaoLogica->u.arvore.right = right;
+  expressaoLogica->token.u.logicalExpression.operator= operator;
+  return expressaoLogica;
+}
+
+AST *criar_expressao_aritmetica(enum ArithmeticOperators operator, AST * left, AST *right) {
+  AST *expressaoAritmetica = (AST *)malloc(sizeof(AST));
+  expressaoAritmetica->tipo = Arvore;
+  expressaoAritmetica->token.tipo = ExpressionArithmetic;
+  expressaoAritmetica->u.arvore.left = left;
+  expressaoAritmetica->u.arvore.right = right;
+  expressaoAritmetica->token.u.arithmeticExpression.operator= operator;
+  return expressaoAritmetica;
+}
+
+AST *criar_expressao_relacional(enum RelationsOperators operator, AST * left, AST *right) {
+  AST *expressaoRelacional = (AST *)malloc(sizeof(AST));
+  expressaoRelacional->tipo = Arvore;
+  expressaoRelacional->token.tipo = ExpressionRelational;
+  expressaoRelacional->u.arvore.left = left;
+  expressaoRelacional->u.arvore.right = right;
+  expressaoRelacional->token.u.relationalExpression.operator= operator;
+  return expressaoRelacional;
+}
