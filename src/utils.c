@@ -141,7 +141,7 @@ void imprimir_token(Token token, int nivel) {
       printf("Expressao Relacional, Operator: %d\n", token.u.relationalExpression.operator);
       break;
     case ExpressionLogical:
-      printf("Expressao Locica, Operator: %d\n", token.u.logicalExpression.operator);
+      printf("Expressao Logica, Operator: %d\n", token.u.logicalExpression.operator);
       break;
     case Variable:
       printf("Variavel\n");
