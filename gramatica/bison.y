@@ -339,7 +339,7 @@ ExpressaoLogica:
 
 TermoLogico:
     LOGICA_NOT TermoLogico{
-        $$ = criar_expressao_logica(Nao, $2, NULL);
+        $$ = criar_expressao_logica(Nao, NULL, $2);
     }
     | ExpressaoRelacional
     | SIMBOLO_ABRE_PARENTESES ExpressaoLogica SIMBOLO_FECHA_PARENTESES{
