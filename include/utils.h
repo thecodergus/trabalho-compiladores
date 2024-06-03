@@ -1,6 +1,8 @@
 #ifndef CCDA0A80_6C57_42F9_805F_FE00EACEF858
 #define CCDA0A80_6C57_42F9_805F_FE00EACEF858
 
+#include <string.h>
+
 #include "ast.h"
 #include "libraries/cvector.h"
 #include "libraries/str.h"
@@ -20,5 +22,7 @@ char* operador_logico_str(enum LogicalOperators op);
 char* operador_aritmetico_str(enum ArithmeticOperators op);
 
 char* operador_relacional_str(enum RelationsOperators op);
+
+char* get_substring_before_delimiter(char* str, const char* delimiters);
 
 #endif /* CCDA0A80_6C57_42F9_805F_FE00EACEF858 */
