@@ -169,7 +169,9 @@ void imprimir_token(Token token, int nivel) {
       printf("Constante Void\n");
       break;
     case Identifier:
-      printf("ID\n");
+      char* copy = malloc(strlen(str_ptr(token.u.idenfier.id)) + 1);
+      strcpy(copy, str_ptr(token.u.idenfier.id));
+      printf("ID {%s}\n", get_substring_before_delimiter(copy, " {}();,"));
       break;
     case IdentifierList:
       printf("Lista de IDs\n");
