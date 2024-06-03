@@ -505,25 +505,65 @@ void imprimir_codigo_original(AST* raiz) {
         AST* left = raiz->u.arvore.left;
         AST* right = raiz->u.arvore.right;
 
+        if (left && left->tipo != Folha) {
+          printf("(");
+        }
         imprimir_codigo_original(left);
+        if (left && left->tipo != Folha) {
+          printf(")");
+        }
         printf(" %s ", operador_aritmetico_str_original(raiz->token.u.arithmeticExpression.operator));
+        if (right && right->tipo != Folha) {
+          printf("(");
+        }
         imprimir_codigo_original(right);
+        if (right && right->tipo != Folha) {
+          printf(")");
+        }
       } break;
       case ExpressionRelational: {
         AST* left = raiz->u.arvore.left;
         AST* right = raiz->u.arvore.right;
 
+        if (left && left->tipo != Folha) {
+          printf("(");
+        }
         imprimir_codigo_original(left);
-        printf("%s", operador_relacional_str_original(raiz->token.u.relationalExpression.operator));
+        if (left && left->tipo != Folha) {
+          printf(")");
+        }
+        printf(" %s ", operador_relacional_str_original(raiz->token.u.relationalExpression.operator));
+        if (right && right->tipo != Folha) {
+          printf("(");
+        }
         imprimir_codigo_original(right);
+        if (right && right->tipo != Folha) {
+          printf(")");
+        }
       } break;
       case ExpressionLogical: {
         AST* left = raiz->u.arvore.left;
         AST* right = raiz->u.arvore.right;
 
+        if (left && left->tipo != Folha) {
+          printf("(");
+        }
         imprimir_codigo_original(left);
-        printf("%s", operador_logico_str_original(raiz->token.u.logicalExpression.operator));
+        if (left && left->tipo != Folha) {
+          printf(")");
+        }
+        if (raiz->token.u.logicalExpression.operator== Nao) {
+          printf("%s", operador_logico_str_original(raiz->token.u.logicalExpression.operator));
+        } else {
+          printf(" %s ", operador_logico_str_original(raiz->token.u.logicalExpression.operator));
+        }
+        if (right && right->tipo != Folha) {
+          printf("(");
+        }
         imprimir_codigo_original(right);
+        if (right && right->tipo != Folha) {
+          printf(")");
+        }
       } break;
       case Variable: {
         AST* id = raiz->u.arvore.left;
