@@ -23,6 +23,18 @@ char* operador_aritmetico_str(enum ArithmeticOperators op);
 
 char* operador_relacional_str(enum RelationsOperators op);
 
+char* operador_logico_str_original(enum LogicalOperators op);
+
+char* operador_aritmetico_str_original(enum ArithmeticOperators op);
+
+char* operador_relacional_str_original(enum RelationsOperators op);
+
 char* get_substring_before_delimiter(char* str, const char* delimiters);
+
+void imprimir_codigo(AST* arvore);
+
+char* get_id_from_ID(AST* id);
+
+char* tipo_dado_str_original(enum TipoDados tipo);
 
 #endif /* CCDA0A80_6C57_42F9_805F_FE00EACEF858 */

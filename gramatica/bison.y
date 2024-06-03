@@ -100,6 +100,8 @@ InicioPrograma:
         $$ = $1;
         imprimir_arvore_estilo_arvore($1, 0);
         // printar_folhas($1);
+        imprimir_codigo_original($1);
+        printf("\n");
     }
     | FIM
     ;
@@ -240,13 +242,13 @@ Comando:
 
 Retorno:
     COMANDO_RETURN ExpressaoAritmetica{
-        $$ = $2;
+        $$ = criar_retorno_funcao($2);
     }
     | COMANDO_RETURN CONSTANTE_STRING{
-        $$ = $2;
+        $$ = criar_retorno_funcao($2);
     }
     | COMANDO_RETURN{
-        $$ = criar_constante_void();
+        $$ = criar_retorno_funcao(NULL);
     }
     ;
 

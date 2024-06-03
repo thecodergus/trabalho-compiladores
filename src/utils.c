@@ -223,17 +223,81 @@ char* operador_aritmetico_str(enum ArithmeticOperators op) {
 char* operador_relacional_str(enum RelationsOperators op) {
   switch (op) {
     case Igual:
-      return "Igual(==)";
+      return "==";
     case Diferente:
-      return "Diferente(!=)";
+      return "!=";
     case Menor:
-      return "Menor(<)";
+      return "<";
     case MenorIgual:
-      return "MenorIgual(<=)";
+      return "<=";
     case Maior:
-      return "Maior(>)";
+      return ">";
     case MaiorIgual:
-      return "MaiorIgual(>=)";
+      return ">=";
+    default:
+      return "Unknown";
+  }
+}
+
+char* operador_logico_str_original(enum LogicalOperators op) {
+  switch (op) {
+    case E:
+      return "&&";
+    case Ou:
+      return "||";
+    case Nao:
+      return "!";
+    default:
+      return "Unknown";
+  }
+}
+
+char* operador_aritmetico_str_original(enum ArithmeticOperators op) {
+  switch (op) {
+    case Soma:
+      return "+";
+    case Subtracao:
+      return "-";
+    case Multiplicacao:
+      return "*";
+    case Divisao:
+      return "/";
+    case Potencia:
+      return "^";
+    default:
+      return "Unknown";
+  }
+}
+
+char* operador_relacional_str_original(enum RelationsOperators op) {
+  switch (op) {
+    case Igual:
+      return "==";
+    case Diferente:
+      return "!=";
+    case Menor:
+      return "<";
+    case MenorIgual:
+      return "<=";
+    case Maior:
+      return ">";
+    case MaiorIgual:
+      return ">=";
+    default:
+      return "Unknown";
+  }
+}
+
+char* tipo_dado_str_original(enum TipoDados tipo) {
+  switch (tipo) {
+    case Int:
+      return "int";
+    case Float:
+      return "float";
+    case String:
+      return "string";
+    case Void:
+      return "void";
     default:
       return "Unknown";
   }
@@ -264,3 +328,248 @@ char* get_substring_before_delimiter(char* str, const char* delimiters) {
 
   return substring;
 }
+
+void imprimir_codigo_original(AST* raiz) {
+  if (!raiz) return;
+
+  if (raiz) {
+    switch (raiz->token.tipo) {
+      case Program: {
+        if (raiz->u.arvore.left) {
+          imprimir_codigo_original(raiz->u.arvore.left);
+        }
+
+        printf("{");
+        if (raiz->u.arvore.right) {
+          imprimir_codigo_original(raiz->u.arvore.right);
+        }
+        printf("}");
+
+      } break;
+      case DeclarationFunction: {
+        if (cvector_size(raiz->u.filhos) == 4) {
+          AST* tipo = raiz->u.filhos[0];
+          AST* id = raiz->u.filhos[1];
+          AST* parametros = raiz->u.filhos[2];
+          AST* bloco = raiz->u.filhos[3];
+
+          printf("%s %s(", tipo_dado_str_original(tipo->token.u.type.tipo), get_id_from_ID(id));
+          if (parametros) {
+            imprimir_codigo_original(parametros);
+          }
+          printf("){");
+          if (bloco) {
+            imprimir_codigo_original(bloco);
+          }
+          printf("}");
+
+        } else if (cvector_size(raiz->u.filhos) == 3) {
+          AST* tipo = raiz->u.filhos[0];
+          AST* id = raiz->u.filhos[1];
+          AST* bloco = raiz->u.filhos[2];
+
+          printf("%s %s(", tipo_dado_str_original(tipo->token.u.type.tipo), get_id_from_ID(id));
+          printf("){");
+          if (bloco) {
+            imprimir_codigo_original(bloco);
+          }
+          printf("}");
+        }
+      } break;
+      case DeclarationParameter: {
+        AST* tipo = raiz->u.arvore.left;
+        AST* id = raiz->u.arvore.right;
+
+        printf("%s %s", tipo_dado_str_original(tipo->token.u.type.tipo), get_id_from_ID(id));
+      } break;
+      case DeclarationParameterList: {
+        for (AST** i = cvector_begin(raiz->u.filhos); i != cvector_end(raiz->u.filhos); i++) {
+          imprimir_codigo_original(*i);
+        }
+      } break;
+      case ParameterList: {
+        for (AST** i = cvector_begin(raiz->u.filhos); i != cvector_end(raiz->u.filhos); i++) {
+          imprimir_codigo_original(*i);
+          if (i != cvector_end(raiz->u.filhos) - 1) {
+            printf(", ");
+          }
+        }
+      } break;
+      case Block: {
+        AST* declaracoes = raiz->u.arvore.left;
+        AST* comandos = raiz->u.arvore.right;
+
+        if (declaracoes) {
+          imprimir_codigo_original(declaracoes);
+        }
+
+        if (comandos) {
+          imprimir_codigo_original(comandos);
+        }
+      } break;
+      case DeclarationVariable: {
+        AST* tipo = raiz->u.arvore.left;
+        AST* id = raiz->u.arvore.right;
+
+        printf("%s %s;", tipo_dado_str_original(tipo->token.u.type.tipo), get_id_from_ID(id));
+      } break;
+      case DeclarationList: {
+        for (AST** i = cvector_begin(raiz->u.filhos); i != cvector_end(raiz->u.filhos); i++) {
+          imprimir_codigo_original(*i);
+        }
+      } break;
+      case Assignment: {
+        AST* id = raiz->u.arvore.left;
+        AST* exp = raiz->u.arvore.right;
+
+        printf("%s = ", get_id_from_ID(id));
+        imprimir_codigo_original(exp);
+        printf(";");
+      }
+
+      break;
+      case If: {
+        AST* condicao = raiz->u.arvore.left;
+
+        printf("if (");
+        imprimir_codigo_original(condicao);
+        printf("){");
+        if (raiz->u.arvore.right) {
+          imprimir_codigo_original(raiz->u.arvore.right);
+        }
+      } break;
+      case IfBlock: {
+        AST* bloco = raiz->u.arvore.left;
+
+        imprimir_codigo_original(bloco);
+
+        printf("}");
+        if (raiz->u.arvore.right) {
+          printf("else{");
+          imprimir_codigo_original(raiz->u.arvore.right);
+          printf("}");
+        }
+      } break;
+      case ElseBlock: {
+        AST* bloco = raiz->u.arvore.left;
+
+        imprimir_codigo_original(bloco);
+      } break;
+      case While: {
+        AST* condicao = raiz->u.arvore.left;
+        AST* bloco = raiz->u.arvore.right;
+
+        printf("while (");
+        imprimir_codigo_original(condicao);
+        printf("){");
+        if (bloco) {
+          imprimir_codigo_original(bloco);
+        }
+        printf("}");
+
+      } break;
+      case Return: {
+        AST* exp = raiz->u.arvore.left;
+
+        printf("return ");
+        imprimir_codigo_original(exp);
+        printf(";");
+      } break;
+      case Print: {
+        AST* exp = raiz->u.arvore.left;
+
+        printf("print(");
+        imprimir_codigo_original(exp);
+        printf(");");
+      } break;
+      case Read: {
+        AST* id = raiz->u.arvore.left;
+
+        printf("read(%s);", get_id_from_ID(id));
+      } break;
+      case DeclarationFunctionList: {
+        for (AST** i = cvector_begin(raiz->u.filhos); i != cvector_end(raiz->u.filhos); i++) {
+          imprimir_codigo_original(*i);
+        }
+      } break;
+      case FunctionCall: {
+        AST* id = raiz->u.arvore.left;
+        AST* parametros = raiz->u.arvore.right;
+
+        printf("%s(", get_id_from_ID(id));
+        if (parametros) {
+          imprimir_codigo_original(parametros);
+        }
+        printf(");");
+      } break;
+      case ExpressionArithmetic: {
+        AST* left = raiz->u.arvore.left;
+        AST* right = raiz->u.arvore.right;
+
+        imprimir_codigo_original(left);
+        printf(" %s ", operador_aritmetico_str_original(raiz->token.u.arithmeticExpression.operator));
+        imprimir_codigo_original(right);
+      } break;
+      case ExpressionRelational: {
+        AST* left = raiz->u.arvore.left;
+        AST* right = raiz->u.arvore.right;
+
+        imprimir_codigo_original(left);
+        printf("%s", operador_relacional_str_original(raiz->token.u.relationalExpression.operator));
+        imprimir_codigo_original(right);
+      } break;
+      case ExpressionLogical: {
+        AST* left = raiz->u.arvore.left;
+        AST* right = raiz->u.arvore.right;
+
+        imprimir_codigo_original(left);
+        printf("%s", operador_logico_str_original(raiz->token.u.logicalExpression.operator));
+        imprimir_codigo_original(right);
+      } break;
+      case Variable: {
+        AST* id = raiz->u.arvore.left;
+
+        printf("%s", get_id_from_ID(id));
+      } break;
+      case Type: {
+        printf("%s", tipo_dado_str_original(raiz->token.u.type.tipo));
+      } break;
+      case Literal: {
+        AST* literal = raiz->u.arvore.left;
+
+        printf("%s", get_id_from_ID(literal));
+      } break;
+      case ConstantInt: {
+        printf("%d", raiz->token.u.constInt.valor);
+      } break;
+      case ConstantFloat: {
+        printf("%f", raiz->token.u.constFloat.valor);
+      } break;
+      case ConstantString: {
+        printf("%s", str_ptr(raiz->token.u.constString.valor));
+      } break;
+      case ConstantVoid:
+        break;
+      case Identifier: {
+        printf("%s", get_id_from_ID(raiz));
+      } break;
+      case IdentifierList: {
+        for (AST** i = cvector_begin(raiz->u.filhos); i != cvector_end(raiz->u.filhos); i++) {
+          imprimir_codigo_original(*i);
+          if (i != cvector_end(raiz->u.filhos) - 1) {
+            printf(", ");
+          }
+        }
+      } break;
+      case CommandList: {
+        for (AST** i = cvector_begin(raiz->u.filhos); i != cvector_end(raiz->u.filhos); i++) {
+          imprimir_codigo_original(*i);
+        }
+      } break;
+      default:
+        printf("Desconhecido\n");
+    }
+  }
+}
+
+char* get_id_from_ID(AST* id) { return get_substring_before_delimiter(str_ptr(id->token.u.idenfier.id), " {}();,"); }

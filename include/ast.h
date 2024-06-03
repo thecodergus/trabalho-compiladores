@@ -193,4 +193,6 @@ AST *criar_expressao_aritmetica(enum ArithmeticOperators operator, AST * left, A
 
 AST *criar_expressao_relacional(enum RelationsOperators operator, AST * left, AST *right);
 
+AST *criar_retorno_funcao(AST *expressao);
+
 #endif

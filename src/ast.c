@@ -91,7 +91,7 @@ AST *criar_constante_string(const char *input) {
   AST *constanteString = (AST *)malloc(sizeof(AST));
   constanteString->tipo = Folha;
   constanteString->token.tipo = ConstantString;
-  constanteString->token.u.constString.valor = str_acquire(input);
+  str_assign(&constanteString->token.u.constString.valor, str_acquire(input));
   return constanteString;
 }
 
@@ -108,7 +108,8 @@ AST *criar_idenfier(const char *input) {
   AST *idenfier = (AST *)malloc(sizeof(AST));
   idenfier->tipo = Folha;
   idenfier->token.tipo = Identifier;
-  idenfier->token.u.idenfier.id = str_acquire(input);
+  str_assign(&idenfier->token.u.idenfier.id, str_acquire(input));
+
   // printf("idenfier->token.u.idenfier.id: %s\n", str_ptr(idenfier->token.u.idenfier.id));
   return idenfier;
 }
@@ -275,4 +276,13 @@ AST *criar_expressao_relacional(enum RelationsOperators operator, AST * left, AS
   expressaoRelacional->u.arvore.right = right;
   expressaoRelacional->token.u.relationalExpression.operator= operator;
   return expressaoRelacional;
+}
+
+AST *criar_retorno_funcao(AST *expressao) {
+  AST *retorno = (AST *)malloc(sizeof(AST));
+  retorno->tipo = Arvore;
+  retorno->token.tipo = Return;
+  retorno->u.arvore.left = expressao ? expressao : criar_constante_void();
+  retorno->u.arvore.right = NULL;
+  return retorno;
 }
