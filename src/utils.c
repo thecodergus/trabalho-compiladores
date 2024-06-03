@@ -169,10 +169,7 @@ void imprimir_token(Token token, int nivel) {
       printf("Constante Void\n");
       break;
     case Identifier:
-      char* copy = (char*)malloc(strlen(str_ptr(token.u.idenfier.id)) + 1);
-      strcpy(copy, str_ptr(token.u.idenfier.id));
-
-      printf("ID {%s}\n", get_substring_before_delimiter(copy, " {}();,"));
+      printf("ID {%s}\n", get_substring_before_delimiter(str_ptr(token.u.idenfier.id), " {}();,"));
       break;
     case IdentifierList:
       printf("Lista de IDs\n");
@@ -411,7 +408,9 @@ void imprimir_codigo_original(AST* raiz) {
         AST* tipo = raiz->u.arvore.left;
         AST* id = raiz->u.arvore.right;
 
-        printf("%s %s;", tipo_dado_str_original(tipo->token.u.type.tipo), get_id_from_ID(id));
+        printf("%s ", tipo_dado_str_original(tipo->token.u.type.tipo));
+        imprimir_codigo_original(id);
+        printf(";");
       } break;
       case DeclarationList: {
         for (AST** i = cvector_begin(raiz->u.filhos); i != cvector_end(raiz->u.filhos); i++) {
