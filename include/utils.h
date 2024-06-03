@@ -5,7 +5,7 @@
 #include "libraries/cvector.h"
 #include "libraries/str.h"
 
-void imprimir_arvore(AST* arvore, int nivel);
+void imprimir_arvore_estilo_arvore(AST* arvore, int nivel);
 
 char* tipo_dado_str(enum TipoDados tipo);
 

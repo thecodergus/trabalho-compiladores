@@ -1,6 +1,6 @@
 #include "utils.h"
 
-void imprimir_arvore(AST* raiz, int nivel) {
+void imprimir_arvore_estilo_arvore(AST* raiz, int nivel) {
   if (raiz == NULL) return;
 
   imprimir_traco(nivel);
@@ -10,21 +10,19 @@ void imprimir_arvore(AST* raiz, int nivel) {
       imprimir_token(raiz->token, nivel);
       imprimir_traco(nivel + 1);
       printf("Arvore:\n");
-      imprimir_arvore(raiz->u.arvore.left, nivel + 2);
-      imprimir_arvore(raiz->u.arvore.right, nivel + 2);
+      imprimir_arvore_estilo_arvore(raiz->u.arvore.left, nivel + 2);
+      imprimir_arvore_estilo_arvore(raiz->u.arvore.right, nivel + 2);
       break;
     case Vetor:
       imprimir_token(raiz->token, nivel);
       imprimir_traco(nivel + 1);
       printf("Vetor:\n");
       for (AST** i = cvector_begin(raiz->u.filhos); i != cvector_end(raiz->u.filhos); i++) {
-        imprimir_arvore(*i, nivel + 2);
+        imprimir_arvore_estilo_arvore(*i, nivel + 2);
       }
       break;
     case Folha:
       imprimir_token(raiz->token, nivel);
-      imprimir_traco(nivel + 1);
-      printf("Folha. \n");
       break;
   }
 }
