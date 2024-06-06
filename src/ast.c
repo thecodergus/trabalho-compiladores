@@ -311,15 +311,14 @@ void analise_semantica_variaveis(vector(AST *) declaracoes_variaveis,
 void analise_semantica_verificar_variavel(str id, enum TipoDados tipo,
                                           AST *ast) {
   if (!ast) return;
-
   switch (ast->tipo) {
     case Arvore: {
       if (ast->token.tipo == Assignment &&
-          str_cmp(ast->u.arvore.left->token.u.idenfier.id, id) &&
+          str_eq(ast->u.arvore.left->token.u.idenfier.id, id) &&
           ast->u.arvore.right->token.u.constante.tipo != tipo) {
-        switch (tipo) {
+        switch (ast->u.arvore.right->token.u.constante.tipo) {
           case Int: {
-            switch (ast->u.arvore.right->token.u.constante.tipo) {
+            switch (tipo) {
               case Float: {
                 ast->u.arvore.right->token.u.constante.tipo = Float;
                 ast->u.arvore.right->token.u.constante.valor.flutuante =
@@ -338,12 +337,12 @@ void analise_semantica_verificar_variavel(str id, enum TipoDados tipo,
             }
           } break;
           case Float: {
-            switch (ast->u.arvore.right->token.u.constante.tipo) {
+            switch (tipo) {
               case Int: {
                 ast->u.arvore.right->token.u.constante.tipo = Int;
-                ast->u.arvore.right->token.u.constante.valor.flutuante =
+                ast->u.arvore.right->token.u.constante.valor.inteiro =
                     floatToInt(
-                        ast->u.arvore.right->token.u.constante.valor.inteiro);
+                        ast->u.arvore.right->token.u.constante.valor.flutuante);
               } break;
               case String: {
                 ast->u.arvore.right->token.u.constante.tipo = String;
