@@ -367,7 +367,6 @@ void analise_semantica_verificar_funcao(enum TipoDados tipo, AST *bloco) {
     AST *expressao = bloco->u.arvore.left;
 
     if (expressao->token.tipo == Constant) {
-      printf("Entrei\n");
       if (expressao->token.u.constante.tipo != tipo) {
         converter_constant_para(expressao, tipo);
       }

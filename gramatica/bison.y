@@ -100,8 +100,8 @@ InicioPrograma:
         $$ = $1;
         imprimir_arvore_estilo_arvore($1, 0);
         // printar_folhas($1);
-        // imprimir_codigo_original($1);
-        // printf("\n");
+        imprimir_codigo_original($1);
+        printf("\n");
     }
     | FIM
     ;
