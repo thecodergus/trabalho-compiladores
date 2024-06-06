@@ -62,11 +62,11 @@ string          { return TIPO_STRING; }
                     return CONSTANTE_FLOAT; 
                 }
 {id}            { 
-                    yylval = criar_idenfier(yytext);
+                    yylval = criar_idenfier(strdup(yytext));
                     return ID; 
                 }
 {string}        {  
-                    yylval = criar_constante(yytext, String);
+                    yylval = criar_constante(strdup(yytext + 1), String);
                     return CONSTANTE_STRING; 
                 }
 {delim}         {}
