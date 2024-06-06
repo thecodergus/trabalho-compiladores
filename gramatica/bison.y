@@ -302,7 +302,7 @@ ChamadaFuncao:
         $$ = criar_comando_chamada_funcao($1, $3);
     }
     | ID SIMBOLO_ABRE_PARENTESES SIMBOLO_FECHA_PARENTESES{
-        $$ = criar_comando_chamada_funcao($1, criar_constante_void());
+        $$ = criar_comando_chamada_funcao($1, criar_constante(NULL, Void));
     }
     ;
 

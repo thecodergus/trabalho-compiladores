@@ -49,16 +49,27 @@ void printar_folhas(AST* arvore) {
   switch (arvore->tipo) {
     case Folha:
       switch (arvore->token.tipo) {
-        case ConstantInt:
-          printf("ConstantInt: %d\n", arvore->token.u.constInt.valor);
-          break;
-        case ConstantFloat:
-          printf("ConstantFloat: %f\n", arvore->token.u.constFloat.valor);
-          break;
-        case ConstantString:
-          printf("ConstantString: %s\n",
-                 str_ptr(arvore->token.u.constString.valor));
-          break;
+        case Constant: {
+          switch (arvore->token.u.constante.tipo) {
+            case Int: {
+              printf("Constante {Int}: %d\n",
+                     arvore->token.u.constante.valor.inteiro);
+            } break;
+            case Float: {
+              printf("Constante {Float}: %f\n",
+                     arvore->token.u.constante.valor.flutuante);
+            } break;
+            case String: {
+              printf("Constante {String}: %s\n",
+                     str_ptr(arvore->token.u.constante.valor.string));
+            } break;
+            case Void: {
+              printf("Constante {Void}\n");
+            } break;
+            default:
+              break;
+          }
+        } break;
         case Identifier:
           printf("Identifier: %s\n", str_ptr(arvore->token.u.idenfier.id));
           break;
@@ -164,18 +175,25 @@ void imprimir_token(Token token, int nivel) {
     case Literal:
       printf("Literal\n");
       break;
-    case ConstantInt:
-      printf("Constante Int {%d}\n", token.u.constInt.valor);
-      break;
-    case ConstantFloat:
-      printf("Constante Float {%f}\n", token.u.constFloat.valor);
-      break;
-    case ConstantString:
-      printf("Constante String {%s}\n", str_ptr(token.u.constString.valor));
-      break;
-    case ConstantVoid:
-      printf("Constante Void\n");
-      break;
+    case Constant: {
+      switch (token.u.constante.tipo) {
+        case Int: {
+          printf("Constante {Int}: %d\n", token.u.constante.valor.inteiro);
+        } break;
+        case Float: {
+          printf("Constante {Float}: %f\n", token.u.constante.valor.flutuante);
+        } break;
+        case String: {
+          printf("Constante {String}: %s\n",
+                 str_ptr(token.u.constante.valor.string));
+        } break;
+        case Void: {
+          printf("Constante {Void}\n");
+        } break;
+        default:
+          break;
+      }
+    } break;
     case Identifier:
       printf("ID {%s}\n", get_substring_before_delimiter(
                               str_ptr(token.u.idenfier.id), " {}();,"));
@@ -473,7 +491,7 @@ void imprimir_codigo_original(AST* raiz) {
         AST* condicao = raiz->u.arvore.left;
         AST* bloco = raiz->u.arvore.right;
 
-        printf("while (");
+        printf("while(");
         imprimir_codigo_original(condicao);
         printf("){");
         if (bloco) {
@@ -598,17 +616,23 @@ void imprimir_codigo_original(AST* raiz) {
 
         printf("%s", get_id_from_ID(literal));
       } break;
-      case ConstantInt: {
-        printf("%d", raiz->token.u.constInt.valor);
+      case Constant: {
+        switch (raiz->token.u.constante.tipo) {
+          case Int: {
+            printf("%d", raiz->token.u.constante.valor.inteiro);
+          } break;
+          case Float: {
+            printf("%f", raiz->token.u.constante.valor.flutuante);
+          } break;
+          case String: {
+            printf("%s", str_ptr(raiz->token.u.constante.valor.string));
+          } break;
+          case Void: {
+          } break;
+          default:
+            break;
+        }
       } break;
-      case ConstantFloat: {
-        printf("%f", raiz->token.u.constFloat.valor);
-      } break;
-      case ConstantString: {
-        printf("%s", str_ptr(raiz->token.u.constString.valor));
-      } break;
-      case ConstantVoid:
-        break;
       case Identifier: {
         printf("%s", get_id_from_ID(raiz));
       } break;

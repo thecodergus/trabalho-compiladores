@@ -53,12 +53,12 @@ string          { return TIPO_STRING; }
 "^"             { return OPERADOR_POTENCIA; }
 ","             { return SIMBOLO_VIRGULA; }
 {inteito}       { 
-                    yylval = criar_constante_int(yytext);
+                    yylval = criar_constante(yytext, Int);
                     return CONSTANTE_INT; 
                 }
 {float}         {  
                     
-                    yylval = criar_constante_float(yytext);
+                    yylval = criar_constante(yytext, Float);
                     return CONSTANTE_FLOAT; 
                 }
 {id}            { 
@@ -66,7 +66,7 @@ string          { return TIPO_STRING; }
                     return ID; 
                 }
 {string}        {  
-                    yylval = criar_constante_string(yytext);
+                    yylval = criar_constante(yytext, String);
                     return CONSTANTE_STRING; 
                 }
 {delim}         {}

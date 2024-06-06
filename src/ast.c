@@ -71,47 +71,43 @@ AST *criar_tipo(enum TipoDados tipo) {
   return tipoAST;
 }
 
-AST *criar_constante_int(const char *input) {
-  AST *constanteInt = (AST *)malloc(sizeof(AST));
-  constanteInt->tipo = Folha;
-  constanteInt->token.tipo = ConstantInt;
-  constanteInt->token.u.constInt.valor = atoi(input);
-  return constanteInt;
-}
+AST *criar_constante(const char *input, enum TipoDados tipo) {
+  AST *constante = (AST *)malloc(sizeof(AST));
+  constante->tipo = Folha;
+  constante->token.tipo = Constant;
 
-AST *criar_constante_float(const char *input) {
-  AST *constanteFloat = (AST *)malloc(sizeof(AST));
-  constanteFloat->tipo = Folha;
-  constanteFloat->token.tipo = ConstantFloat;
-  constanteFloat->token.u.constFloat.valor = atof(input);
-  return constanteFloat;
-}
+  switch (tipo) {
+    case Int: {
+      constante->token.u.constante.tipo = Int;
+      constante->token.u.constante.valor.inteiro = atoi(input);
+    } break;
+    case Float: {
+      constante->token.u.constante.tipo = Float;
+      constante->token.u.constante.valor.flutuante = atof(input);
+    } break;
+    case String: {
+      constante->token.u.constante.tipo = String;
+      str_assign(&constante->token.u.constante.valor.string,
+                 str_acquire(input));
+    } break;
+    case Void: {
+      constante->token.u.constante.tipo = Void;
+      constante->token.u.constante.valor.nada = NULL;
+    } break;
 
-AST *criar_constante_string(const char *input) {
-  AST *constanteString = (AST *)malloc(sizeof(AST));
-  constanteString->tipo = Folha;
-  constanteString->token.tipo = ConstantString;
-  str_assign(&constanteString->token.u.constString.valor, str_acquire(input));
-  return constanteString;
-}
+    default:
+      break;
+  }
 
-AST *criar_constante_void() {
-  AST *constanteVoid = (AST *)malloc(sizeof(AST));
-  constanteVoid->tipo = Folha;
-  constanteVoid->token.tipo = ConstantVoid;
-  constanteVoid->token.u.nada = NULL;
-  return constanteVoid;
+  return constante;
 }
 
 AST *criar_idenfier(const char *input) {
-  // printf("criar_idenfier(): %s | ", input);
   AST *idenfier = (AST *)malloc(sizeof(AST));
   idenfier->tipo = Folha;
   idenfier->token.tipo = Identifier;
   str_assign(&idenfier->token.u.idenfier.id, str_acquire(input));
 
-  // printf("idenfier->token.u.idenfier.id: %s\n",
-  // str_ptr(idenfier->token.u.idenfier.id));
   return idenfier;
 }
 
@@ -286,7 +282,7 @@ AST *criar_retorno_funcao(AST *expressao) {
   AST *retorno = (AST *)malloc(sizeof(AST));
   retorno->tipo = Arvore;
   retorno->token.tipo = Return;
-  retorno->u.arvore.left = expressao ? expressao : criar_constante_void();
+  retorno->u.arvore.left = expressao ? expressao : criar_constante(NULL, Void);
   retorno->u.arvore.right = NULL;
   return retorno;
 }

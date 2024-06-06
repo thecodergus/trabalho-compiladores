@@ -56,10 +56,7 @@ enum TipoToken {
   Variable,
   Type,
   Literal,
-  ConstantInt,
-  ConstantFloat,
-  ConstantString,
-  ConstantVoid,
+  Constant,
   Identifier,
   IdentifierList,
   CommandList
@@ -80,16 +77,14 @@ struct Type {
   enum TipoDados tipo;
 };
 
-struct ConstanteInt {
-  int valor;
-};
-
-struct ConstanteFloat {
-  float valor;
-};
-
-struct ConstanteString {
-  str valor;
+struct Constante {
+  enum TipoDados tipo;
+  union {
+    int inteiro;
+    float flutuante;
+    str string;
+    void *nada;
+  } valor;
 };
 
 struct Indentificador {
@@ -118,9 +113,7 @@ struct Token {
     struct Parametro parametro;
     struct Type type;
     void *nada;
-    struct ConstanteInt constInt;
-    struct ConstanteFloat constFloat;
-    struct ConstanteString constString;
+    struct Constante constante;
     struct Indentificador idenfier;
     struct RelationalExpression relationalExpression;
     struct LogicalExpression logicalExpression;
@@ -160,13 +153,7 @@ AST *criar_funcao_input_void(AST *tipo, AST *id, AST *bloco);
 
 AST *criar_tipo(enum TipoDados tipo);
 
-AST *criar_constante_int(const char *input);
-
-AST *criar_constante_float(const char *input);
-
-AST *criar_constante_string(const char *input);
-
-AST *criar_constante_void();
+AST *criar_constante(const char *input, enum TipoDados tipo);
 
 AST *criar_idenfier(const char *input);
 
