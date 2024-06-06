@@ -1,6 +1,8 @@
 #ifndef CCDA0A80_6C57_42F9_805F_FE00EACEF858
 #define CCDA0A80_6C57_42F9_805F_FE00EACEF858
 
+#include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #include "ast.h"
@@ -36,5 +38,17 @@ void imprimir_codigo(AST* arvore);
 char* get_id_from_ID(AST* id);
 
 char* tipo_dado_str_original(enum TipoDados tipo);
+
+float intToFloat(int num);
+
+str intToString(int num);
+
+float stringToFloat(str string);
+
+int stringToInt(str string);
+
+int floatToInt(float num);
+
+str floatToString(float num);
 
 #endif /* CCDA0A80_6C57_42F9_805F_FE00EACEF858 */
