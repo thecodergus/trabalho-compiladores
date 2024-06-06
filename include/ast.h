@@ -199,4 +199,6 @@ void analise_semantica_variaveis(vector(AST *) declaracoes_variaveis,
 void analise_semantica_verificar_variavel(str id, enum TipoDados tipo,
                                           AST *arvore);
 
+void printar_tipo_no(AST* no);                                          
+
 #endif

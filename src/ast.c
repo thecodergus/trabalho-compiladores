@@ -117,6 +117,11 @@ AST *criar_bloco_principal(AST *declaracoes, AST *comandos) {
   blocoPrincipal->tipo = Arvore;
   blocoPrincipal->u.arvore.left = declaracoes;
   blocoPrincipal->u.arvore.right = comandos;
+
+  if (declaracoes && declaracoes->tipo == Vetor) {
+    analise_semantica_variaveis(declaracoes->u.filhos, comandos);
+  }
+
   return blocoPrincipal;
 }
 
@@ -393,5 +398,24 @@ void analise_semantica_verificar_variavel(str id, enum TipoDados tipo,
 
     default:
       break;
+  }
+}
+
+void printar_tipo_no(AST *no) {
+  if (!no) {
+    printf("No vazio/nulo\n");
+  } else {
+    switch (no->tipo) {
+      case Arvore:
+        printf("Arvore\n");
+        break;
+      case Vetor:
+        printf("Vetor\n");
+
+      case Folha:
+        printf("Folha\n");
+      default:
+        break;
+    }
   }
 }
