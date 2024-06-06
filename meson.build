@@ -15,7 +15,8 @@ app_src = files(
  'src/main.c',
  'src/ast.c',
  'src/libraries/str.c',
- 'src/utils.c'
+ 'src/utils.c',
+ 'src/conversoes.c'
 )
 
 # Local para importar as dependencias
