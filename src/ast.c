@@ -110,7 +110,8 @@ AST *criar_idenfier(const char *input) {
   idenfier->token.tipo = Identifier;
   str_assign(&idenfier->token.u.idenfier.id, str_acquire(input));
 
-  // printf("idenfier->token.u.idenfier.id: %s\n", str_ptr(idenfier->token.u.idenfier.id));
+  // printf("idenfier->token.u.idenfier.id: %s\n",
+  // str_ptr(idenfier->token.u.idenfier.id));
   return idenfier;
 }
 
@@ -248,7 +249,8 @@ AST *criar_lista_parametros(AST *parametros, AST *parametro) {
   return parametros;
 }
 
-AST *criar_expressao_logica(enum LogicalOperators operator, AST * left, AST *right) {
+AST *criar_expressao_logica(enum LogicalOperators operator, AST * left,
+                            AST *right) {
   AST *expressaoLogica = (AST *)malloc(sizeof(AST));
   expressaoLogica->tipo = Arvore;
   expressaoLogica->token.tipo = ExpressionLogical;
@@ -258,7 +260,8 @@ AST *criar_expressao_logica(enum LogicalOperators operator, AST * left, AST *rig
   return expressaoLogica;
 }
 
-AST *criar_expressao_aritmetica(enum ArithmeticOperators operator, AST * left, AST *right) {
+AST *criar_expressao_aritmetica(enum ArithmeticOperators operator, AST * left,
+                                AST *right) {
   AST *expressaoAritmetica = (AST *)malloc(sizeof(AST));
   expressaoAritmetica->tipo = Arvore;
   expressaoAritmetica->token.tipo = ExpressionArithmetic;
@@ -268,7 +271,8 @@ AST *criar_expressao_aritmetica(enum ArithmeticOperators operator, AST * left, A
   return expressaoAritmetica;
 }
 
-AST *criar_expressao_relacional(enum RelationsOperators operator, AST * left, AST *right) {
+AST *criar_expressao_relacional(enum RelationsOperators operator, AST * left,
+                                AST *right) {
   AST *expressaoRelacional = (AST *)malloc(sizeof(AST));
   expressaoRelacional->tipo = Arvore;
   expressaoRelacional->token.tipo = ExpressionRelational;

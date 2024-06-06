@@ -16,7 +16,14 @@ enum TipoDados { Int, Float, String, Void };
 enum LogicalOperators { E, Ou, Nao };
 
 // Operadores relacionais
-enum RelationsOperators { Igual, Diferente, Menor, MenorIgual, Maior, MaiorIgual };
+enum RelationsOperators {
+  Igual,
+  Diferente,
+  Menor,
+  MenorIgual,
+  Maior,
+  MaiorIgual
+};
 
 // Operadores aritméticos
 enum ArithmeticOperators { Soma, Subtracao, Multiplicacao, Divisao, Potencia };
@@ -187,11 +194,14 @@ AST *criar_comando_chamada_funcao(AST *id, AST *parametros);
 
 AST *criar_lista_parametros(AST *parametros, AST *parametro);
 
-AST *criar_expressao_logica(enum LogicalOperators operator, AST * left, AST *right);
+AST *criar_expressao_logica(enum LogicalOperators operator, AST * left,
+                            AST *right);
 
-AST *criar_expressao_aritmetica(enum ArithmeticOperators operator, AST * left, AST *right);
+AST *criar_expressao_aritmetica(enum ArithmeticOperators operator, AST * left,
+                                AST *right);
 
-AST *criar_expressao_relacional(enum RelationsOperators operator, AST * left, AST *right);
+AST *criar_expressao_relacional(enum RelationsOperators operator, AST * left,
+                                AST *right);
 
 AST *criar_retorno_funcao(AST *expressao);
 
