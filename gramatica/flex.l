@@ -11,9 +11,12 @@
 %}
 
 delim     [ \t\r\n\f]+
-inteito    [0-9]+
-float       -?[0-9]*\.[0-9]+([eE][+-]?[0-9]+)?
-id        [a-zA-Z][a-zA-Z0-9]*
+digito    [0-9]
+minuscula [a-z]
+maiuscula [A-Z]
+inteito    -?({digito})+
+float       -?({digito})+("."{digito}*)?("e"[+-]?{digito}+)?
+id        ({maiuscula}|{minuscula})({maiuscula}|{minuscula}|{digito}|-)*
 string    \"([^\\\n]|(\\.))*?\"
 
 %%
@@ -58,12 +61,12 @@ string          { return TIPO_STRING; }
                     yylval = criar_constante(yytext, Float);
                     return CONSTANTE_FLOAT; 
                 }
-{id}            {   
-                    yylval = criar_idenfier(strdup(yytext));
+{id}            { 
+                    yylval = criar_idenfier(yytext);
                     return ID; 
                 }
 {string}        {  
-                    yylval = criar_constante(strdup(yytext + 1), String);
+                    yylval = criar_constante(yytext, String);
                     return CONSTANTE_STRING; 
                 }
 {delim}         {}
