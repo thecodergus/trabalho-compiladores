@@ -22,6 +22,7 @@ app_src = files(
 # Local para importar as dependencias
 flex_program = find_program('flex', required: true)
 bison_program = find_program('bison', required: true)
+math_dep = cc.find_library('m', required : true)
 
 if not flex_program.found()
   error('MESON_SKIP_TEST flex not found.')
@@ -70,7 +71,7 @@ executable('main',
     include_directories('src')
   ],
    dependencies: [
-      
+      math_dep
    ],
    install: true,
    c_args : c_args

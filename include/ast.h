@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "conversoes.h"
 #include "libraries/cvector.h"
 #include "libraries/str.h"
 
@@ -191,5 +192,11 @@ AST *criar_expressao_relacional(enum RelationsOperators operator, AST * left,
                                 AST *right);
 
 AST *criar_retorno_funcao(AST *expressao);
+
+void analise_semantica_variaveis(vector(AST *) declaracoes_variaveis,
+                                 AST *bloco);
+
+void analise_semantica_verificar_variavel(str id, enum TipoDados tipo,
+                                          AST *arvore);
 
 #endif
