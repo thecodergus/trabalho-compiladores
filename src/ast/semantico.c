@@ -44,11 +44,11 @@ void analise_semantica_verificar_variavel(str id, enum TipoDados tipo, AST *ast)
 void analise_semantica_funcoes(vector(AST *) declaracoes_funcoes) {
   for (AST **f = cvector_begin(declaracoes_funcoes); f != cvector_end(declaracoes_funcoes); f++) {
     AST *tipo = (*f)->u.filhos[0];
-    analise_semantica_verificar_funcao(tipo->token.u.type.tipo, *f);
+    analise_semantica_verificar_retorno_funcao(tipo->token.u.type.tipo, *f);
   }
 }
 
-void analise_semantica_verificar_funcao(enum TipoDados tipo, AST *bloco) {
+void analise_semantica_verificar_retorno_funcao(enum TipoDados tipo, AST *bloco) {
   if (!bloco) return;
 
   if (bloco->token.tipo == Return) {
@@ -63,12 +63,12 @@ void analise_semantica_verificar_funcao(enum TipoDados tipo, AST *bloco) {
 
   switch (bloco->tipo) {
     case Arvore:
-      analise_semantica_verificar_funcao(tipo, bloco->u.arvore.left);
-      analise_semantica_verificar_funcao(tipo, bloco->u.arvore.right);
+      analise_semantica_verificar_retorno_funcao(tipo, bloco->u.arvore.left);
+      analise_semantica_verificar_retorno_funcao(tipo, bloco->u.arvore.right);
       break;
     case Vetor:
       for (AST **it = cvector_begin(bloco->u.filhos); it != cvector_end(bloco->u.filhos); it++) {
-        analise_semantica_verificar_funcao(tipo, *it);
+        analise_semantica_verificar_retorno_funcao(tipo, *it);
       }
       break;
 
@@ -101,6 +101,8 @@ void converter_constant_para(AST *constante, enum TipoDados tipo) {
         case Int: {
           constante->token.u.constante.tipo = Int;
           constante->token.u.constante.valor.inteiro = floatToInt(constante->token.u.constante.valor.flutuante);
+
+          exibir_warning("Tipo inteiro nao eh equivalente a ponto flutuante!");
         } break;
         case String: {
           constante->token.u.constante.tipo = String;
@@ -129,5 +131,10 @@ void converter_constant_para(AST *constante, enum TipoDados tipo) {
 
     default:
       break;
+  }
+}
+
+void analise_semantica_expressao(AST *arvore) {
+  if (arvore) {
   }
 }

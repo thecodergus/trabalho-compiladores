@@ -7,6 +7,7 @@
 #include "conversoes.h"
 #include "libraries/cvector.h"
 #include "libraries/str.h"
+#include "mensagens.h"
 
 #define vector(T) cvector_vector_type(T)
 
@@ -191,7 +192,7 @@ void printar_tipo_no(AST *no);
 
 void analise_semantica_funcoes(vector(AST *) declaracoes_funcoes);
 
-void analise_semantica_verificar_funcao(enum TipoDados tipo, AST *bloco);
+void analise_semantica_verificar_retorno_funcao(enum TipoDados tipo, AST *bloco);
 
 void converter_constant_para(AST *constante, enum TipoDados tipo);
 
@@ -225,4 +226,7 @@ char *get_id_from_ID(AST *id);
 
 char *tipo_dado_str_original(enum TipoDados tipo);
 
+void analise_semantica_expressao(AST *arvore);
+
+char *strdup(const char *src);
 #endif

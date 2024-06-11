@@ -2,7 +2,12 @@
 project('Aplicação', 'c')
 
 # Inicia as flags de compilação como um vetor vazio
-c_args = []
+c_args = [
+  '-std=c17',
+  '-Wall',
+  '-Wextra',
+  '-pedantic'
+]
 
 # Adiciona flags de compilação para o GCC e Clang
 cc = meson.get_compiler('c')
