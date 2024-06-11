@@ -169,23 +169,23 @@ Declaracoes:
     Declaracoes Declaracao{
         $$ = criar_declaracoes($1, $2);
     }
-    | Declaracao SIMBOLO_PONTO_VIRGULA{
+    | Declaracao{
         $$ = criar_declaracoes(NULL, $1);
     }
     ;
 
 Declaracao:
-    Tipo ListaId{
+    Tipo ListaId SIMBOLO_PONTO_VIRGULA{
         $$ = criar_declaracao($1, $2);
     }
     ;
 
 Tipo: 
-    TIPO_INT{
-        $$ = criar_tipo(Int);
-    }
-    | TIPO_STRING{
+    TIPO_STRING{
         $$ = criar_tipo(String);
+    }
+    | TIPO_INT{
+        $$ = criar_tipo(Int);
     }
     | TIPO_FLOAT{
         $$ = criar_tipo(Float);
