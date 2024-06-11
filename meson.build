@@ -19,7 +19,6 @@ endif
 app_src = files(
  'src/main.c',
  'src/libraries/str.c',
- 'src/utils.c',
  'src/conversoes.c',
  'src/ast/exibir.c',
  'src/ast/semantico.c',
