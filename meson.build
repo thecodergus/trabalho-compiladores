@@ -13,10 +13,13 @@ endif
 # Importa os arquivos de código fonte
 app_src = files(
  'src/main.c',
- 'src/ast.c',
  'src/libraries/str.c',
  'src/utils.c',
- 'src/conversoes.c'
+ 'src/conversoes.c',
+ 'src/ast/exibir.c',
+ 'src/ast/semantico.c',
+ 'src/ast/sintatico.c',
+ 'src/ast/utils.c'
 )
 
 # Local para importar as dependencias
