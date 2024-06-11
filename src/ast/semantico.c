@@ -15,6 +15,7 @@ void analise_semantica_variaveis(vector(AST *) declaracoes_variaveis, AST *bloco
 
 void analise_semantica_verificar_variavel(str id, enum TipoDados tipo, AST *ast) {
   if (!ast) return;
+
   switch (ast->tipo) {
     case Arvore: {
       if (ast->token.tipo == Assignment && str_eq(ast->u.arvore.left->token.u.idenfier.id, id) &&
