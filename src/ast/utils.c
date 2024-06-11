@@ -34,3 +34,23 @@ char *strdup(const char *src) {
   strcpy(dst, src);                     // Copy the characters
   return dst;                           // Return the new string
 }
+
+void percorrer_arvore_aplicando_funcao(AST *a, void (*fn)(AST *)) {
+  if (a && fn) {
+    fn(a);
+    switch (a->tipo) {
+      case Arvore:
+        percorrer_arvore_aplicando_funcao(a->u.arvore.left, fn);
+        percorrer_arvore_aplicando_funcao(a->u.arvore.right, fn);
+        break;
+      case Vetor:
+        for (AST **it = cvector_begin(a->u.filhos); it != cvector_end(a->u.filhos); it++) {
+          fn(*it);
+        }
+        break;
+      case Folha:
+      default:
+        break;
+    }
+  }
+}

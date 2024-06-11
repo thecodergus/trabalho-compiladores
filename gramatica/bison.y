@@ -2,7 +2,6 @@
 
 %code requires{
 #include "ast.h"
-#include "utils.h"
 #include "libraries/cvector.h"
 }
 

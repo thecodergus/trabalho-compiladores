@@ -5,6 +5,7 @@
 #include <stdlib.h>
 
 #include "conversoes.h"
+#include "lambda.h"
 #include "libraries/cvector.h"
 #include "libraries/str.h"
 #include "mensagens.h"
@@ -229,4 +230,6 @@ char *tipo_dado_str_original(enum TipoDados tipo);
 void analise_semantica_expressao(AST *arvore);
 
 char *strdup(const char *src);
+
+void percorrer_arvore_aplicando_funcao(AST *a, void (*fn)(AST *));
 #endif
