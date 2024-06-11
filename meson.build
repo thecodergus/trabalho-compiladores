@@ -19,7 +19,8 @@ app_src = files(
  'src/ast/exibir.c',
  'src/ast/semantico.c',
  'src/ast/sintatico.c',
- 'src/ast/utils.c'
+ 'src/ast/utils.c',
+ 'src/mensagens.c'
 )
 
 # Local para importar as dependencias
