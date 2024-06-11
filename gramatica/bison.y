@@ -365,6 +365,12 @@ ExpressaoRelacional:
     | ExpressaoAritmetica LOGICA_GT ExpressaoAritmetica{
         $$ = criar_expressao_relacional(Maior, $1, $3);
     }
+    | CONSTANTE_STRING LOGICA_EQ CONSTANTE_STRING{
+        $$ = criar_expressao_relacional(Igual, $1, $3);
+    }
+    | CONSTANTE_STRING {
+        $$ = $1;
+    }
     ;
 
 ExpressaoAritmetica:
