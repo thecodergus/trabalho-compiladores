@@ -66,6 +66,7 @@ string          { return TIPO_STRING; }
                     return ID; 
                 }
 {string}        {  
+                    printf("STRING: %s\n", yytext);
                     yylval = criar_constante(strdup(yytext + 1), String);
                     return CONSTANTE_STRING; 
                 }

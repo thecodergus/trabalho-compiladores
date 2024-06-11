@@ -347,7 +347,10 @@ TermoLogico:
     ;
 
 ExpressaoRelacional:
-    ExpressaoAritmetica LOGICA_EQ ExpressaoAritmetica{
+    CONSTANTE_STRING LOGICA_EQ CONSTANTE_STRING{
+        $$ = criar_expressao_relacional(Igual, $1, $3);
+    }
+    | ExpressaoAritmetica LOGICA_EQ ExpressaoAritmetica{
         $$ = criar_expressao_relacional(Igual, $1, $3);
     }
     | ExpressaoAritmetica LOGICA_NE ExpressaoAritmetica{
@@ -365,17 +368,14 @@ ExpressaoRelacional:
     | ExpressaoAritmetica LOGICA_GT ExpressaoAritmetica{
         $$ = criar_expressao_relacional(Maior, $1, $3);
     }
-    | CONSTANTE_STRING LOGICA_EQ CONSTANTE_STRING{
-        $$ = criar_expressao_relacional(Igual, $1, $3);
-    }
-    | CONSTANTE_STRING {
-        $$ = $1;
-    }
     ;
 
 ExpressaoAritmetica:
     CONSTANTE_INT 
     | CONSTANTE_FLOAT
+    | CONSTANTE_STRING {
+        exibir_erro("Nao pode usar string em operacoes aritmeticas!");
+    }
     | ID
     | ChamadaFuncao
     | ExpressaoAritmetica OPERADOR_SOMA ExpressaoAritmetica{
