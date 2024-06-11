@@ -45,7 +45,7 @@ void percorrer_arvore_aplicando_funcao(AST *a, void (*fn)(AST *)) {
         break;
       case Vetor:
         for (AST **it = cvector_begin(a->u.filhos); it != cvector_end(a->u.filhos); it++) {
-          fn(*it);
+          percorrer_arvore_aplicando_funcao(*it, fn);
         }
         break;
       case Folha:
