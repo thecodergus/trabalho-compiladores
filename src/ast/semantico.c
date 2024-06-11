@@ -136,5 +136,20 @@ void converter_constant_para(AST *constante, enum TipoDados tipo) {
 
 void analise_semantica_expressao(AST *arvore) {
   if (arvore) {
+    bool achouFloat = false;
+
+    percorrer_arvore_aplicando_funcao(arvore, lambda(void, (AST * arv), {
+                                        if (arv->tipo == Folha && arv->token.tipo == Constant && arv->token.u.constante.tipo == Float) {
+                                          achouFloat = true;
+                                        }
+                                      }));
+
+    if (achouFloat) {
+      percorrer_arvore_aplicando_funcao(arvore, lambda(void, (AST * arv), {
+                                          if (arv->tipo == Folha) {
+                                            converter_constant_para(arv, Float);
+                                          }
+                                        }));
+    }
   }
 }
