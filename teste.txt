@@ -8,6 +8,8 @@ int cc(){
 
 {
     int a;
+    string b;
+    
 
     a = 2.3;
 
