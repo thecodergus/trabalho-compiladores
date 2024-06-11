@@ -73,6 +73,9 @@ int yylex();
 %token SIMBOLO_ABRE_PARENTESES "("
 %token SIMBOLO_FECHA_PARENTESES ")"
 
+// Simbolo para abrir e fechar String
+%token ABRE_FECHA_STRING "\""
+
 // Simbolo de virgula e ponto e virgula
 %token SIMBOLO_VIRGULA ","
 %token SIMBOLO_PONTO_VIRGULA ";"
@@ -270,7 +273,7 @@ ComandoAtribuicao:
     ID SIMBOLO_ATRIBUICAO ExpressaoAritmetica{
         $$ = criar_comando_atribuicao($1, $3);
     }
-    | ID SIMBOLO_ATRIBUICAO CONSTANTE_STRING{
+    | ID SIMBOLO_ATRIBUICAO CONSTANTE_STRING {
         $$ = criar_comando_atribuicao($1, $3);
     }
     ;
