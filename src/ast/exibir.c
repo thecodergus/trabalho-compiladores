@@ -131,7 +131,7 @@ void imprimir_token(Token token, int nivel) {
       printf("Bloco\n");
       break;
     case DeclarationVariable:
-      printf("Declaracao de variavel {%s}\n", tipo_dado_str(token.u.type.tipo));
+      printf("Declaracao de variaveis\n");
       break;
     case DeclarationList:
       printf("Lisa de declaracoes\n");
