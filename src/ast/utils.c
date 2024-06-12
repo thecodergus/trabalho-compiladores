@@ -194,7 +194,7 @@ vector(str) get_ids_parametros_funcao(AST *funcao) {
         get_tipo_token(parametros) == DeclarationParameterList) {
       for (size_t i = 0; i < cvector_size(parametros->u.filhos); i++) {
         cvector_push_back(
-            lista, parametros->u.filhos[i]->u.arvore.left->token.u.idenfier.id)
+            lista, parametros->u.filhos[i]->u.arvore.left->token.u.idenfier.id);
       }
     }
   }
