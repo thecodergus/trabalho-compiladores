@@ -16,8 +16,8 @@ minuscula [a-z]
 maiuscula [A-Z]
 inteito    -?({digito})+
 float       -?({digito})+("."{digito}*)?("e"[+-]?{digito}+)?
-id        ({maiuscula}|{minuscula})({maiuscula}|{minuscula}|{digito}|-)*
-string    \"([^\\\n]|(\\.))*?\"
+id        ({maiuscula}|{minuscula})({maiuscula}|{minuscula}|{digito}|-|_)*
+string    (\")(.*)(\")
 
 %%
 

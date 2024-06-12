@@ -6,7 +6,7 @@ int bb(float e){
     int a;
 
     a = bb(20,30);
-    a = naoExiste(10);
+    a = nao_Existe(10);
     
     return a;
 }
