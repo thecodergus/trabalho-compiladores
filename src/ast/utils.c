@@ -64,7 +64,7 @@ AST *procurar_funcao(vector(AST *) funcoes, str id) {
       if (fn && fn->tipo == Vetor && cvector_size(fn->u.filhos) > 0) {
         AST *id_ = fn->u.filhos[1];
         if (str_eq(id_->token.u.idenfier.id, id)) {
-          return id_;
+          return fn;
         }
       }
     }
@@ -76,6 +76,7 @@ AST *procurar_funcao(vector(AST *) funcoes, str id) {
 vector(enum TipoDados) procurar_tipagem_dos_parametros_funcao(AST *funcao) {
   vector(enum TipoDados) tipos_encontrados = NULL;
 
+  printf("Numero parametros: %d\n", cvector_size(funcao->u.filhos));
   if (funcao && get_tipo_no(funcao) == Vetor &&
       get_tipo_token(funcao) == DeclarationFunction &&
       cvector_size(funcao->u.filhos) > 0) {
@@ -83,18 +84,18 @@ vector(enum TipoDados) procurar_tipagem_dos_parametros_funcao(AST *funcao) {
 
     if (parametros && get_tipo_no(parametros) == Vetor &&
         get_tipo_token(parametros) == DeclarationParameterList) {
-      for (AST **it = cvector_begin(parametros->u.filhos);
-           it != cvector_end(parametros->u.filhos); it++) {
-        AST *parametro = *it;
-        if (parametro && get_tipo_no(parametro) == Arvore &&
-            get_tipo_token(parametro) == DeclarationParameter) {
-          AST *tipo = parametro->u.arvore.left;
-          if (tipo && get_tipo_no(tipo) == Folha &&
-              get_tipo_token(tipo) == Type) {
-            cvector_push_back(tipos_encontrados, tipo->token.u.type.tipo);
-          }
-        }
-      }
+      // for (AST **it = cvector_begin(parametros->u.filhos);
+      //      it != cvector_end(parametros->u.filhos); it++) {
+      //   AST *parametro = *it;
+      //   if (parametro && get_tipo_no(parametro) == Arvore &&
+      //       get_tipo_token(parametro) == DeclarationParameter) {
+      //     AST *tipo = parametro->u.arvore.left;
+      //     if (tipo && get_tipo_no(tipo) == Folha &&
+      //         get_tipo_token(tipo) == Type) {
+      //       cvector_push_back(tipos_encontrados, tipo->token.u.type.tipo);
+      //     }
+      //   }
+      // }
     }
   }
 
@@ -141,4 +142,15 @@ str get_chamada_funcao_id(AST *chamada) {
   }
 
   return str_lit("");
+}
+
+vector(enum TipoDados) get_lista_parametros(AST *parametros) {
+  vector(enum TipoDados) lista = NULL;
+  if (parametros && get_tipo_no(parametros) == Vetor &&
+      get_tipo_token(parametros) == ParameterList) {
+    for (AST **it = cvector_begin(parametros->u.filhos);
+         it != cvector_end(parametros->u.filhos); it++) {
+    }
+  }
+  return lista;
 }
