@@ -169,3 +169,16 @@ vector(str) get_ids_declaracoes_variaveis(vector(AST *) declaracoes) {
 
   return declaracoes_ids;
 }
+
+vector(str) get_ids_funcoes(vector(AST *) funcoes) {
+  vector(str) lista_ids = NULL;
+
+  if (funcoes) {
+    for (size_t i = 0; i < cvector_size(funcoes); i++) {
+      cvector_push_back(lista_ids,
+                        funcoes[i]->u.filhos[1]->token.u.idenfier.id);
+    }
+  }
+
+  return lista_ids;
+}

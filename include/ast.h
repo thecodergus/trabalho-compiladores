@@ -275,4 +275,9 @@ void analise_semantica_variaveis_multiplamente_declaradas(vector(AST *)
 
 vector(str) get_ids_declaracoes_variaveis(vector(AST *) declaracoes);
 
+void analise_semantica_uso_variavel_nao_declarada(vector(AST *) ids_funcoes,
+                                                  vector(AST *) declaracoes,
+                                                  AST *bloco);
+vector(str) get_ids_funcoes(vector(AST*) funcoes);                                                  
+
 #endif
