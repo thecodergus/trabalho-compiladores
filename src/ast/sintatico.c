@@ -82,26 +82,25 @@ AST *criar_constante(const char *input, enum TipoDados tipo) {
   constante->token.tipo = Constant;
 
   switch (tipo) {
-    case Int: {
-      constante->token.u.constante.tipo = Int;
-      constante->token.u.constante.valor.inteiro = atoi(input);
-    } break;
-    case Float: {
-      constante->token.u.constante.tipo = Float;
-      constante->token.u.constante.valor.flutuante = atof(input);
-    } break;
-    case String: {
-      constante->token.u.constante.tipo = String;
-      str_assign(&constante->token.u.constante.valor.string,
-                 str_acquire(input));
-    } break;
-    case Void: {
-      constante->token.u.constante.tipo = Void;
-      constante->token.u.constante.valor.nada = NULL;
-    } break;
+  case Int: {
+    constante->token.u.constante.tipo = Int;
+    constante->token.u.constante.valor.inteiro = atoi(input);
+  } break;
+  case Float: {
+    constante->token.u.constante.tipo = Float;
+    constante->token.u.constante.valor.flutuante = atof(input);
+  } break;
+  case String: {
+    constante->token.u.constante.tipo = String;
+    str_assign(&constante->token.u.constante.valor.string, str_acquire(input));
+  } break;
+  case Void: {
+    constante->token.u.constante.tipo = Void;
+    constante->token.u.constante.valor.nada = NULL;
+  } break;
 
-    default:
-      break;
+  default:
+    break;
   }
 
   return constante;
