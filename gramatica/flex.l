@@ -52,7 +52,6 @@ string          { return TIPO_STRING; }
 "-"             { return OPERADOR_SUBTRACAO; }
 "^"             { return OPERADOR_POTENCIA; }
 ","             { return SIMBOLO_VIRGULA; }
-"\""            { return ABRE_FECHA_STRING; }
 {inteito}       { 
                     yylval = criar_constante(yytext, Int);
                     return CONSTANTE_INT; 

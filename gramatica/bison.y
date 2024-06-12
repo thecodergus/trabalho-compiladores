@@ -73,9 +73,6 @@ int yylex();
 %token SIMBOLO_ABRE_PARENTESES "("
 %token SIMBOLO_FECHA_PARENTESES ")"
 
-// Simbolo para abrir e fechar String
-%token ABRE_FECHA_STRING "\""
-
 // Simbolo de virgula e ponto e virgula
 %token SIMBOLO_VIRGULA ","
 %token SIMBOLO_PONTO_VIRGULA ";"
