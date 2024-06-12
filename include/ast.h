@@ -261,6 +261,8 @@ str get_funcao_id(AST *funcao);
 
 str get_id_id(AST *id);
 
+str get_chamada_funcao_id(AST*chamada);
+
 // void analise_semantica_funcao(vector(AST *) funcoes, AST *funcao);
 
 #endif

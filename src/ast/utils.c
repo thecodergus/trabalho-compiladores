@@ -136,3 +136,13 @@ str get_id_id(AST *id) {
   }
   return str_lit("");
 }
+
+str get_chamada_funcao_id(AST *chamada) {
+  if (chamada && get_tipo_no(chamada) == Arvore &&
+      get_tipo_token(chamada) == FunctionCall) {
+    AST *id = chamada->u.arvore.left;
+    return get_id_id(id);
+  }
+
+  return str_lit("");
+}
