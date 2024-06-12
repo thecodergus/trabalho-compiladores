@@ -120,11 +120,7 @@ str get_funcao_id(AST *funcao) {
   if (funcao && get_tipo_no(funcao) == Vetor &&
       get_tipo_token(funcao) == DeclarationFunction &&
       cvector_size(funcao->u.filhos) > 0) {
-    AST *id = cvector_at(funcao->u.filhos, 1);
-
-    if (id && get_tipo_no(id) == Folha && get_tipo_token(id) == Identifier) {
-      return id->token.u.idenfier.id;
-    }
+    return funcao->u.filhos[1]->token.u.idenfier.id;
   }
 
   return str_lit("");
