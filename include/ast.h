@@ -247,7 +247,7 @@ char *strdup(const char *src);
 
 void percorrer_arvore_aplicando_funcao(AST *a, void (*fn)(AST *));
 
-void analise_semantiaca_chamada_funcao_existe(vector(AST *) funcoes, AST *nodo);
+void analise_semantica_chamada_funcao_existe(vector(AST *) funcoes, AST *nodo);
 
 AST *procurar_funcao(vector(AST *) funcoes, str id);
 
@@ -255,5 +255,7 @@ vector(enum TipoDados) procurar_tipagem_dos_parametros_funcao(AST *funcao);
 
 enum TipoNo get_tipo_no(AST *no);
 
-enum TipoToken get_tipo_token(AST*no);
+enum TipoToken get_tipo_token(AST *no);
+
+str get_funcao_id(AST *funcao);
 #endif
