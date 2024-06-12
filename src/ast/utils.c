@@ -83,19 +83,18 @@ vector(enum TipoDados) procurar_tipagem_dos_parametros_funcao(AST *funcao) {
 
     if (parametros && get_tipo_no(parametros) == Vetor &&
         get_tipo_token(parametros) == DeclarationParameterList) {
-      for (AST **it = cvector_begin(parametros->u.filhos;
-                                    it != cvector_end(parametros->u.filhos);
-                                    it++) {
-             AST *parametro = *it;
-             if (parametro && get_tipo_no(parametro) == Arvore &&
-                 get_tipo_token(parametro) == DeclarationParameter) {
-               AST *tipo = parametro->u.arvore.left;
-               if (tipo && get_tipo_no(tipo) == Folha &&
-                   get_tipo_token(tipo) == Type) {
-                 cvector_push_back(tipos_encontrados, tipo->token.u.type.tipo);
-               }
-             }
-           })
+      for (AST **it = cvector_begin(parametros->u.filhos);
+           it != cvector_end(parametros->u.filhos); it++) {
+        AST *parametro = *it;
+        if (parametro && get_tipo_no(parametro) == Arvore &&
+            get_tipo_token(parametro) == DeclarationParameter) {
+          AST *tipo = parametro->u.arvore.left;
+          if (tipo && get_tipo_no(tipo) == Folha &&
+              get_tipo_token(tipo) == Type) {
+            cvector_push_back(tipos_encontrados, tipo->token.u.type.tipo);
+          }
+        }
+      }
     }
   }
 
@@ -121,8 +120,19 @@ str get_funcao_id(AST *funcao) {
   if (funcao && get_tipo_no(funcao) == Vetor &&
       get_tipo_token(funcao) == DeclarationFunction &&
       cvector_size(funcao->u.filhos) > 0) {
-    return cvector_at(funcao->u.filhos, 1);
+    AST *id = cvector_at(funcao->u.filhos, 1);
+
+    if (id && get_tipo_no(id) == Folha && get_tipo_token(id) == Identifier) {
+      return id->token.u.idenfier.id;
+    }
   }
 
+  return str_lit("");
+}
+
+str get_id_id(AST *id) {
+  if (id && get_tipo_no(id) == Folha && get_tipo_token(id) == Identifier) {
+    return id->token.u.idenfier.id;
+  }
   return str_lit("");
 }

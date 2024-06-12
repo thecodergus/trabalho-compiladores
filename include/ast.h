@@ -258,4 +258,9 @@ enum TipoNo get_tipo_no(AST *no);
 enum TipoToken get_tipo_token(AST *no);
 
 str get_funcao_id(AST *funcao);
+
+str get_id_id(AST *id);
+
+// void analise_semantica_funcao(vector(AST *) funcoes, AST *funcao);
+
 #endif

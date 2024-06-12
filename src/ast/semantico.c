@@ -2,7 +2,8 @@
 
 void analise_semantica_variaveis(vector(AST *) declaracoes_variaveis,
                                  AST *bloco) {
-  if (!bloco) return;
+  if (!bloco)
+    return;
 
   for (AST **item = cvector_begin(declaracoes_variaveis);
        item != cvector_end(declaracoes_variaveis); ++item) {
@@ -18,33 +19,34 @@ void analise_semantica_variaveis(vector(AST *) declaracoes_variaveis,
 
 void analise_semantica_verificar_variavel(str id, enum TipoDados tipo,
                                           AST *ast) {
-  if (!ast) return;
+  if (!ast)
+    return;
 
   switch (ast->tipo) {
-    case Arvore: {
-      if (ast->token.tipo == Assignment &&
-          str_eq(ast->u.arvore.left->token.u.idenfier.id, id) &&
-          ast->u.arvore.right->token.u.constante.tipo != tipo) {
-        converter_constant_para(ast->u.arvore.right, tipo);
-      } else {
-        analise_semantica_verificar_variavel(id, tipo, ast->u.arvore.left);
-        analise_semantica_verificar_variavel(id, tipo, ast->u.arvore.right);
-      }
+  case Arvore: {
+    if (ast->token.tipo == Assignment &&
+        str_eq(ast->u.arvore.left->token.u.idenfier.id, id) &&
+        ast->u.arvore.right->token.u.constante.tipo != tipo) {
+      converter_constant_para(ast->u.arvore.right, tipo);
+    } else {
+      analise_semantica_verificar_variavel(id, tipo, ast->u.arvore.left);
+      analise_semantica_verificar_variavel(id, tipo, ast->u.arvore.right);
     }
+  }
 
+  break;
+  case Vetor: {
+    for (AST **it = cvector_begin(ast->u.filhos);
+         it != cvector_end(ast->u.filhos); ++it) {
+      analise_semantica_verificar_variavel(id, tipo, *it);
+    }
+  } break;
+  case Folha: {
+    return;
+  };
+
+  default:
     break;
-    case Vetor: {
-      for (AST **it = cvector_begin(ast->u.filhos);
-           it != cvector_end(ast->u.filhos); ++it) {
-        analise_semantica_verificar_variavel(id, tipo, *it);
-      }
-    } break;
-    case Folha: {
-      return;
-    };
-
-    default:
-      break;
   }
 }
 
@@ -58,7 +60,8 @@ void analise_semantica_funcoes(vector(AST *) declaracoes_funcoes) {
 
 void analise_semantica_verificar_retorno_funcao(enum TipoDados tipo,
                                                 AST *bloco) {
-  if (!bloco) return;
+  if (!bloco)
+    return;
 
   if (bloco->token.tipo == Return) {
     AST *expressao = bloco->u.arvore.left;
@@ -71,82 +74,83 @@ void analise_semantica_verificar_retorno_funcao(enum TipoDados tipo,
   }
 
   switch (bloco->tipo) {
-    case Arvore:
-      analise_semantica_verificar_retorno_funcao(tipo, bloco->u.arvore.left);
-      analise_semantica_verificar_retorno_funcao(tipo, bloco->u.arvore.right);
-      break;
-    case Vetor:
-      for (AST **it = cvector_begin(bloco->u.filhos);
-           it != cvector_end(bloco->u.filhos); it++) {
-        analise_semantica_verificar_retorno_funcao(tipo, *it);
-      }
-      break;
+  case Arvore:
+    analise_semantica_verificar_retorno_funcao(tipo, bloco->u.arvore.left);
+    analise_semantica_verificar_retorno_funcao(tipo, bloco->u.arvore.right);
+    break;
+  case Vetor:
+    for (AST **it = cvector_begin(bloco->u.filhos);
+         it != cvector_end(bloco->u.filhos); it++) {
+      analise_semantica_verificar_retorno_funcao(tipo, *it);
+    }
+    break;
 
-    default:
-      break;
+  default:
+    break;
   }
 }
 
 void converter_constant_para(AST *constante, enum TipoDados tipo) {
-  if (!constante) return;
+  if (!constante)
+    return;
 
   switch (constante->token.u.constante.tipo) {
-    case Int: {
-      switch (tipo) {
-        case Float: {
-          constante->token.u.constante.tipo = Float;
-          constante->token.u.constante.valor.flutuante =
-              intToFloat(constante->token.u.constante.valor.inteiro);
-        } break;
-        case String: {
-          constante->token.u.constante.tipo = String;
-          constante->token.u.constante.valor.string =
-              intToString(constante->token.u.constante.valor.inteiro);
-        };
-
-        default:
-          break;
-      }
-    } break;
+  case Int: {
+    switch (tipo) {
     case Float: {
-      switch (tipo) {
-        case Int: {
-          constante->token.u.constante.tipo = Int;
-          constante->token.u.constante.valor.inteiro =
-              floatToInt(constante->token.u.constante.valor.flutuante);
-
-          exibir_warning("Tipo inteiro nao eh equivalente a ponto flutuante!");
-        } break;
-        case String: {
-          constante->token.u.constante.tipo = String;
-          constante->token.u.constante.valor.string =
-              floatToString(constante->token.u.constante.valor.flutuante);
-        };
-
-        default:
-          break;
-      }
+      constante->token.u.constante.tipo = Float;
+      constante->token.u.constante.valor.flutuante =
+          intToFloat(constante->token.u.constante.valor.inteiro);
     } break;
     case String: {
-      switch (constante->token.u.constante.tipo) {
-        case Int: {
-          constante->token.u.constante.tipo = Int;
-          constante->token.u.constante.valor.inteiro =
-              stringToInt(constante->token.u.constante.valor.string);
-        } break;
-        case Float: {
-          constante->token.u.constante.tipo = Float;
-          constante->token.u.constante.valor.flutuante =
-              stringToFloat(constante->token.u.constante.valor.string);
-        } break;
-
-        default:
-          break;
-      }
+      constante->token.u.constante.tipo = String;
+      constante->token.u.constante.valor.string =
+          intToString(constante->token.u.constante.valor.inteiro);
     };
 
     default:
       break;
+    }
+  } break;
+  case Float: {
+    switch (tipo) {
+    case Int: {
+      constante->token.u.constante.tipo = Int;
+      constante->token.u.constante.valor.inteiro =
+          floatToInt(constante->token.u.constante.valor.flutuante);
+
+      exibir_warning("Tipo inteiro nao eh equivalente a ponto flutuante!");
+    } break;
+    case String: {
+      constante->token.u.constante.tipo = String;
+      constante->token.u.constante.valor.string =
+          floatToString(constante->token.u.constante.valor.flutuante);
+    };
+
+    default:
+      break;
+    }
+  } break;
+  case String: {
+    switch (constante->token.u.constante.tipo) {
+    case Int: {
+      constante->token.u.constante.tipo = Int;
+      constante->token.u.constante.valor.inteiro =
+          stringToInt(constante->token.u.constante.valor.string);
+    } break;
+    case Float: {
+      constante->token.u.constante.tipo = Float;
+      constante->token.u.constante.valor.flutuante =
+          stringToFloat(constante->token.u.constante.valor.string);
+    } break;
+
+    default:
+      break;
+    }
+  };
+
+  default:
+    break;
   }
 }
 
@@ -170,4 +174,24 @@ void analise_semantica_expressao(AST *arvore) {
                                         }));
     }
   }
+}
+
+void analise_semantica_chamada_funcao_existe(vector(AST *) funcoes, AST *nodo) {
+  if (funcoes && nodo && get_tipo_token(nodo) == FunctionCall) {
+    str id = get_id_id(nodo->u.arvore.left);
+
+    for (AST **it = cvector_begin(funcoes); it != cvector_end(funcoes); it++) {
+      str fn_id = get_funcao_id(*it);
+
+      if (str_eq(id, fn_id)) {
+        return;
+      }
+    }
+  }
+
+  exibir_erro("A funcao chamada nao existe!");
+}
+
+void analise_semantica_funcao(vector(AST *) funcoes, AST *funcao){
+  
 }
