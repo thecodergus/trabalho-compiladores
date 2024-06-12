@@ -7,5 +7,9 @@ int bb(float e){
     int a, b;
     float f;
     string s;
-    a = "sda";
+    
+    if(a == b){
+        a = b;
+    }
+
 }
