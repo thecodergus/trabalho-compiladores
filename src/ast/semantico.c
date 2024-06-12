@@ -250,3 +250,34 @@ void analise_semantica_variaveis_multiplamente_declaradas(vector(AST *)
     }
   }
 }
+
+void analise_semantica_uso_variavel_nao_declarada(vector(AST *) funcoes,
+                                                  vector(AST *) declaracoes,
+                                                  AST *bloco) {
+  if (declaracoes) {
+    vector(str) ids_declaracoes = get_ids_declaracoes_variaveis(declaracoes);
+    vector(str) ids_funcoes = get_ids_funcoes(funcoes);
+
+    percorrer_arvore_aplicando_funcao(
+        bloco, lambda(void, (AST * no), {
+          if (no && get_tipo_token(no) == Identifier) {
+            str id = get_id_id(no);
+            for (size_t i = 0; i < cvector_size(ids_declaracoes); i++) {
+              if (str_eq(id, ids_declaracoes[i])) {
+                return;
+              }
+            }
+            for (size_t i = 0; i < cvector_size(ids_funcoes); i++) {
+              if (str_eq(id, ids_funcoes[i])) {
+                return;
+              }
+            }
+
+            char msg_erro[1000];
+            sprintf(msg_erro, "A variavel '%s' nao foi previamente declarada!",
+                    str_ptr(id));
+            exibir_erro(msg_erro);
+          }
+        }));
+  }
+}
