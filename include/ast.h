@@ -62,7 +62,8 @@ enum TipoToken {
   Constant,
   Identifier,
   IdentifierList,
-  CommandList
+  CommandList,
+  TokenDesconhecido
 };
 
 // Estrutura de dados para os tokens
@@ -125,7 +126,7 @@ struct Token {
 };
 
 // Criação do AST
-enum TipoNo { Arvore, Vetor, Folha };
+enum TipoNo { Arvore, Vetor, Folha, NoDesconhecido };
 
 typedef struct AST AST;
 
@@ -248,5 +249,11 @@ void percorrer_arvore_aplicando_funcao(AST *a, void (*fn)(AST *));
 
 void analise_semantiaca_chamada_funcao_existe(vector(AST *) funcoes, AST *nodo);
 
-AST *procurar_funcao(vector(AST*) funcoes, str id);
+AST *procurar_funcao(vector(AST *) funcoes, str id);
+
+vector(enum TipoDados) procurar_tipagem_dos_parametros_funcao(AST *funcao);
+
+enum TipoNo get_tipo_no(AST *no);
+
+enum TipoToken get_tipo_token(AST*no);
 #endif
