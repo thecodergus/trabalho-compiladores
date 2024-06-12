@@ -10,6 +10,12 @@ int bb(float e){
     
     if(a == b){
         a = b;
+    }else{
+        b = a;
+    }
+
+    while(a == b){
+        a = b;
     }
 
 }

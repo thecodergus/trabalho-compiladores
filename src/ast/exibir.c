@@ -336,8 +336,6 @@ char *tipo_dado_str_original(enum TipoDados tipo) {
 }
 
 void imprimir_codigo_original(AST *raiz) {
-  if (!raiz) return;
-
   if (raiz) {
     switch (raiz->token.tipo) {
       case Program: {
@@ -447,9 +445,9 @@ void imprimir_codigo_original(AST *raiz) {
         }
       } break;
       case IfBlock: {
-        AST *bloco = raiz->u.arvore.left;
-
-        imprimir_codigo_original(bloco);
+        if (raiz->u.arvore.left) {
+          imprimir_codigo_original(raiz->u.arvore.left);
+        }
 
         printf("}");
         if (raiz->u.arvore.right) {
@@ -621,7 +619,7 @@ void imprimir_codigo_original(AST *raiz) {
         }
       } break;
       default:
-        printf("Desconhecido\n");
+        printf("Desconhecido {%d}", raiz->token.tipo);
     }
   }
 }

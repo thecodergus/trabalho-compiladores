@@ -179,18 +179,11 @@ AST *criar_comando_if(AST *condicao, AST *blocoIf, AST *blocoElse) {
   comandoIf->u.arvore.left = condicao;
   comandoIf->u.arvore.right = (AST *)malloc(sizeof(AST));
   comandoIf->u.arvore.right->tipo = Arvore;
-  comandoIf->u.arvore.right->token.tipo = If;
+  comandoIf->u.arvore.right->token.tipo = IfBlock;
+  
   comandoIf->u.arvore.right->u.arvore.left = blocoIf;
   comandoIf->u.arvore.right->u.arvore.right = blocoElse;
 
-  // Dando nomes aos bois
-  if (comandoIf->u.arvore.right->u.arvore.left) {
-    comandoIf->u.arvore.right->u.arvore.left->token.tipo = IfBlock;
-  }
-
-  if (comandoIf->u.arvore.right->u.arvore.right) {
-    comandoIf->u.arvore.right->u.arvore.right->token.tipo = ElseBlock;
-  }
   return comandoIf;
 }
 
