@@ -55,3 +55,19 @@ void percorrer_arvore_aplicando_funcao(AST *a, void (*fn)(AST *)) {
     }
   }
 }
+
+AST *procurar_funcao(vector(AST *) funcoes, str id) {
+  if (funcoes) {
+    for (AST **it = cvector_begin(funcoes); it != cvector_end(funcoes); it++) {
+      AST *fn = *it;
+      if (fn && fn->tipo == Vetor && cvector_size(fn->u.filhos) > 0) {
+        AST *id_ = fn->u.filhos[1];
+        if (str_eq(id_->token.u.idenfier.id, id)) {
+          return id_;
+        }
+      }
+    }
+  }
+
+  return NULL;
+}
