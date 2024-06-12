@@ -13,6 +13,7 @@ int bb(float e){
     a = bb(20,30);
     a = nao_Existe(10);
     s = "testando 123";
+    d = 20;
 
     if("Mais um teste" == "Mais um teste"){
         a = 20 + "T";
