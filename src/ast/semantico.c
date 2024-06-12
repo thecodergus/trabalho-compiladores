@@ -191,7 +191,7 @@ void analise_semantica_chamada_funcao_existe(vector(AST *) funcoes, AST *nodo) {
       }
     }
     char msg_erro[1000];
-    sprintf(msg_erro, "A chamada de funcao '%s' nao existe!",
+    sprintf(msg_erro, "A funcao '%s' nao existe!",
             str_ptr(get_chamada_funcao_id(nodo)));
     exibir_erro(msg_erro);
   }
