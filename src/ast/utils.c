@@ -193,8 +193,13 @@ vector(str) get_ids_parametros_funcao(AST *funcao) {
     if (parametros && get_tipo_no(parametros) == Vetor &&
         get_tipo_token(parametros) == DeclarationParameterList) {
       for (size_t i = 0; i < cvector_size(parametros->u.filhos); i++) {
-        cvector_push_back(
-            lista, parametros->u.filhos[i]->u.arvore.left->token.u.idenfier.id);
+        AST *parametro = parametros->u.filhos[i];
+
+        if (parametro && get_tipo_no(parametro) == Arvore &&
+            get_tipo_token(parametro) == DeclarationParameter) {
+          AST *id = parametro->u.arvore.right;
+          cvector_push_back(lista, get_id_id(id));
+        }
       }
     }
   }
