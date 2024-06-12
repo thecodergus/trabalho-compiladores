@@ -201,7 +201,7 @@ enum TipoDados get_tipo_declaracao(vector(AST *) declaracoes, str id) {
 enum TipoDados get_tipo_funcao(vector(AST *) funcoes, str id) {
   for (size_t i = 0; i < cvector_size(funcoes); i++) {
     if (str_eq(funcoes[i]->u.filhos[1]->token.u.idenfier.id, id)) {
-      return funcoes[i]->u.filhos[1]->token.u.type.tipo;
+      return funcoes[i]->u.filhos[0]->token.u.type.tipo;
     }
   }
 
