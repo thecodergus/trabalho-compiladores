@@ -177,21 +177,56 @@ void analise_semantica_expressao(AST *arvore) {
 }
 
 void analise_semantica_chamada_funcao_existe(vector(AST *) funcoes, AST *nodo) {
-  if (funcoes && nodo && get_tipo_token(nodo) == FunctionCall) {
-    str id = get_id_id(nodo->u.arvore.left);
+  if (nodo && get_tipo_token(nodo) == FunctionCall) {
 
-    for (AST **it = cvector_begin(funcoes); it != cvector_end(funcoes); it++) {
-      str fn_id = get_funcao_id(*it);
+    if (funcoes) {
+      str id = get_id_id(nodo->u.arvore.left);
 
-      if (str_eq(id, fn_id)) {
-        return;
+      for (AST **it = cvector_begin(funcoes); it != cvector_end(funcoes);
+           it++) {
+        str fn_id = get_funcao_id(*it);
+        if (str_eq(id, fn_id)) {
+          return;
+        }
+      }
+    }
+    char msg_erro[1000];
+    sprintf(msg_erro, "A chamada de funcao '%s' nao existe!",
+            str_ptr(get_chamada_funcao_id(nodo)));
+    exibir_erro(msg_erro);
+  }
+}
+
+void analise_semantica_funcao(vector(AST *) funcoes, AST *funcao) {
+  percorrer_arvore_aplicando_funcao(
+      funcao, lambda(void, (AST * no), {
+        analise_semantica_chamada_funcao_existe(funcoes, no);
+        analise_semantica_chamada_funcao_numero_parametros(funcoes, no);
+      }));
+}
+
+void analise_semantica_chamada_funcao_numero_parametros(vector(AST *) funcoes,
+                                                        AST *nodo) {
+  if (nodo && get_tipo_no(nodo) == Arvore &&
+      get_tipo_token(nodo) == FunctionCall) {
+    if (funcoes && cvector_size(funcoes) > 0) {
+      AST *lista_parametros = nodo->u.arvore.right;
+      str fn_id = get_id_id(nodo->u.arvore.left);
+      AST *fn = procurar_funcao(funcoes, fn_id);
+
+      if (fn) {
+        size_t tam_parametros_fn =
+                   cvector_size(procurar_tipagem_dos_parametros_funcao(fn)),
+               tam_parametros_chamada_fn =
+                   cvector_size(get_lista_parametros(lista_parametros));
+        if (tam_parametros_fn != tam_parametros_chamada_fn) {
+          char msg_erro[1000];
+          sprintf(msg_erro,
+                  "A lista de parametros da função '%s' é %ld e nao %ld",
+                  str_ptr(fn_id), tam_parametros_fn, tam_parametros_chamada_fn);
+          exibir_erro(msg_erro);
+        }
       }
     }
   }
-
-  exibir_erro("A funcao chamada nao existe!");
-}
-
-void analise_semantica_funcao(vector(AST *) funcoes, AST *funcao){
-  
 }

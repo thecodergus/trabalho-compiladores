@@ -253,6 +253,8 @@ AST *procurar_funcao(vector(AST *) funcoes, str id);
 
 vector(enum TipoDados) procurar_tipagem_dos_parametros_funcao(AST *funcao);
 
+vector(enum TipoDados) get_lista_parametros(AST *parametros);
+
 enum TipoNo get_tipo_no(AST *no);
 
 enum TipoToken get_tipo_token(AST *no);
@@ -261,8 +263,9 @@ str get_funcao_id(AST *funcao);
 
 str get_id_id(AST *id);
 
-str get_chamada_funcao_id(AST*chamada);
+str get_chamada_funcao_id(AST *chamada);
 
-// void analise_semantica_funcao(vector(AST *) funcoes, AST *funcao);
+void analise_semantica_chamada_funcao_numero_parametros(vector(AST *) funcoes,
+                                                        AST *nodo);
 
 #endif

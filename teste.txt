@@ -2,25 +2,10 @@ int bb(float e){
     return e;
 }
 
-int cc(){
-    return 2.4;
-}
-
 {
     int a;
-    string b;
+
+    a = bb(20,30);
     
-
-    a = 2.3;
-    b = "asfsa";
-
-    if(4 == 2.3){
-        a = 23;
-    }
-
-    while(!((20 > 10) || (10 >= 10))){
-        a = 20;
-    }
-
     return a;
 }
