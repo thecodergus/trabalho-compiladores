@@ -4,9 +4,19 @@ int bb(float e){
 
 {
     int a;
+    string s;
 
     a = bb(20,30);
     a = nao_Existe(10);
+    s = "testando 123";
+
+    if("Mais um teste" == "Mais um teste"){
+        a = 20 + "T";
+    }
+
+    if("20" == 20){
+        a = 30;
+    }
     
     return a;
 }

@@ -359,6 +359,9 @@ ExpressaoRelacional:
     CONSTANTE_STRING LOGICA_EQ CONSTANTE_STRING{
         $$ = criar_expressao_relacional(Igual, $1, $3);
     }
+    | CONSTANTE_STRING LOGICA_EQ ExpressaoAritmetica{
+        exibir_erro("Nao se pode comparar strings com operacoes aritmeticas!");
+    }
     | ExpressaoAritmetica LOGICA_EQ ExpressaoAritmetica{
         $$ = criar_expressao_relacional(Igual, $1, $3);
     }
