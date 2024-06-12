@@ -271,4 +271,6 @@ void analise_semantica_atribuicao(vector(AST *) funcoes, vector(AST *) parametro
 
 enum TipoDados get_tipo_declaracao(vector(AST *) declaracoes, str id);
 
+enum TipoDados get_tipo_funcao(vector(AST *) funcoes, str id);
+
 #endif
