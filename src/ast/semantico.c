@@ -281,3 +281,34 @@ void analise_semantica_uso_variavel_nao_declarada(vector(AST *) funcoes, vector(
     }
   }
 }
+
+void analise_semantica_chamada_funcao_tipos_entrada(vector(AST *) funcoes, AST *nodo) {
+  percorrer_arvore_aplicando_funcao(nodo, lambda(void, (AST * no), {
+                                      if (no && get_tipo_no(no) == Arvore && get_tipo_token(no) == FunctionCall) {
+                                        AST *id = no->u.arvore.left;
+                                        AST *parametros = no->u.arvore.right;
+
+                                        str id_ = get_id_id(id);
+                                        AST *fn = procurar_funcao(funcoes, id_);
+
+                                        vector(enum TipoDados) tipos_parametros_fn = procurar_tipagem_dos_parametros_funcao(fn);
+                                        vector(enum TipoDados) tipos_parametros_entrada = get_lista_parametros(parametros);
+
+                                        if (cvector_size(tipos_parametros_fn) == cvector_size(tipos_parametros_entrada)) {
+                                          for (size_t i = 0; i < cvector_size(tipos_parametros_fn); i++) {
+                                            if (tipos_parametros_fn[i] != tipos_parametros_entrada[i]) {
+                                              if (tipos_parametros_fn[i] == Int && tipos_parametros_entrada[i] == Float) {
+                                                converter_constant_para(parametros->u.filhos[i], Int);
+                                              } else if ((tipos_parametros_fn[i] == Float && tipos_parametros_entrada[i] == Int)) {
+                                                converter_constant_para(parametros->u.filhos[i], Float);
+                                              } else {
+                                                char msg_erro[1000];
+                                                sprintf(msg_erro, "Tipo de entrada invalida para a funcao '%s'!", str_ptr(id_));
+                                                exibir_erro(msg_erro);
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }));
+}

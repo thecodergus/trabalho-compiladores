@@ -19,14 +19,7 @@ enum TipoDados { Int, Float, String, Void };
 enum LogicalOperators { E, Ou, Nao };
 
 // Operadores relacionais
-enum RelationsOperators {
-  Igual,
-  Diferente,
-  Menor,
-  MenorIgual,
-  Maior,
-  MaiorIgual
-};
+enum RelationsOperators { Igual, Diferente, Menor, MenorIgual, Maior, MaiorIgual };
 
 // Operadores aritméticos
 enum ArithmeticOperators { Soma, Subtracao, Multiplicacao, Divisao, Potencia };
@@ -185,29 +178,23 @@ AST *criar_comando_chamada_funcao(AST *id, AST *parametros);
 
 AST *criar_lista_parametros(AST *parametros, AST *parametro);
 
-AST *criar_expressao_logica(enum LogicalOperators operator, AST * left,
-                            AST *right);
+AST *criar_expressao_logica(enum LogicalOperators operator, AST * left, AST *right);
 
-AST *criar_expressao_aritmetica(enum ArithmeticOperators operator, AST * left,
-                                AST *right);
+AST *criar_expressao_aritmetica(enum ArithmeticOperators operator, AST * left, AST *right);
 
-AST *criar_expressao_relacional(enum RelationsOperators operator, AST * left,
-                                AST *right);
+AST *criar_expressao_relacional(enum RelationsOperators operator, AST * left, AST *right);
 
 AST *criar_retorno_funcao(AST *expressao);
 
-void analise_semantica_variaveis(vector(AST *) declaracoes_variaveis,
-                                 AST *bloco);
+void analise_semantica_variaveis(vector(AST *) declaracoes_variaveis, AST *bloco);
 
-void analise_semantica_verificar_variavel(str id, enum TipoDados tipo,
-                                          AST *arvore);
+void analise_semantica_verificar_variavel(str id, enum TipoDados tipo, AST *arvore);
 
 void printar_tipo_no(AST *no);
 
 void analise_semantica_funcoes(vector(AST *) declaracoes_funcoes);
 
-void analise_semantica_verificar_retorno_funcao(enum TipoDados tipo,
-                                                AST *bloco);
+void analise_semantica_verificar_retorno_funcao(enum TipoDados tipo, AST *bloco);
 
 void converter_constant_para(AST *constante, enum TipoDados tipo);
 
@@ -265,21 +252,19 @@ str get_id_id(AST *id);
 
 str get_chamada_funcao_id(AST *chamada);
 
-void analise_semantica_chamada_funcao_numero_parametros(vector(AST *) funcoes,
-                                                        AST *nodo);
+void analise_semantica_chamada_funcao_numero_parametros(vector(AST *) funcoes, AST *nodo);
 
 void analise_semantica_funcoes_multiplamente_declaradas(vector(AST *) funcoes);
 
-void analise_semantica_variaveis_multiplamente_declaradas(vector(AST *)
-                                                              declaracoes);
+void analise_semantica_variaveis_multiplamente_declaradas(vector(AST *) declaracoes);
 
 vector(str) get_ids_declaracoes_variaveis(vector(AST *) declaracoes);
 
-void analise_semantica_uso_variavel_nao_declarada(vector(AST *) funcoes,
-                                                  vector(AST *) declaracoes,
-                                                  AST *bloco);
+void analise_semantica_uso_variavel_nao_declarada(vector(AST *) funcoes, vector(AST *) declaracoes, AST *bloco);
 vector(str) get_ids_funcoes(vector(AST *) funcoes);
 
 vector(str) get_ids_parametros_funcao(AST *funcao);
+
+void analise_semantica_chamada_funcao_tipos_entrada(vector(AST *) funcoes, AST *nodo);
 
 #endif

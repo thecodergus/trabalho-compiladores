@@ -4,11 +4,11 @@ int bb(float e){
 
 
 {
-    int a;
+    int a, b;
     string s;
 
     a = "oi";
     s = bb(20);
-
-    return a;
+    b = bb("errado");
+    a = b;
 }
