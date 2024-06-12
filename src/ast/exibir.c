@@ -76,7 +76,7 @@ void printar_folhas(AST *arvore) {
               printf("Constante {Float}: %f\n", arvore->token.u.constante.valor.flutuante);
             } break;
             case String: {
-              printf("Constante {String}: %s\n", str_ptr(arvore->token.u.constante.valor.string));
+              printf("Constante {String}: '%s'\n", str_ptr(arvore->token.u.constante.valor.string));
             } break;
             case Void: {
               printf("Constante {Void}\n");
@@ -194,7 +194,7 @@ void imprimir_token(Token token, int nivel) {
           printf("Constante {Float}: %f\n", token.u.constante.valor.flutuante);
         } break;
         case String: {
-          printf("Constante {String}: %s\n", str_ptr(token.u.constante.valor.string));
+          printf("Constante {String}: '%s'\n", str_ptr(token.u.constante.valor.string));
         } break;
         case Void: {
           printf("Constante {Void}\n");
