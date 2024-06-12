@@ -112,11 +112,19 @@ Programa:
         analise_semantica_funcoes_multiplamente_declaradas($1->u.filhos);
         analise_semantica_uso_variavel_nao_declarada($1->u.filhos, $2->u.arvore.left->u.filhos, $2->u.arvore.right);
         analise_semantica_chamada_funcao_tipos_entrada($1->u.filhos, $2);
+        analise_semantica_atribuicao($1->u.filhos, NULL, $2->u.arvore.left->u.filhos, $2->u.arvore.right);
         if($1->u.filhos && cvector_size($1->u.filhos) > 0){
             // Iterando sobre as funções existentes
             for(AST** it = cvector_begin($1->u.filhos); it != cvector_end($1->u.filhos); it++){
                 analise_semantica_funcao($1->u.filhos, *it);
                 analise_semantica_chamada_funcao_tipos_entrada($1->u.filhos, *it);
+
+                if(cvector_size((*it)->u.filhos) == 4){
+                    analise_semantica_atribuicao($1->u.filhos, (*it)->u.filhos[2], (*it)->u.filhos[3]->u.arvore.left, (*it)->u.filhos[3]->u.arvore.right);
+                }else{
+                    analise_semantica_atribuicao($1->u.filhos, NULL, (*it)->u.filhos[2]->u.arvore.left, (*it)->u.filhos[2]->u.arvore.right);
+                }
+
             }
         }
     }

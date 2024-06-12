@@ -5,10 +5,7 @@ int bb(float e){
 
 {
     int a, b;
+    float f;
     string s;
-
-    a = "oi";
-    s = bb(20);
-    b = bb("errado");
-    a = b;
+    a = "sda";
 }

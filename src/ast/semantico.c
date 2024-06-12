@@ -312,3 +312,65 @@ void analise_semantica_chamada_funcao_tipos_entrada(vector(AST *) funcoes, AST *
                                       }
                                     }));
 }
+
+void analise_semantica_atribuicao(vector(AST *) funcoes, vector(AST *) parametros, vector(AST *) declaracoes, AST *nodo) {
+  if (nodo) {
+    vector(str) ids_funcoes = get_ids_funcoes(funcoes);
+    percorrer_arvore_aplicando_funcao(
+        nodo, lambda(void, (AST * no), {
+          if (no && get_tipo_token(no) == Assignment) {
+            str id = get_id_id(no->u.arvore.left);
+            enum TipoDados tipo = get_tipo_declaracao(declaracoes, id);
+
+            switch (no->u.arvore.right->token.tipo) {
+              case FunctionCall: {
+                str id_fn = get_chamada_funcao_id(no->u.arvore.right);
+                enum TipoDados tipo_fn = get_tipo_funcao(funcoes, id_fn);
+
+                if (tipo != tipo_fn) {
+                  char msg_erro[1000];
+                  sprintf(msg_erro, "A variavel '%s' tem tipo '%s' mas a funcao '%s' eh do tipo '%s'", str_ptr(id), tipo_dado_str(tipo),
+                          str_ptr(id_fn), tipo_dado_str(tipo_fn));
+                  exibir_erro(msg_erro);
+                }
+
+              } break;
+              case Identifier: {
+                str id_id = get_id_id(no->u.arvore.right);
+                enum TipoDados tipo_id = get_tipo_declaracao(declaracoes, id_id);
+
+                if (tipo != tipo_id) {
+                  char msg_erro[1000];
+                  sprintf(msg_erro, "A variavel '%s' tem tipo '%s' mas a variavel '%s' eh do tipo '%s'", str_ptr(id), tipo_dado_str(tipo),
+                          str_ptr(id_id), tipo_dado_str(tipo_id));
+                  exibir_erro(msg_erro);
+                }
+
+              } break;
+              case ExpressionArithmetic: {
+                if (tipo == String) {
+                  char msg_erro[1000];
+                  sprintf(msg_erro, "A variavel '%s' tem tipo '%s' e nao pode receber o resultado de operacoes aritmeticas", str_ptr(id),
+                          tipo_dado_str(tipo));
+                  exibir_erro(msg_erro);
+                }
+              } break;
+              case Constant: {
+                enum TipoDados tipo_c = no->u.arvore.right->token.u.constante.tipo;
+
+                if (tipo != tipo_c) {
+                  char msg_erro[1000];
+                  sprintf(msg_erro, "A variavel '%s' tem tipo '%s' e nao pode receber o tipo '%s'", str_ptr(id), tipo_dado_str(tipo),
+                          tipo_dado_str(tipo_c));
+                  exibir_erro(msg_erro);
+                }
+
+              } break;
+
+              default:
+                break;
+            }
+          }
+        }));
+  }
+}
