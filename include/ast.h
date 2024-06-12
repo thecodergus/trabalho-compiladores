@@ -280,4 +280,6 @@ void analise_semantica_uso_variavel_nao_declarada(vector(AST *) funcoes,
                                                   AST *bloco);
 vector(str) get_ids_funcoes(vector(AST *) funcoes);
 
+vector(str) get_ids_parametros_funcao(AST *funcao);
+
 #endif

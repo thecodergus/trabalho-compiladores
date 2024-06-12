@@ -182,3 +182,22 @@ vector(str) get_ids_funcoes(vector(AST *) funcoes) {
 
   return lista_ids;
 }
+
+vector(str) get_ids_parametros_funcao(AST *funcao) {
+  vector(str) lista = NULL;
+
+  if (funcao && get_tipo_no(funcao) == Vetor &&
+      get_tipo_token(funcao) == DeclarationFunction &&
+      cvector_size(funcao->u.filhos) == 4) {
+    AST *parametros = funcao->u.filhos[2];
+    if (parametros && get_tipo_no(parametros) == Vetor &&
+        get_tipo_token(parametros) == DeclarationParameterList) {
+      for (size_t i = 0; i < cvector_size(parametros->u.filhos); i++) {
+        cvector_push_back(
+            lista, parametros->u.filhos[i]->u.arvore.left->token.u.idenfier.id)
+      }
+    }
+  }
+
+  return lista;
+}
