@@ -8,7 +8,7 @@ int bb(float e){
 
 {
     int a;
-    string s;
+    string s, a;
 
     a = bb(20,30);
     a = nao_Existe(10);
@@ -22,5 +22,9 @@ int bb(float e){
         a = 30;
     }
     
+    if(a == s){
+        a = 20;
+    }
+
     return a;
 }

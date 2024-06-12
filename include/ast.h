@@ -270,4 +270,9 @@ void analise_semantica_chamada_funcao_numero_parametros(vector(AST *) funcoes,
 
 void analise_semantica_funcoes_multiplamente_declaradas(vector(AST *) funcoes);
 
+void analise_semantica_variaveis_multiplamente_declaradas(vector(AST *)
+                                                              declaracoes);
+
+vector(str) get_ids_declaracoes_variaveis(vector(AST *) declaracoes);
+
 #endif

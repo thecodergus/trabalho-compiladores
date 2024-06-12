@@ -123,14 +123,14 @@ str get_funcao_id(AST *funcao) {
     return funcao->u.filhos[1]->token.u.idenfier.id;
   }
 
-  return str_lit("");
+  return str_null;
 }
 
 str get_id_id(AST *id) {
   if (id && get_tipo_no(id) == Folha && get_tipo_token(id) == Identifier) {
     return id->token.u.idenfier.id;
   }
-  return str_lit("");
+  return str_null;
 }
 
 str get_chamada_funcao_id(AST *chamada) {
@@ -140,7 +140,7 @@ str get_chamada_funcao_id(AST *chamada) {
     return get_id_id(id);
   }
 
-  return str_lit("");
+  return str_null;
 }
 
 vector(enum TipoDados) get_lista_parametros(AST *parametros) {
@@ -153,4 +153,19 @@ vector(enum TipoDados) get_lista_parametros(AST *parametros) {
     }
   }
   return lista;
+}
+
+vector(str) get_ids_declaracoes_variaveis(vector(AST *) declaracoes) {
+  vector(str) declaracoes_ids = NULL;
+
+  for (size_t i = 0; i < cvector_size(declaracoes); i++) {
+    for (size_t j = 0;
+         j < cvector_size(declaracoes[i]->u.arvore.right->u.filhos); j++) {
+      cvector_push_back(
+          declaracoes_ids,
+          declaracoes[i]->u.arvore.right->u.filhos[j]->token.u.idenfier.id);
+    }
+  }
+
+  return declaracoes_ids;
 }

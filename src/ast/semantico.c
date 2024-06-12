@@ -102,12 +102,7 @@ void converter_constant_para(AST *constante, enum TipoDados tipo) {
       constante->token.u.constante.valor.flutuante =
           intToFloat(constante->token.u.constante.valor.inteiro);
     } break;
-    case String: {
-      constante->token.u.constante.tipo = String;
-      constante->token.u.constante.valor.string =
-          intToString(constante->token.u.constante.valor.inteiro);
-    };
-
+    case String:
     default:
       break;
     }
@@ -121,29 +116,15 @@ void converter_constant_para(AST *constante, enum TipoDados tipo) {
 
       exibir_warning("Tipo inteiro nao eh equivalente a ponto flutuante!");
     } break;
-    case String: {
-      constante->token.u.constante.tipo = String;
-      constante->token.u.constante.valor.string =
-          floatToString(constante->token.u.constante.valor.flutuante);
-    };
-
+    case String:
     default:
       break;
     }
   } break;
   case String: {
     switch (constante->token.u.constante.tipo) {
-    case Int: {
-      constante->token.u.constante.tipo = Int;
-      constante->token.u.constante.valor.inteiro =
-          stringToInt(constante->token.u.constante.valor.string);
-    } break;
-    case Float: {
-      constante->token.u.constante.tipo = Float;
-      constante->token.u.constante.valor.flutuante =
-          stringToFloat(constante->token.u.constante.valor.string);
-    } break;
-
+    case Int:
+    case Float:
     default:
       break;
     }
@@ -234,18 +215,37 @@ void analise_semantica_chamada_funcao_numero_parametros(vector(AST *) funcoes,
 void analise_semantica_funcoes_multiplamente_declaradas(vector(AST *) funcoes) {
   if (funcoes) {
     for (size_t i = 0; i < cvector_size(funcoes); i++) {
-      bool duplicada = false;
       for (size_t j = 0; j < cvector_size(funcoes); j++) {
         if (i != j) {
-          duplicada =
-              str_eq(get_funcao_id(funcoes[i]), get_funcao_id(funcoes[j]));
+          if (str_eq(get_funcao_id(funcoes[i]), get_funcao_id(funcoes[j]))) {
+            char msg_erro[1000];
+            sprintf(msg_erro, "A funcao '%s' foi multiplamente declarada!",
+                    str_ptr(get_funcao_id(funcoes[i])));
+            exibir_erro(msg_erro);
+            break;
+          }
         }
       }
-      if (duplicada) {
-        char msg_erro[1000];
-        sprintf(msg_erro, "A funcao '%s' foi multiplamente declarada!",
-                str_ptr(get_funcao_id(funcoes[i])));
-        exibir_erro(msg_erro);
+    }
+  }
+}
+
+void analise_semantica_variaveis_multiplamente_declaradas(vector(AST *)
+                                                              declaracoes) {
+  if (declaracoes) {
+    vector(str) ids_declaracoes = get_ids_declaracoes_variaveis(declaracoes);
+    for (size_t i = 0; i < cvector_size(ids_declaracoes); i++) {
+      for (size_t j = 0; j < cvector_size(ids_declaracoes); j++) {
+        if (j != i) {
+          if (str_eq(ids_declaracoes[i], ids_declaracoes[j])) {
+
+            char msg_erro[1000];
+            sprintf(msg_erro, "A variavel '%s' foi multiplamente declarada!",
+                    str_ptr(ids_declaracoes[i]));
+            exibir_erro(msg_erro);
+            break;
+          }
+        }
       }
     }
   }

@@ -123,6 +123,7 @@ AST *criar_bloco_principal(AST *declaracoes, AST *comandos) {
   blocoPrincipal->u.arvore.right = comandos;
 
   if (declaracoes && declaracoes->tipo == Vetor) {
+    analise_semantica_variaveis_multiplamente_declaradas(declaracoes->u.filhos);
     analise_semantica_variaveis(declaracoes->u.filhos, comandos);
   }
 
