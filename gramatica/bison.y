@@ -97,7 +97,7 @@ int yylex();
 InicioPrograma:
     Programa FIM{
         $$ = $1;
-        // imprimir_arvore_estilo_arvore($1, 0);
+        imprimir_arvore_estilo_arvore($1, 0);
         // printar_folhas($1);
         // imprimir_codigo_original($1);
         // printf("\n");
@@ -108,11 +108,11 @@ InicioPrograma:
 Programa:
     ListaFuncoes BloboPrincipal{
         $$ = criar_programa($1, $2);
-        // analise_semantiaca_chamada_funcao_existe($1->u.filhos, $2);
+        analise_semantica_funcao($1->u.filhos, $2);
         if($1->u.filhos && cvector_size($1->u.filhos) > 0){
             // Iterando sobre as funções existentes
             for(AST** it = cvector_begin($1->u.filhos); it != cvector_end($1->u.filhos); it++){
-                // analise_semantiaca_chamada_funcao_existe($1->u.filhos, *it);
+                analise_semantica_funcao($1->u.filhos, *it);
             }
         }
     }
@@ -320,13 +320,13 @@ ListaParametros:
         $$ = criar_lista_parametros($1, $3);
     }
     | ExpressaoAritmetica{
-        $$ = $1;
+        $$ = criar_lista_parametros(NULL, $1);
     }
     | CONSTANTE_STRING{
-        $$ = $1;
+        $$ = criar_lista_parametros(NULL, $1);
     }
     | ID{
-        $$ = $1;
+        $$ = criar_lista_parametros(NULL, $1);
     }
     ;
 
