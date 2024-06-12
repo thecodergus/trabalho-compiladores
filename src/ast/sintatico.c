@@ -82,25 +82,25 @@ AST *criar_constante(const char *input, enum TipoDados tipo) {
   constante->token.tipo = Constant;
 
   switch (tipo) {
-  case Int: {
-    constante->token.u.constante.tipo = Int;
-    constante->token.u.constante.valor.inteiro = atoi(input);
-  } break;
-  case Float: {
-    constante->token.u.constante.tipo = Float;
-    constante->token.u.constante.valor.flutuante = atof(input);
-  } break;
-  case String: {
-    constante->token.u.constante.tipo = String;
-    str_assign(&constante->token.u.constante.valor.string, str_acquire(input));
-  } break;
-  case Void: {
-    constante->token.u.constante.tipo = Void;
-    constante->token.u.constante.valor.nada = NULL;
-  } break;
+    case Int: {
+      constante->token.u.constante.tipo = Int;
+      constante->token.u.constante.valor.inteiro = atoi(input);
+    } break;
+    case Float: {
+      constante->token.u.constante.tipo = Float;
+      constante->token.u.constante.valor.flutuante = atof(input);
+    } break;
+    case String: {
+      constante->token.u.constante.tipo = String;
+      str_assign(&constante->token.u.constante.valor.string, str_acquire(input));
+    } break;
+    case Void: {
+      constante->token.u.constante.tipo = Void;
+      constante->token.u.constante.valor.nada = NULL;
+    } break;
 
-  default:
-    break;
+    default:
+      break;
   }
 
   return constante;
@@ -255,8 +255,7 @@ AST *criar_lista_parametros(AST *parametros, AST *parametro) {
   return parametros;
 }
 
-AST *criar_expressao_logica(enum LogicalOperators operator, AST * left,
-                            AST *right) {
+AST *criar_expressao_logica(enum LogicalOperators operator, AST * left, AST *right) {
   AST *expressaoLogica = (AST *)malloc(sizeof(AST));
   expressaoLogica->tipo = Arvore;
   expressaoLogica->token.tipo = ExpressionLogical;
@@ -266,8 +265,7 @@ AST *criar_expressao_logica(enum LogicalOperators operator, AST * left,
   return expressaoLogica;
 }
 
-AST *criar_expressao_aritmetica(enum ArithmeticOperators operator, AST * left,
-                                AST *right) {
+AST *criar_expressao_aritmetica(enum ArithmeticOperators operator, AST * left, AST *right) {
   AST *expressaoAritmetica = (AST *)malloc(sizeof(AST));
   expressaoAritmetica->tipo = Arvore;
   expressaoAritmetica->token.tipo = ExpressionArithmetic;
@@ -277,8 +275,7 @@ AST *criar_expressao_aritmetica(enum ArithmeticOperators operator, AST * left,
   return expressaoAritmetica;
 }
 
-AST *criar_expressao_relacional(enum RelationsOperators operator, AST * left,
-                                AST *right) {
+AST *criar_expressao_relacional(enum RelationsOperators operator, AST * left, AST *right) {
   AST *expressaoRelacional = (AST *)malloc(sizeof(AST));
   expressaoRelacional->tipo = Arvore;
   expressaoRelacional->token.tipo = ExpressionRelational;
