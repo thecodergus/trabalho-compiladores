@@ -185,3 +185,15 @@ vector(str) get_ids_parametros_funcao(AST *funcao) {
 
   return lista;
 }
+
+enum TipoDados get_tipo_declaracao(vector(AST *) declaracoes, str id) {
+  for (size_t i = 0; i < cvector_size(declaracoes); i++) {
+    for (size_t j = 0; j < cvector_size(declaracoes[i]->u.arvore.right->u.filhos); j++) {
+      if (str_eq(declaracoes[i]->u.arvore.right->u.filhos[j]->token.u.idenfier.id, id)) {
+        return declaracoes[i]->u.arvore.left->token.u.type.tipo;
+      }
+    }
+  }
+
+  return Void;
+}

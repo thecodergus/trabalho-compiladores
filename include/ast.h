@@ -267,4 +267,8 @@ vector(str) get_ids_parametros_funcao(AST *funcao);
 
 void analise_semantica_chamada_funcao_tipos_entrada(vector(AST *) funcoes, AST *nodo);
 
+void analise_semantica_atribuicao(vector(AST *) funcoes, vector(AST *) parametros, vector(AST *) declaracoes, AST *nodo);
+
+enum TipoDados get_tipo_declaracao(vector(AST *) declaracoes, str id);
+
 #endif
