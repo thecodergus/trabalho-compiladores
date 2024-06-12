@@ -230,3 +230,23 @@ void analise_semantica_chamada_funcao_numero_parametros(vector(AST *) funcoes,
     }
   }
 }
+
+void analise_semantica_funcoes_multiplamente_declaradas(vector(AST *) funcoes) {
+  if (funcoes) {
+    for (size_t i = 0; i < cvector_size(funcoes); i++) {
+      bool duplicada = false;
+      for (size_t j = 0; j < cvector_size(funcoes); j++) {
+        if (i != j) {
+          duplicada =
+              str_eq(get_funcao_id(funcoes[i]), get_funcao_id(funcoes[j]));
+        }
+      }
+      if (duplicada) {
+        char msg_erro[1000];
+        sprintf(msg_erro, "A funcao '%s' foi multiplamente declarada!",
+                str_ptr(get_funcao_id(funcoes[i])));
+        exibir_erro(msg_erro);
+      }
+    }
+  }
+}

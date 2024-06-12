@@ -109,6 +109,7 @@ Programa:
     ListaFuncoes BloboPrincipal{
         $$ = criar_programa($1, $2);
         analise_semantica_funcao($1->u.filhos, $2);
+        analise_semantica_funcoes_multiplamente_declaradas($1->u.filhos);
         if($1->u.filhos && cvector_size($1->u.filhos) > 0){
             // Iterando sobre as funções existentes
             for(AST** it = cvector_begin($1->u.filhos); it != cvector_end($1->u.filhos); it++){

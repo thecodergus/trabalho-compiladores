@@ -2,6 +2,10 @@ int bb(float e){
     return e;
 }
 
+int bb(float e){
+    return e;
+}
+
 {
     int a;
     string s;

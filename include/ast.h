@@ -268,4 +268,6 @@ str get_chamada_funcao_id(AST *chamada);
 void analise_semantica_chamada_funcao_numero_parametros(vector(AST *) funcoes,
                                                         AST *nodo);
 
+void analise_semantica_funcoes_multiplamente_declaradas(vector(AST *) funcoes);
+
 #endif
