@@ -6,6 +6,8 @@
 #include <string.h>
 #include "bison.tab.h"
 
+#include "ast.h"
+
 #define yyterminate() return FIM
 %}
 
@@ -52,10 +54,10 @@ string          { return TIPO_STRING; }
 "-"             { return OPERADOR_SUBTRACAO; }
 "^"             { return OPERADOR_POTENCIA; }
 ","             { return SIMBOLO_VIRGULA; }
-{inteito}       { yylval.inteiro = atoi(yytext); return CONSTANTE_INT; }
-{float}         { yylval.real = atof(yytext); return CONSTANTE_FLOAT; }
-{id}            { yylval.string = strdup(yytext); return ID; }
-{string}        { yylval.string = strdup(yytext + 1); return CONSTANTE_STRING; }
+{inteito}       { yylval = criar_int(atoi(yytext)); return CONSTANTE_INT; }
+{float}         { yylval = criar_float(atof(yytext)); return CONSTANTE_FLOAT; }
+{id}            { yylval = criar_id(strdup(yytext)); return ID; }
+{string}        { yylval = criar_string((strdup(yytext + 1))); return CONSTANTE_STRING; }
 {delim}         {}
 #*              {}
 .               { printf("Caractere invalido: %c\\n", yytext[0]); return ERRO; }

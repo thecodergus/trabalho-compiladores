@@ -6,7 +6,7 @@
 extern FILE *yyin;
 
 int main(int argc, char *argv[]) {
-  FILE *arquivo = fopen("../teste.txt", "r");
+  FILE *arquivo = fopen("../teste1.j--", "r");
   if (!arquivo) {
     printf("Erro ao abrir arquivo %s\n", argv[1]);
     return 1;
