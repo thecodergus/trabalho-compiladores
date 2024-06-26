@@ -7,6 +7,7 @@
 #include "libraries/cvector.h"
 #include "libraries/lambda.h"
 #include "mensagens.h"
+#include "tipos.h"
 
 #define vector(T) cvector_vector_type(T)
 
@@ -33,7 +34,6 @@ enum TipoToken {
   Desconhecido
 };
 
-enum TipoDado { Int, Float, String };
 typedef struct AST AST;
 
 struct ExpressaoRelacional {
@@ -66,24 +66,30 @@ struct Atribuicao {
   struct ExpressaoAritmetica expressao;
 };
 struct If {
-  struct ExpressaoRelacional codicao;
+  struct ExpressaoLogica codicao;
   vector(AST *) blocoIf;
   vector(AST *) blocoElse;
 };
 struct While {
-  struct ExpressaoRelacional codicao;
+  struct ExpressaoLogica codicao;
   vector(AST *) bloco;
 };
 struct Print {
-  vector(AST *) parametros;
+  AST *parametro;
 };
 struct Read {
-  vector(AST *) parametros;
+  const char *id;
 };
 
 struct ChamadaFuncao {
   const char *id;
   vector(AST *) parametros;
+};
+
+struct Retorno {
+  enum TipoDado tipo;
+
+  AST *ret;
 };
 
 struct AST {
@@ -106,6 +112,7 @@ struct AST {
     struct ExpressaoLogica logica;
     struct ExpressaoAritmetica aritmetica;
     struct ChamadaFuncao chamada_funcao;
+    struct Retorno retorno;
   };
 };
 
@@ -115,5 +122,16 @@ AST *criar_float(const float f);
 AST *criar_string(const char *string);
 AST *criar_id(const char *id);
 AST *transicao(AST *a, AST *b);
+AST *criar_operacao_aritmetica(AST *a, AST *b, const char *simbolo);
+AST *criar_operacao_relacional(AST *a, AST *b, const char *simbolo);
+AST *criar_operacao_logica(AST *a, AST *b, const char *simbolo);
+AST *criar_chamada_funcao(AST *id, AST *parametros);
+AST *criar_read(AST *id);
+AST *criar_print(AST *instancia);
+AST *criar_atribuicao(AST *id, AST *expr);
+AST *criar_enquanto(AST *expr, AST *bloco);
+AST *criar_if(AST *expr, AST *blocoIf, AST *blocoElse);
+AST *criar_retorno(AST *ret, enum TipoDado tipo);
+void percorrer(AST *a, void (*fn)(AST *));
 
 #endif

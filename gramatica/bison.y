@@ -184,6 +184,7 @@ ListaId:
 
 Bloco: 
     SIMBOLO_ABRE_CHAVES ListaComando SIMBOLO_FECHA_CHAVES{
+        $$ = $2;
     }
 
 ListaComando:
@@ -216,51 +217,64 @@ Retorno:
     COMANDO_RETURN ExpressaoAritmetica{
     }
     | COMANDO_RETURN CONSTANTE_STRING{
+        $$ = criar_retorno($1, String);
     }
     | COMANDO_RETURN{
+        $$ = criar_retorno(NULL, Void);
     }
     ;
 
 ComandoSe:
     COMANDO_IF SIMBOLO_ABRE_PARENTESES ExpressaoLogica SIMBOLO_FECHA_PARENTESES Bloco{
+        $$ = criar_if($3, $5, NULL);
     }
     | COMANDO_IF SIMBOLO_ABRE_PARENTESES ExpressaoLogica SIMBOLO_FECHA_PARENTESES Bloco COMANDO_ELSE Bloco{
+        $$ = criar_if($3, $5, $7);
     }
     ;
 
 ComandoEnquanto:
     COMANDO_WHILE SIMBOLO_ABRE_PARENTESES ExpressaoLogica SIMBOLO_FECHA_PARENTESES Bloco{
+        $$ = criar_enquanto($3, $5);
     }
     ;
 
 ComandoAtribuicao:
     ID SIMBOLO_ATRIBUICAO ExpressaoAritmetica{
+        $$ = criar_atribuicao($1, $3);
     }
     | ID SIMBOLO_ATRIBUICAO CONSTANTE_STRING {
+        $$ = criar_atribuicao($1, $3);
     }
     ;
 
 ComandoEscrita:
     COMANDO_PRINT SIMBOLO_ABRE_PARENTESES ExpressaoAritmetica SIMBOLO_FECHA_PARENTESES{
+        $$ = criar_print($3);
     }
     | COMANDO_PRINT SIMBOLO_ABRE_PARENTESES CONSTANTE_STRING SIMBOLO_FECHA_PARENTESES{
+        $$ = criar_print($3);
     }
     ;
 
 ComandoLeitura:
     COMANDO_READ SIMBOLO_ABRE_PARENTESES ID SIMBOLO_FECHA_PARENTESES{
+        $$ = criar_read($3);
     }
     ;
 
 ChamadaProc:
     ChamadaFuncao{
+        $$ = $1;
     }
     ;
 
 ChamadaFuncao:
     ID SIMBOLO_ABRE_PARENTESES ListaParametros SIMBOLO_FECHA_PARENTESES{
+        $$ = criar_chamada_funcao($1, $3);
     }
     | ID SIMBOLO_ABRE_PARENTESES SIMBOLO_FECHA_PARENTESES{
+        $$ = criar_chamada_funcao($1, NULL);
     }
     ;
 
@@ -287,58 +301,80 @@ ListaParametros:
 
 ExpressaoLogica:
     ExpressaoLogica LOGICA_AND TermoLogico{
+        $$ = criar_operacao_logica($1, $2, "&&");
     }
     | ExpressaoLogica LOGICA_OR TermoLogico{
+        $$ = criar_operacao_logica($1, $2, "||");
     }
-    | TermoLogico
+    | TermoLogico{
+        $$ = $1;
+    }
     ;
 
 TermoLogico:
     LOGICA_NOT TermoLogico{
+        $$ = criar_operacao_logica($2, NULL, "!");
     }
     | ExpressaoRelacional{
+        $$ = $1;
     }
     | SIMBOLO_ABRE_PARENTESES ExpressaoLogica SIMBOLO_FECHA_PARENTESES{
+        $$ = $2;
     }
     ;
 
 ExpressaoRelacional:
     CONSTANTE_STRING LOGICA_EQ CONSTANTE_STRING{
+        $$ = criar_operacao_relacional($1, $2, "==");
+        
     }
     | CONSTANTE_STRING LOGICA_EQ ExpressaoAritmetica{
+        exibir_erro("Strings nao se misturam com expressoes aritmeticas!");
+        $$ = NULL;        
     }
     | ExpressaoAritmetica LOGICA_EQ ExpressaoAritmetica{
+        $$ = criar_operacao_relacional($1, $2, "==");
     }
     | ExpressaoAritmetica LOGICA_NE ExpressaoAritmetica{
+        $$ = criar_operacao_relacional($1, $2, "!=");
     }
     | ExpressaoAritmetica LOGICA_LE ExpressaoAritmetica{
+        $$ = criar_operacao_relacional($1, $2, "<=");
     }
     | ExpressaoAritmetica LOGICA_GE ExpressaoAritmetica{
+        $$ = criar_operacao_relacional($1, $2, ">=");
     }
     | ExpressaoAritmetica LOGICA_LT ExpressaoAritmetica{
+        $$ = criar_operacao_relacional($1, $2, "<");
     }
     | ExpressaoAritmetica LOGICA_GT ExpressaoAritmetica{
+        $$ = criar_operacao_relacional($1, $2, ">");
     }
     ;
 
 ExpressaoAritmetica:
     CONSTANTE_INT 
     | CONSTANTE_FLOAT
-    | CONSTANTE_STRING {
-    }
+    | CONSTANTE_STRING
     | ID
     | ChamadaFuncao
     | ExpressaoAritmetica OPERADOR_SOMA ExpressaoAritmetica{
+        $$ = criar_operacao_aritmetica($1, $3, "+");
     }
     | ExpressaoAritmetica OPERADOR_SUBTRACAO ExpressaoAritmetica{
+        $$ = criar_operacao_aritmetica($1, $3, "-");
     }
     | ExpressaoAritmetica OPERADOR_MULTIPLICACAO ExpressaoAritmetica{
+        $$ = criar_operacao_aritmetica($1, $3, "*");
     }
     | ExpressaoAritmetica OPERADOR_DIVISAO ExpressaoAritmetica{
+        $$ = criar_operacao_aritmetica($1, $3, "/");
     }
     | ExpressaoAritmetica OPERADOR_POTENCIA ExpressaoAritmetica{
+        $$ = criar_operacao_aritmetica($1, $3, "^");
     }
     | SIMBOLO_ABRE_PARENTESES ExpressaoAritmetica SIMBOLO_FECHA_PARENTESES{
+        $$ = $2;
     }
     ;
 %%
