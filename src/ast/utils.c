@@ -29,28 +29,30 @@ char *get_substring_before_delimiter(char *str, const char *delimiters) {
 char *get_id_from_ID(AST *id) { return str_ptr(id->token.u.idenfier.id); }
 
 char *strdup(const char *src) {
-  char *dst = malloc(strlen(src) + 1);  // Space for length plus nul
-  if (dst == NULL) return NULL;         // No memory
-  strcpy(dst, src);                     // Copy the characters
-  return dst;                           // Return the new string
+  char *dst = malloc(strlen(src) + 1); // Space for length plus nul
+  if (dst == NULL)
+    return NULL;    // No memory
+  strcpy(dst, src); // Copy the characters
+  return dst;       // Return the new string
 }
 
 void percorrer_arvore_aplicando_funcao(AST *a, void (*fn)(AST *)) {
   if (a && fn) {
     fn(a);
     switch (a->tipo) {
-      case Arvore:
-        percorrer_arvore_aplicando_funcao(a->u.arvore.left, fn);
-        percorrer_arvore_aplicando_funcao(a->u.arvore.right, fn);
-        break;
-      case Vetor:
-        for (AST **it = cvector_begin(a->u.filhos); it != cvector_end(a->u.filhos); it++) {
-          percorrer_arvore_aplicando_funcao(*it, fn);
-        }
-        break;
-      case Folha:
-      default:
-        break;
+    case Arvore:
+      percorrer_arvore_aplicando_funcao(a->u.arvore.left, fn);
+      percorrer_arvore_aplicando_funcao(a->u.arvore.right, fn);
+      break;
+    case Vetor:
+      for (AST **it = cvector_begin(a->u.filhos);
+           it != cvector_end(a->u.filhos); it++) {
+        percorrer_arvore_aplicando_funcao(*it, fn);
+      }
+      break;
+    case Folha:
+    default:
+      break;
     }
   }
 }
@@ -74,15 +76,21 @@ AST *procurar_funcao(vector(AST *) funcoes, str id) {
 vector(enum TipoDados) procurar_tipagem_dos_parametros_funcao(AST *funcao) {
   vector(enum TipoDados) tipos_encontrados = NULL;
 
-  if (funcao && get_tipo_no(funcao) == Vetor && get_tipo_token(funcao) == DeclarationFunction && cvector_size(funcao->u.filhos) > 0) {
+  if (funcao && get_tipo_no(funcao) == Vetor &&
+      get_tipo_token(funcao) == DeclarationFunction &&
+      cvector_size(funcao->u.filhos) > 0) {
     AST *parametros = funcao->u.filhos[2];
 
-    if (parametros && get_tipo_no(parametros) == Vetor && get_tipo_token(parametros) == DeclarationParameterList) {
-      for (AST **it = cvector_begin(parametros->u.filhos); it != cvector_end(parametros->u.filhos); it++) {
+    if (parametros && get_tipo_no(parametros) == Vetor &&
+        get_tipo_token(parametros) == DeclarationParameterList) {
+      for (AST **it = cvector_begin(parametros->u.filhos);
+           it != cvector_end(parametros->u.filhos); it++) {
         AST *parametro = *it;
-        if (parametro && get_tipo_no(parametro) == Arvore && get_tipo_token(parametro) == DeclarationParameter) {
+        if (parametro && get_tipo_no(parametro) == Arvore &&
+            get_tipo_token(parametro) == DeclarationParameter) {
           AST *tipo = parametro->u.arvore.left;
-          if (tipo && get_tipo_no(tipo) == Folha && get_tipo_token(tipo) == Type) {
+          if (tipo && get_tipo_no(tipo) == Folha &&
+              get_tipo_token(tipo) == Type) {
             cvector_push_back(tipos_encontrados, tipo->token.u.type.tipo);
           }
         }
@@ -109,7 +117,9 @@ enum TipoToken get_tipo_token(AST *no) {
 }
 
 str get_funcao_id(AST *funcao) {
-  if (funcao && get_tipo_no(funcao) == Vetor && get_tipo_token(funcao) == DeclarationFunction && cvector_size(funcao->u.filhos) > 0) {
+  if (funcao && get_tipo_no(funcao) == Vetor &&
+      get_tipo_token(funcao) == DeclarationFunction &&
+      cvector_size(funcao->u.filhos) > 0) {
     return funcao->u.filhos[1]->token.u.idenfier.id;
   }
 
@@ -124,7 +134,8 @@ str get_id_id(AST *id) {
 }
 
 str get_chamada_funcao_id(AST *chamada) {
-  if (chamada && get_tipo_no(chamada) == Arvore && get_tipo_token(chamada) == FunctionCall) {
+  if (chamada && get_tipo_no(chamada) == Arvore &&
+      get_tipo_token(chamada) == FunctionCall) {
     AST *id = chamada->u.arvore.left;
     return get_id_id(id);
   }
@@ -134,8 +145,10 @@ str get_chamada_funcao_id(AST *chamada) {
 
 vector(enum TipoDados) get_lista_parametros(AST *parametros) {
   vector(enum TipoDados) lista = NULL;
-  if (parametros && get_tipo_no(parametros) == Vetor && get_tipo_token(parametros) == ParameterList) {
-    for (AST **it = cvector_begin(parametros->u.filhos); it != cvector_end(parametros->u.filhos); it++) {
+  if (parametros && get_tipo_no(parametros) == Vetor &&
+      get_tipo_token(parametros) == ParameterList) {
+    for (AST **it = cvector_begin(parametros->u.filhos);
+         it != cvector_end(parametros->u.filhos); it++) {
       cvector_push_back(lista, (*it)->token.u.constante.tipo);
     }
   }
@@ -145,9 +158,19 @@ vector(enum TipoDados) get_lista_parametros(AST *parametros) {
 vector(str) get_ids_declaracoes_variaveis(vector(AST *) declaracoes) {
   vector(str) declaracoes_ids = NULL;
 
-  for (size_t i = 0; i < cvector_size(declaracoes); i++) {
-    for (size_t j = 0; j < cvector_size(declaracoes[i]->u.arvore.right->u.filhos); j++) {
-      cvector_push_back(declaracoes_ids, declaracoes[i]->u.arvore.right->u.filhos[j]->token.u.idenfier.id);
+  for (AST **it = cvector_begin(declaracoes); it != cvector_end(declaracoes);
+       it++) {
+    AST *item = *it;
+    if (item && item->tipo == Arvore &&
+        item->token.tipo == DeclarationVariable) {
+      AST *ids = item->u.arvore.right;
+      if (ids && ids->tipo == Vetor && ids->token.tipo == IdentifierList) {
+        for (AST **it_ = cvector_begin(ids->u.filhos);
+             it_ != cvector_end(ids->u.filhos); it_++) {
+          AST *id = *it_;
+          cvector_push_back(declaracoes_ids, id->token.u.idenfier.id);
+        }
+      }
     }
   }
 
@@ -159,7 +182,8 @@ vector(str) get_ids_funcoes(vector(AST *) funcoes) {
 
   if (funcoes) {
     for (size_t i = 0; i < cvector_size(funcoes); i++) {
-      cvector_push_back(lista_ids, funcoes[i]->u.filhos[1]->token.u.idenfier.id);
+      cvector_push_back(lista_ids,
+                        funcoes[i]->u.filhos[1]->token.u.idenfier.id);
     }
   }
 
@@ -169,13 +193,17 @@ vector(str) get_ids_funcoes(vector(AST *) funcoes) {
 vector(str) get_ids_parametros_funcao(AST *funcao) {
   vector(str) lista = NULL;
 
-  if (funcao && get_tipo_no(funcao) == Vetor && get_tipo_token(funcao) == DeclarationFunction && cvector_size(funcao->u.filhos) == 4) {
+  if (funcao && get_tipo_no(funcao) == Vetor &&
+      get_tipo_token(funcao) == DeclarationFunction &&
+      cvector_size(funcao->u.filhos) == 4) {
     AST *parametros = funcao->u.filhos[2];
-    if (parametros && get_tipo_no(parametros) == Vetor && get_tipo_token(parametros) == DeclarationParameterList) {
+    if (parametros && get_tipo_no(parametros) == Vetor &&
+        get_tipo_token(parametros) == DeclarationParameterList) {
       for (size_t i = 0; i < cvector_size(parametros->u.filhos); i++) {
         AST *parametro = parametros->u.filhos[i];
 
-        if (parametro && get_tipo_no(parametro) == Arvore && get_tipo_token(parametro) == DeclarationParameter) {
+        if (parametro && get_tipo_no(parametro) == Arvore &&
+            get_tipo_token(parametro) == DeclarationParameter) {
           AST *id = parametro->u.arvore.right;
           cvector_push_back(lista, get_id_id(id));
         }
@@ -188,8 +216,11 @@ vector(str) get_ids_parametros_funcao(AST *funcao) {
 
 enum TipoDados get_tipo_declaracao(vector(AST *) declaracoes, str id) {
   for (size_t i = 0; i < cvector_size(declaracoes); i++) {
-    for (size_t j = 0; j < cvector_size(declaracoes[i]->u.arvore.right->u.filhos); j++) {
-      if (str_eq(declaracoes[i]->u.arvore.right->u.filhos[j]->token.u.idenfier.id, id)) {
+    for (size_t j = 0;
+         j < cvector_size(declaracoes[i]->u.arvore.right->u.filhos); j++) {
+      if (str_eq(
+              declaracoes[i]->u.arvore.right->u.filhos[j]->token.u.idenfier.id,
+              id)) {
         return declaracoes[i]->u.arvore.left->token.u.type.tipo;
       }
     }
