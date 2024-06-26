@@ -2,6 +2,8 @@
 
 void percorrer(AST *no, void (*fn)(AST *)) {
   if (no && fn) {
+    fn(no);
+
     switch (no->tipo) {
     case Programa: {
       for (AST **it = cvector_begin(no->programa.funcoes);
