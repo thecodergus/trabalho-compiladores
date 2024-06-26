@@ -139,3 +139,58 @@ AST *criar_retorno(AST *ret, enum TipoDado tipo) {
 
   return retorno;
 }
+
+AST *criar_tipo(enum TipoDado tipo) {
+  AST *aux = criar_ast(Tipo);
+
+  aux->declaracao_tipo = tipo;
+
+  return aux;
+}
+
+AST *criar_variavel(AST *tipo, AST *lista_ids) {
+  AST *aux = criar_ast(Variavel);
+
+  aux->variavel.tipo = tipo->declaracao_tipo;
+  aux->variavel.ids = lista_ids->transicao;
+
+  return aux;
+}
+
+AST *criar_bloco(AST *declaracoes, AST *comandos) {
+  AST *aux = criar_ast(Bloco);
+
+  aux->bloco.declaracoes = declaracoes->transicao;
+  aux->bloco.comandos = comandos->transicao;
+
+  return aux;
+}
+
+AST *criar_parametro(AST *tipo, AST *id) {
+  AST *aux = criar_ast(Parametro);
+
+  aux->parametro.tipo = tipo->declaracao_tipo;
+  aux->parametro.id = id->id;
+
+  return aux;
+}
+
+AST *criar_funcao(AST *retorno, AST *id, AST *parametros, AST *bloco) {
+  AST *aux = criar_ast(Funcao);
+
+  aux->funcao.retorno = retorno->declaracao_tipo;
+  aux->funcao.id = id->id;
+  aux->funcao.parametros = parametros->transicao;
+  aux->funcao.bloco = bloco->bloco;
+
+  return aux;
+}
+
+AST *criar_programa(AST *funcoes, AST *main) {
+  AST *aux = criar_ast(Programa);
+
+  aux->programa.funcoes = funcoes ? funcoes->transicao : NULL;
+  aux->programa.bloco = main->bloco;
+
+  return aux;
+}

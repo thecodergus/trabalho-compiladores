@@ -96,14 +96,17 @@ int yylex();
 
 InicioPrograma:
     Programa FIM{
+        $$ = $1;
     }
     | FIM
     ;
 
 Programa:
     ListaFuncoes BloboPrincipal{
+        $$ = criar_programa($1, $2);
     }
     | BloboPrincipal{
+        $$ = criar_programa(NULL, $1);
     }
     ;
 
@@ -118,15 +121,19 @@ ListaFuncoes:
 
 Funcao:
     TipoRetorno ID SIMBOLO_ABRE_PARENTESES DeclaracaoParametros SIMBOLO_FECHA_PARENTESES BloboPrincipal{
+        $$ = criar_funcao($1, $2, $4, $6);
     }
     | TipoRetorno ID SIMBOLO_ABRE_PARENTESES SIMBOLO_FECHA_PARENTESES BloboPrincipal{
+        $$ = criar_funcao($1, $2, NULL, $5);
     }
     ;
 
 TipoRetorno:
     Tipo{
+        $$ = $1;
     }
     | TIPO_VOID{
+        $$ = criar_tipo(Void);
     }
     ;
 
@@ -141,12 +148,15 @@ DeclaracaoParametros:
 
 Parametro:
     Tipo ID{
+        $$ = criar_parametro($1, $2);
     }
 
 BloboPrincipal:
     SIMBOLO_ABRE_CHAVES Declaracoes ListaComando SIMBOLO_FECHA_CHAVES{
+        $$ = criar_bloco($2, $3);
     }
     | SIMBOLO_ABRE_CHAVES ListaComando SIMBOLO_FECHA_CHAVES{
+        $$ = criar_bloco(NULL, $2);
     }
     ;
 
@@ -161,15 +171,19 @@ Declaracoes:
 
 Declaracao:
     Tipo ListaId SIMBOLO_PONTO_VIRGULA{
+        $$ = criar_variavel($1, $2);
     }
     ;
 
 Tipo: 
     TIPO_STRING{
+        $$ = criar_tipo(String);
     }
     | TIPO_INT{
+        $$ = criar_tipo(Int);
     }
     | TIPO_FLOAT{
+        $$ = criar_tipo(Float);
     }
     ;
 
@@ -198,18 +212,25 @@ ListaComando:
 
 Comando:
     ComandoSe{
+        $$ = $1;
     }
     | ComandoEnquanto{
+        $$ = $1;
     }
     | ComandoAtribuicao SIMBOLO_PONTO_VIRGULA{
+        $$ = $1;
     }
     | ComandoEscrita SIMBOLO_PONTO_VIRGULA{
+        $$ = $1;
     }
     | ComandoLeitura SIMBOLO_PONTO_VIRGULA{
+        $$ = $1;
     }
     | ChamadaProc SIMBOLO_PONTO_VIRGULA{
+        $$ = $1;
     }
     | Retorno SIMBOLO_PONTO_VIRGULA{
+        $$ = $1;
     }
     ;
 

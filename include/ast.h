@@ -26,11 +26,13 @@ enum TipoToken {
   ExpressaoRelacional,
   ExpressaoLogica,
   ExpressaoAritmetica,
+  Tipo,
   ConsanteInt,
   ConsanteFloat,
   ConsanteString,
   Id,
   SituacaoTransicao,
+  Variavel,
   Desconhecido
 };
 
@@ -48,14 +50,21 @@ struct ExpressaoAritmetica {
   const char *simbolo;
   AST *esquerda, *direita;
 };
+
+struct Bloco {
+  vector(AST *) declaracoes;
+  vector(AST *) comandos;
+};
+
 struct Programa {
   vector(AST *) funcoes;
-  vector(AST *) bloco;
+  struct Bloco bloco;
 };
 struct Funcao {
+  enum TipoDado retorno;
   const char *id;
   vector(AST *) parametros;
-  vector(AST *) bloco;
+  struct Bloco bloco;
 };
 struct Parametro {
   enum TipoDado tipo;
@@ -92,6 +101,11 @@ struct Retorno {
   AST *ret;
 };
 
+struct Variavel {
+  enum TipoDado tipo;
+  vector(AST *) ids;
+};
+
 struct AST {
   enum TipoToken tipo;
   union {
@@ -113,6 +127,9 @@ struct AST {
     struct ExpressaoAritmetica aritmetica;
     struct ChamadaFuncao chamada_funcao;
     struct Retorno retorno;
+    enum TipoDado declaracao_tipo;
+    struct Variavel variavel;
+    struct Bloco bloco;
   };
 };
 
@@ -133,5 +150,11 @@ AST *criar_enquanto(AST *expr, AST *bloco);
 AST *criar_if(AST *expr, AST *blocoIf, AST *blocoElse);
 AST *criar_retorno(AST *ret, enum TipoDado tipo);
 void percorrer(AST *a, void (*fn)(AST *));
+AST *criar_tipo(enum TipoDado tipo);
+AST *criar_variavel(AST *tipo, AST *lista_ids);
+AST *criar_bloco(AST *declaracoes, AST *comandos);
+AST *criar_parametro(AST *tipo, AST *id);
+AST *criar_funcao(AST *retorno, AST *id, AST *parametros, AST *bloco);
+AST *criar_programa(AST *funcoes, AST *main);
 
 #endif

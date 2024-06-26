@@ -8,26 +8,30 @@ void percorrer(AST *no, void (*fn)(AST *)) {
            it != cvector_end(no->programa.funcoes); it++) {
         percorrer(*it, fn);
       }
-      for (AST **it = cvector_begin(no->programa.bloco);
-           it != cvector_end(no->programa.bloco); it++) {
-        percorrer(*it, fn);
-      }
+      percorrer(&no->programa.bloco, fn);
     } break;
     case Funcao: {
       for (AST **it = cvector_begin(no->funcao.parametros);
            it != cvector_end(no->funcao.parametros); it++) {
         percorrer(*it, fn);
       }
-      for (AST **it = cvector_begin(no->funcao.bloco);
-           it != cvector_end(no->funcao.bloco); it++) {
-        percorrer(*it, fn);
-      }
+      percorrer(&no->funcao.bloco, fn);
 
     } break;
     case Parametro: {
 
     } break;
     case Bloco: {
+
+      for (AST **it = cvector_begin(no->bloco.comandos);
+           it != cvector_end(no->bloco.comandos); it++) {
+        percorrer(*it, fn);
+      }
+
+      for (AST **it = cvector_begin(no->bloco.declaracoes);
+           it != cvector_end(no->bloco.declaracoes); it++) {
+        percorrer(*it, fn);
+      }
 
     } break;
     case Atribuicao: {
@@ -75,12 +79,18 @@ void percorrer(AST *no, void (*fn)(AST *)) {
 
     } break;
     case ExpressaoRelacional: {
+      percorrer(no->relacional.esquerda, fn);
+      percorrer(no->relacional.direita, fn);
 
     } break;
     case ExpressaoLogica: {
+      percorrer(no->logica.esquerda, fn);
+      percorrer(no->logica.direita, fn);
 
     } break;
     case ExpressaoAritmetica: {
+      percorrer(no->aritmetica.esquerda, fn);
+      percorrer(no->aritmetica.direita, fn);
 
     } break;
     case ConsanteInt: {
