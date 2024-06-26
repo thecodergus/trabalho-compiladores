@@ -6,6 +6,7 @@
 
 #include "libraries/cvector.h"
 #include "libraries/lambda.h"
+#include "mensagens.h"
 
 #define vector(T) cvector_vector_type(T)
 
@@ -80,6 +81,11 @@ struct Read {
   vector(AST *) parametros;
 };
 
+struct ChamadaFuncao {
+  const char *id;
+  vector(AST *) parametros;
+};
+
 struct AST {
   enum TipoToken tipo;
   union {
@@ -99,6 +105,7 @@ struct AST {
     struct ExpressaoRelacional relacional;
     struct ExpressaoLogica logica;
     struct ExpressaoAritmetica aritmetica;
+    struct ChamadaFuncao chamada_funcao;
   };
 };
 
@@ -107,5 +114,6 @@ AST *criar_int(const int i);
 AST *criar_float(const float f);
 AST *criar_string(const char *string);
 AST *criar_id(const char *id);
+AST *transicao(AST *a, AST *b);
 
 #endif

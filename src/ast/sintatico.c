@@ -34,3 +34,21 @@ AST *criar_id(const char *id) {
 
   return aux;
 }
+
+AST *transicao(AST *a, AST *b) {
+  if (a && a->tipo == SituacaoTransicao) {
+    cvector_push_back(a->transicao, b);
+
+    return a;
+  } else if (!a) {
+    a = criar_ast(SituacaoTransicao);
+    a->tipo = SituacaoTransicao;
+    cvector_push_back(a->transicao, b);
+
+    return a;
+  } else {
+    exibir_erro("Funcao 'transicao' sendo usada de forma errada");
+  }
+
+  return NULL;
+}

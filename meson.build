@@ -14,7 +14,7 @@ endif
 inc = include_directories('include', '/usr/local/include')
 
 # Importa os arquivos de código fonte
-app_src = files('src/ast/sintatico.c','src/main.c')
+app_src = files('src/ast/sintatico.c', 'src/main.c', 'src/mensagens.c')
 
 # Local para importar as dependencias
 flex_program = find_program('flex', required: true)

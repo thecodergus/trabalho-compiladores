@@ -109,8 +109,10 @@ Programa:
 
 ListaFuncoes:
     ListaFuncoes Funcao{
+        $$ = transicao($1, $2);
     }
     | Funcao{
+        $$ = transicao(NULL, $1);
     }
     ;
 
@@ -130,9 +132,10 @@ TipoRetorno:
 
 DeclaracaoParametros:
     DeclaracaoParametros SIMBOLO_VIRGULA Parametro{
-        
+        $$ = transicao($1, $3);
     }
     | Parametro{
+        $$ = transicao(NULL, $1);
     }
     ;
 
@@ -149,8 +152,10 @@ BloboPrincipal:
 
 Declaracoes:
     Declaracoes Declaracao{
+        $$ = transicao($1, $2);
     }
     | Declaracao{
+        $$ = transicao(NULL, $1);
     }
     ;
 
@@ -170,8 +175,10 @@ Tipo:
 
 ListaId:
     ListaId SIMBOLO_VIRGULA ID{
+        $$ = transicao($1, $3);
     }
     | ID{
+        $$ = transicao(NULL, $1);
     }
     ;
 
@@ -181,8 +188,10 @@ Bloco:
 
 ListaComando:
     ListaComando Comando{
+        $$ = transicao($1, $2);
     }
     | Comando{
+        $$ = transicao(NULL, $1);
     }
     ;
 
@@ -257,14 +266,19 @@ ChamadaFuncao:
 
 ListaParametros:
     ListaParametros SIMBOLO_VIRGULA ExpressaoAritmetica{
+        $$ = transicao($1, $3);
     }
     | ListaParametros SIMBOLO_VIRGULA CONSTANTE_STRING{
+        $$ = transicao($1, $3);
     }
     | ExpressaoAritmetica{
+        $$ = transicao(NULL, $1);
     }
     | CONSTANTE_STRING{
+        $$ = transicao(NULL, $1);
     }
     | ID{
+        $$ = transicao(NULL, $1);
     }
     ;
 
