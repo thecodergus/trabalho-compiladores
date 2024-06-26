@@ -29,9 +29,9 @@ int yylex();
 
 // Simbolo de tipos
 %token TIPO_VOID TIPO_FLOAT TIPO_INT TIPO_STRING
-%token <real> CONSTANTE_FLOAT 
-%token <inteiro> CONSTANTE_INT 
-%token <string> LITERAL
+%token CONSTANTE_FLOAT 
+%token CONSTANTE_INT 
+%token CONSTANTE_STRING
 
 // Simbolos de abrir e fechar chaves
 %token SIMBOLO_ABRE_CHAVES SIMBOLO_FECHA_CHAVES

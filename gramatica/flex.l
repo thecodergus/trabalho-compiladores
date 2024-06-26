@@ -9,12 +9,15 @@
 #define yyterminate() return FIM
 %}
 
+
 delim     [ \t\r\n\f]+
 digito    [0-9]
+minuscula [a-z]
+maiuscula [A-Z]
 inteito    -?({digito})+
 float       -?({digito})+("."{digito}*)?("e"[+-]?{digito}+)?
-id        [a-zA-Z_][a-zA-Z0-9_]*
-string    \"([^\\\n]|(\\.))*?\"
+id        ({maiuscula}|{minuscula})({maiuscula}|{minuscula}|{digito}|-|_)*
+string    \"[^"]*\"
 
 %%
 
@@ -52,7 +55,7 @@ string          { return TIPO_STRING; }
 {inteito}       { yylval.inteiro = atoi(yytext); return CONSTANTE_INT; }
 {float}         { yylval.real = atof(yytext); return CONSTANTE_FLOAT; }
 {id}            { yylval.string = strdup(yytext); return ID; }
-{string}        { yylval.string = strdup(yytext + 1); return LITERAL; }
+{string}        { yylval.string = strdup(yytext + 1); return CONSTANTE_STRING; }
 {delim}         {}
 #*              {}
 .               { printf("Caractere invalido: %c\\n", yytext[0]); return ERRO; }
