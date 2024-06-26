@@ -19,6 +19,7 @@ app_src = files(
   'src/ast/utils.c',
   'src/main.c',
   'src/mensagens.c',
+  'src/tabela_simbolos.c',
 )
 
 # Local para importar as dependencias
