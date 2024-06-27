@@ -109,6 +109,8 @@ AST *criar_atribuicao(AST *id, AST *expr) {
   aux->atribuicao.id = id->id;
   aux->atribuicao.expressao = expr;
 
+  printf("%s\n", tipoToken_para_str(expr->tipo));
+
   return aux;
 }
 
@@ -193,4 +195,25 @@ AST *criar_programa(AST *funcoes, AST *main) {
   aux->programa.bloco = main;
 
   return aux;
+}
+
+enum TipoDado descobrir_tipo_expressao(AST *expr) {
+  enum TipoDado tipo = Void;
+
+  if (expr) {
+    percorrer(expr, lambda(void, (AST * no), {
+                if (no &&
+                    (no->tipo == ConsanteInt || no->tipo == ConsanteFloat)) {
+                  if (no->tipo == ConsanteFloat) {
+                    tipo = Float;
+                  } else if (no->tipo == ConsanteInt) {
+                    tipo = Int;
+                  } else if (no->tipo == ConsanteString) {
+                    exibir_erro("Proibido Strings em expressoes aritmeticas");
+                  }
+                }
+              }));
+  }
+
+  return tipo;
 }

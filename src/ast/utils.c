@@ -24,13 +24,14 @@ void percorrer(AST *no, void (*fn)(AST *)) {
 
     } break;
     case Bloco: {
-      for (AST **it = cvector_begin(no->bloco.comandos);
-           it != cvector_end(no->bloco.comandos); it++) {
-        percorrer(*it, fn);
-      }
 
       for (AST **it = cvector_begin(no->bloco.declaracoes);
            it != cvector_end(no->bloco.declaracoes); it++) {
+        percorrer(*it, fn);
+      }
+
+      for (AST **it = cvector_begin(no->bloco.comandos);
+           it != cvector_end(no->bloco.comandos); it++) {
         percorrer(*it, fn);
       }
 
@@ -175,7 +176,7 @@ const char *tipoToken_para_str(enum TipoToken token) {
     return "Consante String";
     break;
   case Id:
-    return "Situacao de Transicao";
+    return "Id";
     break;
   case Variavel:
     return "Variavel";
@@ -215,13 +216,13 @@ void exibir_arvore(AST *no, int profundidade) {
 
     } break;
     case Bloco: {
-      for (AST **it = cvector_begin(no->bloco.comandos);
-           it != cvector_end(no->bloco.comandos); it++) {
+      for (AST **it = cvector_begin(no->bloco.declaracoes);
+           it != cvector_end(no->bloco.declaracoes); it++) {
         exibir_arvore(*it, profundidade + 1);
       }
 
-      for (AST **it = cvector_begin(no->bloco.declaracoes);
-           it != cvector_end(no->bloco.declaracoes); it++) {
+      for (AST **it = cvector_begin(no->bloco.comandos);
+           it != cvector_end(no->bloco.comandos); it++) {
         exibir_arvore(*it, profundidade + 1);
       }
 

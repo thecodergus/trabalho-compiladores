@@ -237,6 +237,7 @@ Comando:
 
 Retorno:
     COMANDO_RETURN ExpressaoAritmetica{
+        $$ = criar_retorno($2, descobrir_tipo_expressao($2));
     }
     | COMANDO_RETURN CONSTANTE_STRING{
         $$ = criar_retorno($1, String);
@@ -266,6 +267,9 @@ ComandoAtribuicao:
         $$ = criar_atribuicao($1, $3);
     }
     | ID SIMBOLO_ATRIBUICAO CONSTANTE_STRING {
+        $$ = criar_atribuicao($1, $3);
+    }
+    | ID SIMBOLO_ATRIBUICAO ID{
         $$ = criar_atribuicao($1, $3);
     }
     ;

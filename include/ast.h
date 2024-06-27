@@ -157,6 +157,7 @@ AST *criar_bloco(AST *declaracoes, AST *comandos);
 AST *criar_parametro(AST *tipo, AST *id);
 AST *criar_funcao(AST *retorno, AST *id, AST *parametros, AST *bloco);
 AST *criar_programa(AST *funcoes, AST *main);
+enum TipoDado descobrir_tipo_expressao(AST *expr);
 
 // Semantico
 void avaliar_programa(AST *nodo);
