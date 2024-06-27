@@ -107,7 +107,7 @@ AST *criar_print(AST *instancia) {
 AST *criar_atribuicao(AST *id, AST *expr) {
   AST *aux = criar_ast(Atribuicao);
   aux->atribuicao.id = id->id;
-  aux->atribuicao.expressao = expr->aritmetica;
+  aux->atribuicao.expressao = expr;
 
   return aux;
 }
@@ -181,7 +181,7 @@ AST *criar_funcao(AST *retorno, AST *id, AST *parametros, AST *bloco) {
   aux->funcao.retorno = retorno->declaracao_tipo;
   aux->funcao.id = id->id;
   aux->funcao.parametros = parametros->transicao;
-  aux->funcao.bloco = bloco->bloco;
+  aux->funcao.bloco = bloco;
 
   return aux;
 }
@@ -190,7 +190,7 @@ AST *criar_programa(AST *funcoes, AST *main) {
   AST *aux = criar_ast(Programa);
 
   aux->programa.funcoes = funcoes ? funcoes->transicao : NULL;
-  aux->programa.bloco = main->bloco;
+  aux->programa.bloco = main;
 
   return aux;
 }

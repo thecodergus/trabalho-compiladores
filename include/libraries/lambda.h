@@ -37,6 +37,11 @@ int main(int argc, char *argv[])
     return 0;
 };*/
 
-#define lambda(lambda$_ret, lambda$_args, lambda$_body) ({ lambda$_ret lambda$__anon$ lambda$_args lambda$_body &lambda$__anon$; })
+#define lambda(lambda$_ret, lambda$_args, lambda$_body)                        \
+  ({ lambda$_ret lambda$__anon$ lambda$_args lambda$_body &lambda$__anon$; })
 
+/*                                                                             \
+#define lambda(return_type, function_body)                                     \
+  ({ return_type __fn__ function_body __fn__; })                               \
+*/
 #endif /* AC0CB76B_E98E_46C3_9476_4C399EAB344A */

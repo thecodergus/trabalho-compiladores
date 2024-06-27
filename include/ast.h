@@ -59,13 +59,13 @@ struct Bloco {
 
 struct Programa {
   vector(AST *) funcoes;
-  struct Bloco bloco;
+  AST *bloco;
 };
 struct Funcao {
   enum TipoDado retorno;
   const char *id;
   vector(AST *) parametros;
-  struct Bloco bloco;
+  AST *bloco;
 };
 struct Parametro {
   enum TipoDado tipo;
@@ -73,7 +73,7 @@ struct Parametro {
 };
 struct Atribuicao {
   const char *id;
-  struct ExpressaoAritmetica expressao;
+  AST *expressao;
 };
 struct If {
   struct ExpressaoLogica codicao;
@@ -134,6 +134,7 @@ struct AST {
   };
 };
 
+// Sintatico
 AST *criar_ast(const enum TipoToken tipo);
 AST *criar_int(const int i);
 AST *criar_float(const float f);
@@ -150,7 +151,6 @@ AST *criar_atribuicao(AST *id, AST *expr);
 AST *criar_enquanto(AST *expr, AST *bloco);
 AST *criar_if(AST *expr, AST *blocoIf, AST *blocoElse);
 AST *criar_retorno(AST *ret, enum TipoDado tipo);
-void percorrer(AST *a, void (*fn)(AST *));
 AST *criar_tipo(enum TipoDado tipo);
 AST *criar_variavel(AST *tipo, AST *lista_ids);
 AST *criar_bloco(AST *declaracoes, AST *comandos);
@@ -158,4 +158,12 @@ AST *criar_parametro(AST *tipo, AST *id);
 AST *criar_funcao(AST *retorno, AST *id, AST *parametros, AST *bloco);
 AST *criar_programa(AST *funcoes, AST *main);
 
+// Semantico
+void avaliar_programa(AST *nodo);
+void avaliar_funcao(AST *nodo);
+
+// Utils
+void percorrer(AST *a, void (*fn)(AST *));
+void exibir_arvore(AST *no);
+const char *tipoToken_para_str(enum TipoToken token);
 #endif
