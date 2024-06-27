@@ -191,15 +191,139 @@ const char *tipoToken_para_str(enum TipoToken token) {
   return NULL;
 }
 
-void exibir_arvore(AST *no) {
+void exibir_arvore(AST *no, int profundidade) {
 
   if (no) {
-    int profundidade = 0;
-    percorrer(no, lambda(void, (AST * no_), {
-                if (no_) {
-                  printf("{%d}{%s}\n", profundidade++,
-                         tipoToken_para_str(no_->tipo));
-                }
-              }));
+
+    printf("{%d}%s{%s}\n", profundidade, repeat_char(profundidade),
+           tipoToken_para_str(no->tipo));
+
+    switch (no->tipo) {
+    case Programa: {
+      for (AST **it = cvector_begin(no->programa.funcoes);
+           it != cvector_end(no->programa.funcoes); it++) {
+        exibir_arvore(*it, ++profundidade);
+      }
+      exibir_arvore(no->programa.bloco, ++profundidade);
+    } break;
+    case Funcao: {
+      for (AST **it = cvector_begin(no->funcao.parametros);
+           it != cvector_end(no->funcao.parametros); it++) {
+        exibir_arvore(*it, ++profundidade);
+      }
+      exibir_arvore(no->funcao.bloco, ++profundidade);
+
+    } break;
+    case Parametro: {
+
+    } break;
+    case Bloco: {
+      for (AST **it = cvector_begin(no->bloco.comandos);
+           it != cvector_end(no->bloco.comandos); it++) {
+        exibir_arvore(*it, ++profundidade);
+      }
+
+      for (AST **it = cvector_begin(no->bloco.declaracoes);
+           it != cvector_end(no->bloco.declaracoes); it++) {
+        exibir_arvore(*it, ++profundidade);
+      }
+
+    } break;
+    case Atribuicao: {
+      exibir_arvore(no->atribuicao.expressao, ++profundidade);
+
+    } break;
+    case If: {
+
+      for (AST **it = cvector_begin(no->if_.blocoIf);
+           it != cvector_end(no->if_.blocoIf); it++) {
+        exibir_arvore(*it, ++profundidade);
+      }
+
+      for (AST **it = cvector_begin(no->if_.blocoElse);
+           it != cvector_end(no->if_.blocoElse); it++) {
+        exibir_arvore(*it, ++profundidade);
+      }
+
+    } break;
+    case While: {
+
+      for (AST **it = cvector_begin(no->while_.bloco);
+           it != cvector_end(no->while_.bloco); it++) {
+        exibir_arvore(*it, ++profundidade);
+      }
+
+    } break;
+    case Retorno: {
+      exibir_arvore(no->retorno.ret, ++profundidade);
+
+    } break;
+    case Print: {
+
+    } break;
+    case Read: {
+
+    } break;
+    case ChamadaFuncao: {
+
+      for (AST **it = cvector_begin(no->chamada_funcao.parametros);
+           it != cvector_end(no->chamada_funcao.parametros); it++) {
+        exibir_arvore(*it, ++profundidade);
+      }
+
+    } break;
+    case ExpressaoRelacional: {
+      exibir_arvore(no->relacional.esquerda, ++profundidade);
+      exibir_arvore(no->relacional.direita, ++profundidade);
+
+    } break;
+    case ExpressaoLogica: {
+      exibir_arvore(no->logica.esquerda, ++profundidade);
+      exibir_arvore(no->logica.direita, ++profundidade);
+
+    } break;
+    case ExpressaoAritmetica: {
+      exibir_arvore(no->aritmetica.esquerda, ++profundidade);
+      exibir_arvore(no->aritmetica.direita, ++profundidade);
+
+    } break;
+    case ConsanteInt: {
+
+    } break;
+    case ConsanteFloat: {
+
+    } break;
+    case ConsanteString: {
+
+    } break;
+    case Id: {
+
+    } break;
+    case SituacaoTransicao: {
+
+    } break;
+    case Desconhecido: {
+
+    } break;
+
+    default:
+      break;
+    }
   }
+}
+
+char *repeat_char(int n) {
+  if (n <= 0) {
+    return "";
+  }
+
+  char *str = malloc(n + 1); // +1 for the null terminator
+  if (!str) {
+    return NULL; // Failed to allocate memory
+  }
+
+  memset(str, '-', n);
+  str[n] = '\0'; // Null terminate the string
+
+  return str;
 }

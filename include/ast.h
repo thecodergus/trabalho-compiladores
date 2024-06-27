@@ -164,6 +164,7 @@ void avaliar_funcao(AST *nodo);
 
 // Utils
 void percorrer(AST *a, void (*fn)(AST *));
-void exibir_arvore(AST *no);
+void exibir_arvore(AST *no, int profundidade);
 const char *tipoToken_para_str(enum TipoToken token);
+char *repeat_char(int n);
 #endif
