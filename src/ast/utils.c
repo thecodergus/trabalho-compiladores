@@ -202,47 +202,44 @@ void exibir_arvore(AST *no, int profundidade) {
     case Programa: {
       for (AST **it = cvector_begin(no->programa.funcoes);
            it != cvector_end(no->programa.funcoes); it++) {
-        exibir_arvore(*it, ++profundidade);
+        exibir_arvore(*it, profundidade + 1);
       }
-      exibir_arvore(no->programa.bloco, ++profundidade);
+      exibir_arvore(no->programa.bloco, profundidade + 1);
     } break;
     case Funcao: {
       for (AST **it = cvector_begin(no->funcao.parametros);
            it != cvector_end(no->funcao.parametros); it++) {
-        exibir_arvore(*it, ++profundidade);
+        exibir_arvore(*it, profundidade + 1);
       }
-      exibir_arvore(no->funcao.bloco, ++profundidade);
-
-    } break;
-    case Parametro: {
+      exibir_arvore(no->funcao.bloco, profundidade + 1);
 
     } break;
     case Bloco: {
       for (AST **it = cvector_begin(no->bloco.comandos);
            it != cvector_end(no->bloco.comandos); it++) {
-        exibir_arvore(*it, ++profundidade);
+        exibir_arvore(*it, profundidade + 1);
       }
 
       for (AST **it = cvector_begin(no->bloco.declaracoes);
            it != cvector_end(no->bloco.declaracoes); it++) {
-        exibir_arvore(*it, ++profundidade);
+        exibir_arvore(*it, profundidade + 1);
       }
 
     } break;
     case Atribuicao: {
-      exibir_arvore(no->atribuicao.expressao, ++profundidade);
+      exibir_arvore(no->atribuicao.expressao, profundidade + 1);
 
     } break;
     case If: {
 
       for (AST **it = cvector_begin(no->if_.blocoIf);
            it != cvector_end(no->if_.blocoIf); it++) {
-        exibir_arvore(*it, ++profundidade);
+        exibir_arvore(*it, profundidade + 1);
       }
 
       for (AST **it = cvector_begin(no->if_.blocoElse);
            it != cvector_end(no->if_.blocoElse); it++) {
-        exibir_arvore(*it, ++profundidade);
+        exibir_arvore(*it, profundidade + 1);
       }
 
     } break;
@@ -250,59 +247,35 @@ void exibir_arvore(AST *no, int profundidade) {
 
       for (AST **it = cvector_begin(no->while_.bloco);
            it != cvector_end(no->while_.bloco); it++) {
-        exibir_arvore(*it, ++profundidade);
+        exibir_arvore(*it, profundidade + 1);
       }
 
     } break;
     case Retorno: {
-      exibir_arvore(no->retorno.ret, ++profundidade);
-
-    } break;
-    case Print: {
-
-    } break;
-    case Read: {
+      exibir_arvore(no->retorno.ret, profundidade + 1);
 
     } break;
     case ChamadaFuncao: {
 
       for (AST **it = cvector_begin(no->chamada_funcao.parametros);
            it != cvector_end(no->chamada_funcao.parametros); it++) {
-        exibir_arvore(*it, ++profundidade);
+        exibir_arvore(*it, profundidade + 1);
       }
 
     } break;
     case ExpressaoRelacional: {
-      exibir_arvore(no->relacional.esquerda, ++profundidade);
-      exibir_arvore(no->relacional.direita, ++profundidade);
+      exibir_arvore(no->relacional.esquerda, profundidade + 1);
+      exibir_arvore(no->relacional.direita, profundidade + 1);
 
     } break;
     case ExpressaoLogica: {
-      exibir_arvore(no->logica.esquerda, ++profundidade);
-      exibir_arvore(no->logica.direita, ++profundidade);
+      exibir_arvore(no->logica.esquerda, profundidade + 1);
+      exibir_arvore(no->logica.direita, profundidade + 1);
 
     } break;
     case ExpressaoAritmetica: {
-      exibir_arvore(no->aritmetica.esquerda, ++profundidade);
-      exibir_arvore(no->aritmetica.direita, ++profundidade);
-
-    } break;
-    case ConsanteInt: {
-
-    } break;
-    case ConsanteFloat: {
-
-    } break;
-    case ConsanteString: {
-
-    } break;
-    case Id: {
-
-    } break;
-    case SituacaoTransicao: {
-
-    } break;
-    case Desconhecido: {
+      exibir_arvore(no->aritmetica.esquerda, profundidade + 1);
+      exibir_arvore(no->aritmetica.direita, profundidade + 1);
 
     } break;
 
