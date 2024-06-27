@@ -7,6 +7,7 @@
 #include "libraries/cvector.h"
 #include "libraries/lambda.h"
 #include "mensagens.h"
+#include "tabela_simbolos.h"
 #include "tipos.h"
 
 #define vector(T) cvector_vector_type(T)
