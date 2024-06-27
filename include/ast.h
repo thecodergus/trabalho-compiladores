@@ -162,6 +162,7 @@ enum TipoDado descobrir_tipo_expressao(AST *expr);
 // Semantico
 void avaliar_programa(AST *nodo);
 void avaliar_funcao(AST *nodo);
+void avaliar_main(AST*nodo);
 
 // Utils
 void percorrer(AST *a, void (*fn)(AST *));
