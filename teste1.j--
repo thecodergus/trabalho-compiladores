@@ -40,6 +40,10 @@ void imprimir(string s, float r)
   return 0;
 }
 
+int testar_return_int_string(){
+  return "string";
+}
+
 {
   int x, num;
   float a;

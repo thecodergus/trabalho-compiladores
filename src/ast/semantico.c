@@ -105,7 +105,7 @@ void avaliar_comando(const char *contexto, AST *comando) {
       case Read: {
       } break;
       case ChamadaFuncao: {
-        avaliar_chamada_funcao(comando);
+        avaliar_chamada_funcao(contexto, comando);
       } break;
 
       default:
@@ -215,7 +215,7 @@ void avaliar_atribuição(const char *contexto, AST *atribuicao) {
                 exibir_erro(msg);
               }
               // Fazer o resto das avaliações também
-              avaliar_chamada_funcao(valor_atribuido);
+              avaliar_chamada_funcao(contexto, valor_atribuido);
             }
           } break;
 
@@ -230,8 +230,76 @@ void avaliar_atribuição(const char *contexto, AST *atribuicao) {
   }
 }
 
-void avaliar_chamada_funcao(AST *chamada) {
+void avaliar_chamada_funcao(const char *contexto, AST *chamada) {
   if (chamada && chamada->tipo == ChamadaFuncao) {
+    char msg[1000];
+    const char *id_funcao = chamada->chamada_funcao.id;
+
+    if (!id_sendo_usado_por_funcao(id_funcao)) {
+      sprintf(msg, "A função '%s' chamada na função '%s' não existe!", id_funcao, contexto);
+      exibir_erro(msg);
+    } else {
+      vector(struct Par) parametros_funcao = get_parametros_funcao(id_funcao);
+      vector(AST *) parametros_chamada_funcao = chamada->chamada_funcao.parametros;
+
+      if (cvector_size(parametros_funcao) != cvector_size(parametros_chamada_funcao)) {
+        sprintf(msg, "A função '%s' tem %ld parametros mas foram passados apenas %ld na chamada de função na função '%s'!", id_funcao,
+                cvector_size(parametros_funcao), cvector_size(parametros_chamada_funcao), contexto);
+        exibir_erro(msg);
+      } else {
+        // Pegando os valores inciais
+        struct Par *p_fn = cvector_begin(parametros_funcao);
+        AST **p_ch = cvector_begin(parametros_chamada_funcao);
+
+        for (int i = 1; p_fn != cvector_end(parametros_funcao) && p_ch != cvector_end(parametros_chamada_funcao); i++, p_fn++, p_ch++) {
+          switch ((*p_ch)->tipo) {
+            case ConsanteFloat: {
+              if (p_fn->tipo == Int) {
+                constantFloat_para_constantInt(*p_ch);
+                sprintf(msg,
+                        "A função '%s' tem como %dº argumento o tipo '%s' mas foi passado na chamada de função na função '%s' o tipo '%s' "
+                        "que será convertido para inteiro.",
+                        id_funcao, i, tipo_para_str(p_fn->tipo), contexto, tipo_para_str(Float));
+                exibir_warning(msg);
+              } else if (p_fn->tipo != Float) {
+                sprintf(msg,
+                        "A função '%s' tem como %dº argumento o tipo '%s' mas foi passado na chamada de função na função '%s' o tipo '%s'!",
+                        id_funcao, i, tipo_para_str(p_fn->tipo), contexto, tipo_para_str(Float));
+                exibir_erro(msg);
+              }
+            } break;
+            case ConsanteInt: {
+              if (p_fn->tipo == Float) {
+                constantInt_para_constantFloat(*p_ch);
+                sprintf(msg,
+                        "A função '%s' tem como %dº argumento o tipo '%s' mas foi passado na chamada de função na função '%s' o tipo '%s' "
+                        "que será convertido para flutuante.",
+                        id_funcao, i, tipo_para_str(p_fn->tipo), contexto, tipo_para_str(Int));
+                exibir_warning(msg);
+              } else if (p_fn->tipo != Int) {
+                sprintf(msg,
+                        "A função '%s' tem como %dº argumento o tipo '%s' mas foi passado na chamada de função na função '%s' o tipo '%s'!",
+                        id_funcao, i, tipo_para_str(p_fn->tipo), contexto, tipo_para_str(Int));
+                exibir_erro(msg);
+              }
+            }
+
+            break;
+            case ConsanteString: {
+            } break;
+            case Id: {
+            } break;
+            case ChamadaFuncao: {
+            } break;
+            case ExpressaoAritmetica: {
+            } break;
+
+            default:
+              break;
+          }
+        }
+      }
+    }
   }
 }
 

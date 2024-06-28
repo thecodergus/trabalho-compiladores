@@ -165,7 +165,7 @@ void avaliar_main(AST *nodo);
 void avaliar_bloco(const char *contexto, AST *bloco);
 void avaliar_comando(const char *contexto, AST *comando);
 void avaliar_atribuição(const char *contexto, AST *atribuicao);
-void avaliar_chamada_funcao(AST *chamada);
+void avaliar_chamada_funcao(const char *contexto, AST *chamada);
 void avaliar_existencia_retorno_funcao(const char *id, AST *bloco);
 void avaliar_retorno(const char *id, AST *retorno);
 
