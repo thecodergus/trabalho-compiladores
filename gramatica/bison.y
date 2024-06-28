@@ -241,7 +241,7 @@ Retorno:
         $$ = criar_retorno($2, descobrir_tipo_expressao($2));
     }
     | COMANDO_RETURN CONSTANTE_STRING{
-        $$ = criar_retorno($1, String);
+        $$ = criar_retorno($2, String);
     }
     | COMANDO_RETURN{
         $$ = criar_retorno(NULL, Void);
