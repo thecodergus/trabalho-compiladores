@@ -46,7 +46,7 @@ void avaliar_funcao(AST *nodo) {
     adicionar_funcao(tipo, id, parametros);
 
     // Avaliar Bloco Principal
-    avaliar_bloco(nodo->funcao.bloco, id);
+    avaliar_bloco(id, nodo->funcao.bloco);
 
     // Avaliar retorno da função
     bool encontrou_return = false;
@@ -63,7 +63,7 @@ void avaliar_funcao(AST *nodo) {
                     if (!id_sendo_usado_por_variavel(id, no->retorno.ret->id)) {
                       sprintf(msg, "A variavel '%s' que esta no retorno da funcao '%s' nao existe!", no->retorno.ret->id, id);
                       exibir_erro(msg);
-                    } else {
+                    } else if (get_tipo_dado_variavel(id, no->retorno.ret->id) != tipo) {
                       sprintf(msg, "A funcao '%s' tem retorno do tipo '%s' mas esta retornando a variavel '%s' que eh do tipo '%s'", id,
                               tipo_para_str(tipo), no->retorno.ret->id, tipo_para_str(get_tipo_dado_variavel(id, no->retorno.ret->id)));
                       exibir_erro(msg);
@@ -148,6 +148,15 @@ void avaliar_main(AST *nodo) {}
 void avaliar_bloco(const char *contexto, AST *bloco) {
   if (bloco && bloco->tipo == Bloco) {
     // Jogar para a tabela de simbolos as declarações de variaveis
+    for (AST **declaracao = cvector_begin(bloco->bloco.declaracoes); declaracao != cvector_end(bloco->bloco.declaracoes); declaracao++) {
+      if (*declaracao && (*declaracao)->tipo == Variavel) {
+        enum TipoDado tipo_variavel = (*declaracao)->variavel.tipo;
+        for (AST **id_variavel = cvector_begin((*declaracao)->variavel.ids); id_variavel != cvector_end((*declaracao)->variavel.ids);
+             id_variavel++) {
+          adicionar_variavel(contexto, tipo_variavel, (*id_variavel)->id);
+        }
+      }
+    }
 
     // Avaliar Comandos, provavelmente implementar outra função para essa tarefa
   }
