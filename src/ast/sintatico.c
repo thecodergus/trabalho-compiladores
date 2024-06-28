@@ -108,7 +108,7 @@ AST *criar_atribuicao(AST *id, AST *expr) {
   AST *aux = criar_ast(Atribuicao);
   aux->atribuicao.id = id->id;
   aux->atribuicao.expressao = expr;
-  
+
   return aux;
 }
 
@@ -180,7 +180,7 @@ AST *criar_funcao(AST *retorno, AST *id, AST *parametros, AST *bloco) {
 
   aux->funcao.retorno = retorno->declaracao_tipo;
   aux->funcao.id = id->id;
-  aux->funcao.parametros = parametros->transicao;
+  aux->funcao.parametros = parametros ? parametros->transicao : NULL;
   aux->funcao.bloco = bloco;
 
   return aux;
