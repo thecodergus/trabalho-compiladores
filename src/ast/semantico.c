@@ -12,7 +12,7 @@ void avaliar_programa(AST *nodo) {
     adicionar_funcao(Int, id, NULL);
 
     // Avaliar retorno da função
-    // avaliar_retorno_funcao(id, nodo->programa.bloco);
+    avaliar_existencia_retorno_funcao(id, nodo->programa.bloco);
 
     // Avaliar bloco principal
     avaliar_bloco("main", nodo->programa.bloco);
