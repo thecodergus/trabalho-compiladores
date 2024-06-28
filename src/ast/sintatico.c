@@ -108,9 +108,7 @@ AST *criar_atribuicao(AST *id, AST *expr) {
   AST *aux = criar_ast(Atribuicao);
   aux->atribuicao.id = id->id;
   aux->atribuicao.expressao = expr;
-
-  printf("%s\n", tipoToken_para_str(expr->tipo));
-
+  
   return aux;
 }
 
@@ -202,8 +200,7 @@ enum TipoDado descobrir_tipo_expressao(AST *expr) {
 
   if (expr) {
     percorrer(expr, lambda(void, (AST * no), {
-                if (no &&
-                    (no->tipo == ConsanteInt || no->tipo == ConsanteFloat)) {
+                if (no && (no->tipo == ConsanteInt || no->tipo == ConsanteFloat)) {
                   if (no->tipo == ConsanteFloat) {
                     tipo = Float;
                   } else if (no->tipo == ConsanteInt) {
