@@ -103,16 +103,17 @@ void avaliar_funcao(AST *nodo) {
                       char msg[1000];
                       if (tipo_expr == Int && tipo == Float) {
                         expressaoAritmetica_para_Float(no->retorno.ret);
-                        sprintf(
-                            msg,
-                            "A funcao '%s' tem retorno do tipo '%s', logo, a expressao no retorno da funcao sera convertida para 'Float'",
-                            id, tipo_para_str(tipo));
+                        sprintf(msg,
+                                "A funcao '%s' tem retorno do tipo '%s', logo, a expressao que esta com tipo 'Int' no retorno da funcao "
+                                "sera convertida para 'Float'",
+                                id, tipo_para_str(tipo));
                         exibir_warning(msg);
 
                       } else if (tipo_expr == Float && tipo == Int) {
                         expressaoAritmetica_para_Int(no->retorno.ret);
                         sprintf(msg,
-                                "A funcao '%s' tem retorno do tipo '%s', logo, a expressao no retorno da funcao sera convertida para "
+                                "A funcao '%s' tem retorno do tipo '%s', logo, a expressao que esta com tipo 'Float' no retorno da funcao "
+                                "sera convertida para "
                                 "'Int'",
                                 id, tipo_para_str(tipo));
                         exibir_warning(msg);
