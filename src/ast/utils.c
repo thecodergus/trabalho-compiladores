@@ -311,13 +311,14 @@ enum TipoDado descobrir_tipo_expressao(AST *expr) {
   if (expr) {
     percorrer(expr, lambda(void, (AST * no), {
                 if (no) {
-                  if (no->tipo == ConsanteInt || no->tipo == ConsanteFloat) {
+                  if ((no->tipo == ConsanteInt || no->tipo == ConsanteFloat) && tipo != String) {
                     if (no->tipo == ConsanteFloat) {
                       tipo = Float;
-                    } else if (no->tipo == ConsanteInt && tipo != Float) {
+                    } else if (no->tipo == ConsanteInt && (tipo != Float && tipo != String)) {
                       tipo = Int;
                     } else if (no->tipo == ConsanteString) {
                       exibir_erro("Proibido Strings em expressoes aritmeticas");
+                      tipo = String;
                     }
                   }
                 }
@@ -334,12 +335,13 @@ enum TipoDado descobrir_tipo_expressao_com_contexto(const char *contexto, AST *e
     percorrer(expr, lambda(void, (AST * no), {
                 if (no) {
                   if (no->tipo == ConsanteInt || no->tipo == ConsanteFloat) {
-                    if (no->tipo == ConsanteFloat) {
+                    if (no->tipo == ConsanteFloat && tipo != String) {
                       tipo = Float;
-                    } else if (no->tipo == ConsanteInt && tipo != Float) {
+                    } else if (no->tipo == ConsanteInt && (tipo != Float && tipo != String)) {
                       tipo = Int;
                     } else if (no->tipo == ConsanteString) {
                       exibir_erro("Proibido Strings em expressoes aritmeticas");
+                      tipo = String;
                     }
                   } else if (no->tipo == Id) {
                     char msg[1000];
