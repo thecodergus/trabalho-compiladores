@@ -165,6 +165,7 @@ void avaliar_main(AST *nodo);
 void avaliar_bloco(const char *contexto, AST *bloco);
 void avaliar_comando(const char *contexto, AST *comando);
 void avaliar_atribuição(const char *contexto, AST *atribuicao);
+void avaliar_chamada_funcao(AST *chamada);
 
 // Utils
 void percorrer(AST *a, void (*fn)(AST *));

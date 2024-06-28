@@ -361,7 +361,7 @@ enum TipoDado descobrir_tipo_expressao_com_contexto(const char *contexto, AST *e
                   } else if (no->tipo == ChamadaFuncao) {
                     char msg[1000];
                     if (!id_sendo_usado_por_funcao(no->chamada_funcao.id)) {
-                      sprintf(msg, "A função '%d' chamada na expressão aritmetica não existe!", no->chamada_funcao.id);
+                      sprintf(msg, "A função '%s' chamada na expressão aritmetica não existe!", no->chamada_funcao.id);
                       exibir_erro(no->chamada_funcao.id);
                     } else {
                       enum TipoDado tipo_var = get_tipo_dado_funcao(no->chamada_funcao.id);
