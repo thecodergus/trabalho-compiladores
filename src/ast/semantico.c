@@ -2,9 +2,13 @@
 
 void avaliar_programa(AST *nodo) {
   if (nodo && nodo->tipo == Programa) {
+    // Avaliar Funções
     for (AST **it = cvector_begin(nodo->programa.funcoes); it != cvector_end(nodo->programa.funcoes); it++) {
       avaliar_funcao(*it);
     }
+
+    // Avaliar bloco principal
+    avaliar_bloco("main", nodo->programa.bloco);
   }
 }
 
@@ -61,37 +65,37 @@ void avaliar_funcao(AST *nodo) {
                 switch (no->retorno.ret->tipo) {
                   case Id: {
                     if (!id_sendo_usado_por_variavel(id, no->retorno.ret->id)) {
-                      sprintf(msg, "A variavel '%s' que esta no retorno da funcao '%s' nao existe!", no->retorno.ret->id, id);
+                      sprintf(msg, "A variavel '%s' que esta no retorno da função '%s' não existe!", no->retorno.ret->id, id);
                       exibir_erro(msg);
                     } else if (get_tipo_dado_variavel(id, no->retorno.ret->id) != tipo) {
-                      sprintf(msg, "A funcao '%s' tem retorno do tipo '%s' mas esta retornando a variavel '%s' que eh do tipo '%s'", id,
+                      sprintf(msg, "A função '%s' tem retorno do tipo '%s' mas esta retornando a variavel '%s' que é do tipo '%s'", id,
                               tipo_para_str(tipo), no->retorno.ret->id, tipo_para_str(get_tipo_dado_variavel(id, no->retorno.ret->id)));
                       exibir_erro(msg);
                     }
                   } break;
                   case ConsanteFloat: {
                     constantFloat_para_constantInt(no->retorno.ret);
-                    sprintf(msg, "Convertendo o retorno da funcao '%s' que tem tipo '%s' de Float para Int", id,
+                    sprintf(msg, "Convertendo o retorno da função '%s' que tem tipo '%s' de Float para Int", id,
                             tipo_para_str(get_tipo_dado_funcao(id)));
                     exibir_warning(msg);
                   } break;
                   case ConsanteInt: {
                     constantInt_para_constantFloat(no->retorno.ret);
-                    sprintf(msg, "Convertendo o retorno da funcao '%s' que tem tipo '%s' de Int para Float", id,
+                    sprintf(msg, "Convertendo o retorno da função '%s' que tem tipo '%s' de Int para Float", id,
                             tipo_para_str(get_tipo_dado_funcao(id)));
                     exibir_warning(msg);
                   } break;
                   case ConsanteString: {
-                    sprintf(msg, "A funcao '%s' tem tipo '%s' mas esta retornado o tipo '%s'!", id, tipo_para_str(tipo),
+                    sprintf(msg, "A função '%s' tem tipo '%s' mas esta retornado o tipo '%s'!", id, tipo_para_str(tipo),
                             tipo_para_str(no->retorno.tipo));
                     exibir_erro(msg);
                   } break;
                   case ChamadaFuncao: {
                     if (!id_sendo_usado_por_funcao(no->retorno.ret->id)) {
-                      sprintf(msg, "A funcao '%s' que eh chamada no retorno da funcao '%s' nao existe!", no->retorno.ret->id, id);
+                      sprintf(msg, "A função '%s' que é chamada no retorno da função '%s' nao existe!", no->retorno.ret->id, id);
                       exibir_erro(msg);
                     } else {
-                      sprintf(msg, "A funcao '%s' tem tipo '%s', e eh chamada no retorno da funcao '%s' que tem tipo '%s'!",
+                      sprintf(msg, "A função '%s' tem tipo '%s', e é chamada no retorno da função '%s' que tem tipo '%s'!",
                               no->retorno.ret->id, tipo_para_str(get_tipo_dado_funcao(no->retorno.ret->id)), id, tipo_para_str(tipo));
                       exibir_erro(msg);
                     }
@@ -104,7 +108,7 @@ void avaliar_funcao(AST *nodo) {
                       if (tipo_expr == Int && tipo == Float) {
                         expressaoAritmetica_para_Float(no->retorno.ret);
                         sprintf(msg,
-                                "A funcao '%s' tem retorno do tipo '%s', logo, a expressao que esta com tipo 'Int' no retorno da funcao "
+                                "A função '%s' tem retorno do tipo '%s', logo, a expressão que esta com tipo 'Int' no retorno da função "
                                 "sera convertida para 'Float'",
                                 id, tipo_para_str(tipo));
                         exibir_warning(msg);
@@ -112,7 +116,7 @@ void avaliar_funcao(AST *nodo) {
                       } else if (tipo_expr == Float && tipo == Int) {
                         expressaoAritmetica_para_Int(no->retorno.ret);
                         sprintf(msg,
-                                "A funcao '%s' tem retorno do tipo '%s', logo, a expressao que esta com tipo 'Float' no retorno da funcao "
+                                "A função '%s' tem retorno do tipo '%s', logo, a expressão que esta com tipo 'Float' no retorno da função "
                                 "sera convertida para "
                                 "'Int'",
                                 id, tipo_para_str(tipo));
@@ -127,7 +131,7 @@ void avaliar_funcao(AST *nodo) {
                     break;
                 }
               } else {
-                sprintf(msg, "A funcao '%s' tem tipo '%s' mas esta retornado o tipo '%s'!", id, tipo_para_str(tipo),
+                sprintf(msg, "A função '%s' tem tipo '%s' mas esta retornado o tipo '%s'!", id, tipo_para_str(tipo),
                         tipo_para_str(no->retorno.tipo));
                 exibir_erro(msg);
               }
@@ -137,7 +141,7 @@ void avaliar_funcao(AST *nodo) {
 
     if (!encontrou_return && tipo != Void) {
       char msg[1000];
-      sprintf(msg, "A funcao '%s' retorna o tipo '%s' mas nao encontrou nenhum retorno", id, tipo_para_str(tipo));
+      sprintf(msg, "A funcao '%s' retorna o tipo '%s' mas não encontrou nenhum retorno", id, tipo_para_str(tipo));
       exibir_erro(msg);
     }
   }
@@ -159,5 +163,72 @@ void avaliar_bloco(const char *contexto, AST *bloco) {
     }
 
     // Avaliar Comandos, provavelmente implementar outra função para essa tarefa
+    for (AST **comando = cvector_begin(bloco->bloco.comandos); comando != cvector_end(bloco->bloco.comandos); comando++) {
+      avaliar_comando(contexto, *comando);
+    }
+  }
+}
+
+void avaliar_comando(const char *contexto, AST *comando) {
+  if (comando && (comando->tipo == Atribuicao || comando->tipo == If || comando->tipo == While || comando->tipo == Retorno ||
+                  comando->tipo == Print || comando->tipo == Read || comando->tipo == ChamadaFuncao)) {
+    switch (comando->tipo) {
+      case Atribuicao: {
+        avaliar_atribuição(contexto, comando);
+      } break;
+      case If: {
+      } break;
+      case While: {
+      } break;
+      case Retorno: {
+      } break;
+      case Print: {
+      } break;
+      case Read: {
+      } break;
+      case ChamadaFuncao: {
+      } break;
+
+      default:
+        break;
+    }
+  }
+}
+
+void avaliar_atribuição(const char *contexto, AST *atribuicao) {
+  if (atribuicao && atribuicao->tipo == Atribuicao) {
+    const char *variavel_id = atribuicao->atribuicao.id;
+    AST *valor_atribuido = atribuicao->atribuicao.expressao;
+    char msg[1000];
+
+    if (!id_sendo_usado_por_variavel(contexto, variavel_id)) {
+      sprintf(msg, "A variavel '%s' nao foi previamente declarada na funcao '%s'!", variavel_id, contexto);
+      exibir_erro(msg);
+    } else {
+      if (valor_atribuido &&
+          (valor_atribuido->tipo == ConsanteFloat || valor_atribuido->tipo == ConsanteInt || valor_atribuido->tipo == ConsanteString ||
+           valor_atribuido->tipo == ExpressaoAritmetica || valor_atribuido->tipo == Id || valor_atribuido->tipo == ChamadaFuncao)) {
+        switch (valor_atribuido->tipo) {
+          case ConsanteFloat: {
+          } break;
+          case ConsanteInt: {
+          } break;
+          case ConsanteString: {
+          } break;
+          case ExpressaoAritmetica: {
+          } break;
+          case Id: {
+          } break;
+          case ChamadaFuncao: {
+          } break;
+
+          default:
+            break;
+        }
+      } else {
+        sprintf(msg, "Existem algum erro desconhecido na atribuicao da variavel '%s' na funcao '%s'!", variavel_id, contexto);
+        exibir_erro(msg);
+      }
+    }
   }
 }
