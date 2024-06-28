@@ -8,7 +8,11 @@ void avaliar_programa(AST *nodo) {
     }
 
     // Registrar a função main
-    adicionar_funcao(Int, "main", NULL);
+    const char *id = "main";
+    adicionar_funcao(Int, id, NULL);
+
+    // Avaliar retorno da função
+    // avaliar_retorno_funcao(id, nodo->programa.bloco);
 
     // Avaliar bloco principal
     avaliar_bloco("main", nodo->programa.bloco);
@@ -56,97 +60,7 @@ void avaliar_funcao(AST *nodo) {
     avaliar_bloco(id, nodo->funcao.bloco);
 
     // Avaliar retorno da função
-    bool encontrou_return = false;
-    percorrer(
-        nodo->funcao.bloco, lambda(void, (AST * no), {
-          if (no && no->tipo == Retorno) {
-            encontrou_return = true;
-
-            if (tipo != no->retorno.tipo && no->retorno.ret) {
-              char msg[1000];
-              if (tipo != Void && tipo != String) {
-                switch (no->retorno.ret->tipo) {
-                  case Id: {
-                    if (!id_sendo_usado_por_variavel(id, no->retorno.ret->id)) {
-                      sprintf(msg, "A variavel '%s' que esta no retorno da função '%s' não existe!", no->retorno.ret->id, id);
-                      exibir_erro(msg);
-                    } else if (get_tipo_dado_variavel(id, no->retorno.ret->id) != tipo) {
-                      sprintf(msg, "A função '%s' tem retorno do tipo '%s' mas esta retornando a variavel '%s' que é do tipo '%s'", id,
-                              tipo_para_str(tipo), no->retorno.ret->id, tipo_para_str(get_tipo_dado_variavel(id, no->retorno.ret->id)));
-                      exibir_erro(msg);
-                    }
-                  } break;
-                  case ConsanteFloat: {
-                    constantFloat_para_constantInt(no->retorno.ret);
-                    sprintf(msg, "Convertendo o retorno da função '%s' que tem tipo '%s' de Float para Int", id,
-                            tipo_para_str(get_tipo_dado_funcao(id)));
-                    exibir_warning(msg);
-                  } break;
-                  case ConsanteInt: {
-                    constantInt_para_constantFloat(no->retorno.ret);
-                    sprintf(msg, "Convertendo o retorno da função '%s' que tem tipo '%s' de Int para Float", id,
-                            tipo_para_str(get_tipo_dado_funcao(id)));
-                    exibir_warning(msg);
-                  } break;
-                  case ConsanteString: {
-                    sprintf(msg, "A função '%s' tem tipo '%s' mas esta retornado o tipo '%s'!", id, tipo_para_str(tipo),
-                            tipo_para_str(no->retorno.tipo));
-                    exibir_erro(msg);
-                  } break;
-                  case ChamadaFuncao: {
-                    if (!id_sendo_usado_por_funcao(no->retorno.ret->id)) {
-                      sprintf(msg, "A função '%s' que é chamada no retorno da função '%s' nao existe!", no->retorno.ret->id, id);
-                      exibir_erro(msg);
-                    } else {
-                      sprintf(msg, "A função '%s' tem tipo '%s', e é chamada no retorno da função '%s' que tem tipo '%s'!",
-                              no->retorno.ret->id, tipo_para_str(get_tipo_dado_funcao(no->retorno.ret->id)), id, tipo_para_str(tipo));
-                      exibir_erro(msg);
-                    }
-                  } break;
-                  case ExpressaoAritmetica: {
-                    enum TipoDado tipo_expr = descobrir_tipo_expressao_com_contexto(id, no->retorno.ret);
-
-                    if (tipo_expr == Int || tipo_expr == Float) {
-                      char msg[1000];
-                      if (tipo_expr == Int && tipo == Float) {
-                        expressaoAritmetica_para_Float(no->retorno.ret);
-                        sprintf(msg,
-                                "A função '%s' tem retorno do tipo '%s', logo, a expressão que esta com tipo 'Int' no retorno da função "
-                                "sera convertida para 'Float'",
-                                id, tipo_para_str(tipo));
-                        exibir_warning(msg);
-
-                      } else if (tipo_expr == Float && tipo == Int) {
-                        expressaoAritmetica_para_Int(no->retorno.ret);
-                        sprintf(msg,
-                                "A função '%s' tem retorno do tipo '%s', logo, a expressão que esta com tipo 'Float' no retorno da função "
-                                "sera convertida para "
-                                "'Int'",
-                                id, tipo_para_str(tipo));
-                        exibir_warning(msg);
-                      }
-                    } else if (tipo_expr == String) {
-                    }
-
-                  } break;
-
-                  default:
-                    break;
-                }
-              } else {
-                sprintf(msg, "A função '%s' tem tipo '%s' mas esta retornado o tipo '%s'!", id, tipo_para_str(tipo),
-                        tipo_para_str(no->retorno.tipo));
-                exibir_erro(msg);
-              }
-            }
-          }
-        }));
-
-    if (!encontrou_return && tipo != Void) {
-      char msg[1000];
-      sprintf(msg, "A funcao '%s' retorna o tipo '%s' mas não encontrou nenhum retorno", id, tipo_para_str(tipo));
-      exibir_erro(msg);
-    }
+    avaliar_existencia_retorno_funcao(id, nodo->funcao.bloco);
   }
 }
 
@@ -184,6 +98,7 @@ void avaliar_comando(const char *contexto, AST *comando) {
       case While: {
       } break;
       case Retorno: {
+        avaliar_retorno(contexto, comando);
       } break;
       case Print: {
       } break;
@@ -317,5 +232,106 @@ void avaliar_atribuição(const char *contexto, AST *atribuicao) {
 
 void avaliar_chamada_funcao(AST *chamada) {
   if (chamada && chamada->tipo == ChamadaFuncao) {
+  }
+}
+
+void avaliar_existencia_retorno_funcao(const char *id, AST *bloco) {
+  bool encontrou_return = false;
+  enum TipoDado tipo = get_tipo_dado_funcao(id);
+  percorrer(bloco, lambda(void, (AST * no), {
+              if (no && no->tipo == Retorno) {
+                encontrou_return = true;
+              }
+            }));
+
+  if (!encontrou_return && tipo != Void) {
+    char msg[1000];
+    sprintf(msg, "A funcao '%s' retorna o tipo '%s' mas não encontrou nenhum retorno", id, tipo_para_str(tipo));
+    exibir_erro(msg);
+  }
+}
+
+void avaliar_retorno(const char *id, AST *retorno) {
+  if (retorno && retorno->tipo == Retorno) {
+    char msg[1000];
+    enum TipoDado tipo = get_tipo_dado_funcao(id);
+    if (tipo != Void && tipo != String && retorno->retorno.ret) {
+      switch (retorno->retorno.ret->tipo) {
+        case Id: {
+          if (!id_sendo_usado_por_variavel(id, retorno->retorno.ret->id)) {
+            sprintf(msg, "A variavel '%s' que esta no retorno da função '%s' não existe!", retorno->retorno.ret->id, id);
+            exibir_erro(msg);
+          } else if (get_tipo_dado_variavel(id, retorno->retorno.ret->id) != tipo) {
+            sprintf(msg, "A função '%s' tem retorno do tipo '%s' mas esta retornando a variavel '%s' que é do tipo '%s'", id,
+                    tipo_para_str(tipo), retorno->retorno.ret->id, tipo_para_str(get_tipo_dado_variavel(id, retorno->retorno.ret->id)));
+            exibir_erro(msg);
+          }
+        } break;
+        case ConsanteFloat: {
+          if (tipo == Int) {
+            constantFloat_para_constantInt(retorno->retorno.ret);
+            sprintf(msg, "Convertendo o retorno da função '%s' que tem tipo '%s' de Float para Int", id,
+                    tipo_para_str(get_tipo_dado_funcao(id)));
+            exibir_warning(msg);
+          }
+        } break;
+        case ConsanteInt: {
+          if (tipo == Float) {
+            constantInt_para_constantFloat(retorno->retorno.ret);
+            sprintf(msg, "Convertendo o retorno da função '%s' que tem tipo '%s' de Int para Float", id,
+                    tipo_para_str(get_tipo_dado_funcao(id)));
+            exibir_warning(msg);
+          }
+        } break;
+        case ConsanteString: {
+          sprintf(msg, "A função '%s' tem tipo '%s' mas esta retornado o tipo '%s'!", id, tipo_para_str(tipo),
+                  tipo_para_str(retorno->retorno.tipo));
+          exibir_erro(msg);
+        } break;
+        case ChamadaFuncao: {
+          if (!id_sendo_usado_por_funcao(retorno->retorno.ret->id)) {
+            sprintf(msg, "A função '%s' que é chamada no retorno da função '%s' nao existe!", retorno->retorno.ret->id, id);
+            exibir_erro(msg);
+          } else {
+            sprintf(msg, "A função '%s' tem tipo '%s', e é chamada no retorno da função '%s' que tem tipo '%s'!", retorno->retorno.ret->id,
+                    tipo_para_str(get_tipo_dado_funcao(retorno->retorno.ret->id)), id, tipo_para_str(tipo));
+            exibir_erro(msg);
+          }
+        } break;
+        case ExpressaoAritmetica: {
+          enum TipoDado tipo_expr = descobrir_tipo_expressao_com_contexto(id, retorno->retorno.ret);
+
+          if (tipo_expr == Int || tipo_expr == Float) {
+            char msg[1000];
+            if (tipo_expr == Int && tipo == Float) {
+              expressaoAritmetica_para_Float(retorno->retorno.ret);
+              sprintf(msg,
+                      "A função '%s' tem retorno do tipo '%s', logo, a expressão que esta com tipo 'Int' no retorno da função "
+                      "sera convertida para 'Float'",
+                      id, tipo_para_str(tipo));
+              exibir_warning(msg);
+
+            } else if (tipo_expr == Float && tipo == Int) {
+              expressaoAritmetica_para_Int(retorno->retorno.ret);
+              sprintf(msg,
+                      "A função '%s' tem retorno do tipo '%s', logo, a expressão que esta com tipo 'Float' no retorno da função "
+                      "sera convertida para "
+                      "'Int'",
+                      id, tipo_para_str(tipo));
+              exibir_warning(msg);
+            }
+          } else if (tipo_expr == String) {
+          }
+
+        } break;
+
+        default:
+          break;
+      }
+    } else {
+      sprintf(msg, "A função '%s' tem tipo '%s' mas esta retornado o tipo '%s'!", id, tipo_para_str(tipo),
+              tipo_para_str(retorno->retorno.tipo));
+      exibir_erro(msg);
+    }
   }
 }
