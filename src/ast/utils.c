@@ -358,6 +358,22 @@ enum TipoDado descobrir_tipo_expressao_com_contexto(const char *contexto, AST *e
                         tipo = String;
                       }
                     }
+                  } else if (no->tipo == ChamadaFuncao) {
+                    char msg[1000];
+                    if (!id_sendo_usado_por_funcao(no->chamada_funcao.id)) {
+                      sprintf(msg, "A função '%d' chamada na expressão aritmetica não existe!", no->chamada_funcao.id);
+                      exibir_erro(no->chamada_funcao.id);
+                    } else {
+                      enum TipoDado tipo_var = get_tipo_dado_funcao(no->chamada_funcao.id);
+                      if (tipo == Int && tipo_var == Float) {
+                        tipo = Float;
+                      } else if (tipo_var == String) {
+                        sprintf(msg, "A função chamada '%s' que esta numa expressao aritmetica tem tipo 'String' e isso eh proibido!",
+                                no->id);
+                        exibir_erro(msg);
+                        tipo = String;
+                      }
+                    }
                   }
                 }
               }));
