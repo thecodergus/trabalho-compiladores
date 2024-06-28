@@ -145,4 +145,10 @@ void avaliar_funcao(AST *nodo) {
 
 void avaliar_main(AST *nodo) {}
 
-void avaliar_bloco(AST *bloco, const char *contexto) {}
+void avaliar_bloco(const char *contexto, AST *bloco) {
+  if (bloco && bloco->tipo == Bloco) {
+    // Jogar para a tabela de simbolos as declarações de variaveis
+
+    // Avaliar Comandos, provavelmente implementar outra função para essa tarefa
+  }
+}

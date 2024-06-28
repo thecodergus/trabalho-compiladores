@@ -77,8 +77,8 @@ struct Atribuicao {
 };
 struct If {
   struct ExpressaoLogica codicao;
-  vector(AST *) blocoIf;
-  vector(AST *) blocoElse;
+  vector(AST *) comandosIf;
+  vector(AST *) comandosElse;
 };
 struct While {
   struct ExpressaoLogica codicao;
@@ -149,7 +149,7 @@ AST *criar_read(AST *id);
 AST *criar_print(AST *instancia);
 AST *criar_atribuicao(AST *id, AST *expr);
 AST *criar_enquanto(AST *expr, AST *bloco);
-AST *criar_if(AST *expr, AST *blocoIf, AST *blocoElse);
+AST *criar_if(AST *expr, AST *comandosIf, AST *comandosElse);
 AST *criar_retorno(AST *ret, enum TipoDado tipo);
 AST *criar_tipo(enum TipoDado tipo);
 AST *criar_variavel(AST *tipo, AST *lista_ids);
@@ -162,7 +162,7 @@ AST *criar_programa(AST *funcoes, AST *main);
 void avaliar_programa(AST *nodo);
 void avaliar_funcao(AST *nodo);
 void avaliar_main(AST *nodo);
-void avaliar_bloco(AST *bloco, const char *contexto);
+void avaliar_bloco(const char *contexto, AST *bloco);
 
 // Utils
 void percorrer(AST *a, void (*fn)(AST *));
@@ -174,5 +174,5 @@ void constantFloat_para_constantInt(AST *constant);
 void expressaoAritmetica_para_Float(AST *expr);
 void expressaoAritmetica_para_Int(AST *expr);
 enum TipoDado descobrir_tipo_expressao(AST *expr);
-enum TipoDado descobrir_tipo_expressao_com_contexto(const char* contexto, AST *expr);
+enum TipoDado descobrir_tipo_expressao_com_contexto(const char *contexto, AST *expr);
 #endif

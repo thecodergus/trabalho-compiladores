@@ -121,12 +121,12 @@ AST *criar_enquanto(AST *expr, AST *bloco) {
   return aux;
 }
 
-AST *criar_if(AST *expr, AST *blocoIf, AST *blocoElse) {
+AST *criar_if(AST *expr, AST *comandosIf, AST *comandosElse) {
   AST *aux = criar_ast(If);
 
   aux->if_.codicao = expr->logica;
-  aux->if_.blocoIf = blocoIf ? blocoIf->transicao : NULL;
-  aux->if_.blocoElse = blocoElse ? blocoElse->transicao : NULL;
+  aux->if_.comandosIf = comandosIf ? comandosIf->transicao : NULL;
+  aux->if_.comandosElse = comandosElse ? comandosElse->transicao : NULL;
 
   return aux;
 }

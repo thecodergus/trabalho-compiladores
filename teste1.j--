@@ -29,10 +29,6 @@ int somatorio (int n)
 
    return s;
 }   
-
-int teste_retorno_float(){
-  return 2.5 + 3.6;
-}
    
 
 void imprimir(string s, float r)
