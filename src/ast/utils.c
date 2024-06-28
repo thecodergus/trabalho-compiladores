@@ -284,3 +284,82 @@ void constantFloat_para_constantInt(AST *constant) {
     constant->inteiro = (int)aux;
   }
 }
+
+void expressaoAritmetica_para_Float(AST *expr) {
+  if (expr && expr->tipo == ExpressaoAritmetica) {
+    percorrer(expr, lambda(void, (AST * no), {
+                if (no && no->tipo == ConsanteInt) {
+                  constantInt_para_constantFloat(no);
+                }
+              }));
+  }
+}
+
+void expressaoAritmetica_para_Int(AST *expr) {
+  if (expr && expr->tipo == ExpressaoAritmetica) {
+    percorrer(expr, lambda(void, (AST * no), {
+                if (no && no->tipo == ConsanteFloat) {
+                  constantFloat_para_constantInt(no);
+                }
+              }));
+  }
+}
+
+enum TipoDado descobrir_tipo_expressao(AST *expr) {
+  enum TipoDado tipo = Void;
+
+  if (expr) {
+    percorrer(expr, lambda(void, (AST * no), {
+                if (no) {
+                  if (no->tipo == ConsanteInt || no->tipo == ConsanteFloat) {
+                    if (no->tipo == ConsanteFloat) {
+                      tipo = Float;
+                    } else if (no->tipo == ConsanteInt && tipo != Float) {
+                      tipo = Int;
+                    } else if (no->tipo == ConsanteString) {
+                      exibir_erro("Proibido Strings em expressoes aritmeticas");
+                    }
+                  }
+                }
+              }));
+  }
+
+  return tipo;
+}
+
+enum TipoDado descobrir_tipo_expressao_com_contexto(const char *contexto, AST *expr) {
+  enum TipoDado tipo = Void;
+
+  if (expr) {
+    percorrer(expr, lambda(void, (AST * no), {
+                if (no) {
+                  if (no->tipo == ConsanteInt || no->tipo == ConsanteFloat) {
+                    if (no->tipo == ConsanteFloat) {
+                      tipo = Float;
+                    } else if (no->tipo == ConsanteInt && tipo != Float) {
+                      tipo = Int;
+                    } else if (no->tipo == ConsanteString) {
+                      exibir_erro("Proibido Strings em expressoes aritmeticas");
+                    }
+                  } else if (no->tipo == Id) {
+                    char msg[1000];
+                    if (!id_sendo_usado_por_variavel(contexto, no->id)) {
+                      sprintf(msg, "A variavel '%s' que esta num expressao aritmetica nao existe!", contexto);
+                      exibir_erro(msg);
+                    } else {
+                      enum TipoDado tipo_var = get_tipo_dado_variavel(contexto, no->id);
+                      if (tipo == Int && tipo_var == Float) {
+                        tipo = Float;
+                      } else if (tipo_var == String) {
+                        sprintf(msg, "A variavel '%s' que esta numa expressao aritmetica tem tipo 'String' e isso eh proibido!", no->id);
+                        exibir_erro(msg);
+                        tipo = String;
+                      }
+                    }
+                  }
+                }
+              }));
+  }
+
+  return tipo;
+}

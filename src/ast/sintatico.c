@@ -194,23 +194,3 @@ AST *criar_programa(AST *funcoes, AST *main) {
 
   return aux;
 }
-
-enum TipoDado descobrir_tipo_expressao(AST *expr) {
-  enum TipoDado tipo = Void;
-
-  if (expr) {
-    percorrer(expr, lambda(void, (AST * no), {
-                if (no && (no->tipo == ConsanteInt || no->tipo == ConsanteFloat)) {
-                  if (no->tipo == ConsanteFloat) {
-                    tipo = Float;
-                  } else if (no->tipo == ConsanteInt) {
-                    tipo = Int;
-                  } else if (no->tipo == ConsanteString) {
-                    exibir_erro("Proibido Strings em expressoes aritmeticas");
-                  }
-                }
-              }));
-  }
-
-  return tipo;
-}
