@@ -116,7 +116,7 @@ AST *criar_enquanto(AST *expr, AST *bloco) {
   AST *aux = criar_ast(While);
 
   aux->while_.codicao = expr->logica;
-  aux->while_.bloco = bloco->transicao;
+  aux->while_.bloco = bloco ? bloco->transicao : NULL;
 
   return aux;
 }
@@ -125,7 +125,7 @@ AST *criar_if(AST *expr, AST *blocoIf, AST *blocoElse) {
   AST *aux = criar_ast(If);
 
   aux->if_.codicao = expr->logica;
-  aux->if_.blocoIf = blocoIf->transicao;
+  aux->if_.blocoIf = blocoIf ? blocoIf->transicao : NULL;
   aux->if_.blocoElse = blocoElse ? blocoElse->transicao : NULL;
 
   return aux;
@@ -152,7 +152,7 @@ AST *criar_variavel(AST *tipo, AST *lista_ids) {
   AST *aux = criar_ast(Variavel);
 
   aux->variavel.tipo = tipo->declaracao_tipo;
-  aux->variavel.ids = lista_ids->transicao;
+  aux->variavel.ids = lista_ids ? lista_ids->transicao : NULL;
 
   return aux;
 }
@@ -160,8 +160,8 @@ AST *criar_variavel(AST *tipo, AST *lista_ids) {
 AST *criar_bloco(AST *declaracoes, AST *comandos) {
   AST *aux = criar_ast(Bloco);
 
-  aux->bloco.declaracoes = declaracoes->transicao;
-  aux->bloco.comandos = comandos->transicao;
+  aux->bloco.declaracoes = declaracoes ? declaracoes->transicao : NULL;
+  aux->bloco.comandos = comandos ? comandos->transicao : NULL;
 
   return aux;
 }
