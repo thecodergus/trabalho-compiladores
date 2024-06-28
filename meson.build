@@ -21,6 +21,7 @@ app_src = files(
   'src/main.c',
   'src/mensagens.c',
   'src/tabela_simbolos.c',
+  'src/tipos.c'
 )
 
 # Local para importar as dependencias

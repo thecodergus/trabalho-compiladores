@@ -162,11 +162,14 @@ enum TipoDado descobrir_tipo_expressao(AST *expr);
 // Semantico
 void avaliar_programa(AST *nodo);
 void avaliar_funcao(AST *nodo);
-void avaliar_main(AST*nodo);
+void avaliar_main(AST *nodo);
+void avaliar_bloco(AST *bloco, const char *contexto);
 
 // Utils
 void percorrer(AST *a, void (*fn)(AST *));
 void exibir_arvore(AST *no, int profundidade);
 const char *tipoToken_para_str(enum TipoToken token);
 char *repeat_char(int n);
+void constantInt_para_constantFloat(AST *constant);
+void constantFloat_para_constantInt(AST *constant);
 #endif

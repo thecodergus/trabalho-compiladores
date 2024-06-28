@@ -44,7 +44,61 @@ void avaliar_funcao(AST *nodo) {
 
     // Adicionando a tabela de simbolos
     adicionar_funcao(tipo, id, parametros);
+
+    // Avaliar Bloco Principal
+    avaliar_bloco(nodo->funcao.bloco, id);
+
+    // Avaliar retorno da função
+    bool encontrou_return = false;
+    percorrer(nodo->funcao.bloco, lambda(void, (AST * no), {
+                if (no && no->tipo == Retorno) {
+                  encontrou_return = true;
+
+                  if (tipo != no->retorno.tipo && no->retorno.ret) {
+                    char msg[1000];
+                    switch (no->retorno.ret->tipo) {
+                      case Id: {
+                        if (!id_sendo_usado_por_variavel(id, no->retorno.ret->id)) {
+                          sprintf(msg, "A variavel '%s' que esta no retorno da funcao '%s' nao existe!", no->retorno.ret->id, id);
+                          exibir_erro(msg);
+                        } else {
+                          sprintf(msg, "A funcao '%s' tem retorno do tipo '%s' mas esta retornando a variavel '%s' que eh do tipo '%s'", id,
+                                  tipo_para_str(tipo), no->retorno.ret->id, tipo_para_str(get_tipo_dado_variavel(id, no->retorno.ret->id)));
+                          exibir_erro(msg);
+                        }
+                      } break;
+                      case ConsanteFloat: {
+                      } break;
+                      case ConsanteInt: {
+                      } break;
+                      case ConsanteString: {
+                      } break;
+                      case ChamadaFuncao: {
+                        if (!id_sendo_usado_por_funcao(no->retorno.ret->id)) {
+                          sprintf(msg, "A funcao '%s' que eh chamada no retorno da funcao '%s' nao existe!", no->retorno.ret->id, id);
+                          exibir_erro(msg);
+                        } else {
+                          sprintf(msg, "A funcao '%s' tem tipo '%s', e eh chamada no retorno da funcao '%s' que tem tipo '%s'!",
+                                  no->retorno.ret->id, tipo_para_str(get_tipo_dado_funcao(no->retorno.ret->id)), id, tipo_para_str(tipo));
+                          exibir_erro(msg);
+                        }
+                      } break;
+
+                      default:
+                        break;
+                    }
+                  }
+                }
+              }));
+
+    if (!encontrou_return && tipo != Void) {
+      char msg[1000];
+      sprintf(msg, "A funcao '%s' retorna o tipo '%s' mas nao encontrou nenhum retorno", id, tipo_para_str(tipo));
+      exibir_erro(msg);
+    }
   }
 }
 
 void avaliar_main(AST *nodo) {}
+
+void avaliar_bloco(AST *bloco, const char *contexto) {}
