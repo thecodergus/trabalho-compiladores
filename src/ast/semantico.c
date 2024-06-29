@@ -167,7 +167,7 @@ void avaliar_atribuição(const char *contexto, AST *atribuicao) {
             enum TipoDado expressao_tipo = descobrir_tipo_expressao_com_contexto(contexto, valor_atribuido);
             if (variavel_tipo != expressao_tipo && (variavel_tipo != String && variavel_tipo != Void)) {
               if (variavel_tipo == Int && expressao_tipo == Float) {
-                expressaoAritmetica_para_Int(valor_atribuido);
+                expressaoAritmetica_para_Int(contexto, valor_atribuido);
                 sprintf(msg,
                         "A variavel '%s' da função '%s' tem tipo 'Int' mas recebeu uma expressão de tipo 'Float', iremos converter a "
                         "expressão para o "
@@ -175,7 +175,7 @@ void avaliar_atribuição(const char *contexto, AST *atribuicao) {
                         variavel_id, contexto);
                 exibir_warning(msg);
               } else if (variavel_tipo == Float && expressao_tipo == Int) {
-                expressaoAritmetica_para_Float(valor_atribuido);
+                expressaoAritmetica_para_Float(contexto, valor_atribuido);
                 sprintf(msg,
                         "A variavel '%s' da função '%s' tem tipo 'Float' mas recebeu uma expressão de tipo 'Int', iremos converter a "
                         "expressão para o "
@@ -344,14 +344,14 @@ void avaliar_chamada_funcao(const char *contexto, AST *chamada) {
                 enum TipoDado expressao_tipo = descobrir_tipo_expressao_com_contexto(contexto, *p_ch);
 
                 if (p_fn->tipo == Int && expressao_tipo == Float) {
-                  expressaoAritmetica_para_Int(*p_ch);
+                  expressaoAritmetica_para_Int(contexto, *p_ch);
                   sprintf(msg,
                           "A função '%s' tem como %dº parametro o tipo 'Inteiro' mas recebeu uma expressão do tipo 'Flutuante' na chamada "
                           "de função na função '%s', iremos converter a expressão para Flutuante",
                           id_funcao, i, contexto);
                   exibir_warning(msg);
                 } else if ((p_fn->tipo == Float && expressao_tipo == Int)) {
-                  expressaoAritmetica_para_Float(*p_ch);
+                  expressaoAritmetica_para_Float(contexto, *p_ch);
                   sprintf(msg,
                           "A função '%s' tem como %dº parametro o tipo 'Flutuante' mas recebeu uma expressão do tipo 'Inteiro' na chamada "
                           "de função na função '%s', iremos converter a expressão para Flutuante",
@@ -445,7 +445,7 @@ void avaliar_retorno(const char *id, AST *retorno) {
           if (tipo_expr == Int || tipo_expr == Float) {
             char msg[1000];
             if (tipo_expr == Int && tipo == Float) {
-              expressaoAritmetica_para_Float(retorno->retorno.ret);
+              expressaoAritmetica_para_Float(id, retorno->retorno.ret);
               sprintf(msg,
                       "A função '%s' tem retorno do tipo '%s', logo, a expressão que esta com tipo 'Int' no retorno da função "
                       "sera convertida para 'Float'",
@@ -453,7 +453,7 @@ void avaliar_retorno(const char *id, AST *retorno) {
               exibir_warning(msg);
 
             } else if (tipo_expr == Float && tipo == Int) {
-              expressaoAritmetica_para_Int(retorno->retorno.ret);
+              expressaoAritmetica_para_Int(id, retorno->retorno.ret);
               sprintf(msg,
                       "A função '%s' tem retorno do tipo '%s', logo, a expressão que esta com tipo 'Float' no retorno da função "
                       "sera convertida para "
@@ -529,10 +529,16 @@ void avaliar_expressao_relacional(const char *contexto, AST *expr) {
                 exibir_erro(msg);
               } else {
                 enum TipoDado var_tipo = get_tipo_dado_variavel(contexto, no->id);
-                if (tipo != var_tipo) {
+                if (tipo != var_tipo && !((tipo == Int && var_tipo == Float) || (tipo == Float && var_tipo == Int))) {
                   sprintf(msg, "A variavel '%s' tem tipo '%s' e não é compativel com o tipo '%s' da expressão relacional na função '%s'!",
                           no->id, tipo_para_str(var_tipo), tipo_para_str(tipo), contexto);
                   exibir_erro(msg);
+                } else if (tipo != var_tipo && ((tipo == Int && var_tipo == Float) || (tipo == Float && var_tipo == Int))) {
+                  sprintf(msg,
+                          "Para tornar a expressão relacional possivel vamos converter os Inteiro em flutuantes e deixar ambos os lados em "
+                          "comum acordo de tipos!");
+                  exibir_warning(msg);
+                  expressaoAritmetica_para_Float(contexto, no);
                 }
               }
             } break;
@@ -582,6 +588,24 @@ void avaliar_expressao_relacional(const char *contexto, AST *expr) {
               }
             } break;
             case ConsanteString: {
+            } break;
+
+            case ExpressaoRelacional: {
+              switch (tipo) {
+                case Int: {
+                  sprintf(msg, "Convertendo os valores da expressão relacional para 'Inteiros' e deixar os tipos em comum tipiagem!");
+                  exibir_warning(msg);
+                } break;
+                case Float: {
+                  expressaoAritmetica_para_Float(contexto, no);
+                  sprintf(msg,
+                          "Convertendo os valores da expressão relacional para 'Ponto Flutuante' e deixar os tipos em comum tipaagem!");
+                  exibir_warning(msg);
+                } break;
+
+                default:
+                  break;
+              }
             } break;
 
             default:

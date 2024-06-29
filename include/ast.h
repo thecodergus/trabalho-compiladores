@@ -179,8 +179,8 @@ const char *tipoToken_para_str(enum TipoToken token);
 char *repeat_char(int n);
 void constantInt_para_constantFloat(AST *constant);
 void constantFloat_para_constantInt(AST *constant);
-void expressaoAritmetica_para_Float(AST *expr);
-void expressaoAritmetica_para_Int(AST *expr);
+void expressaoAritmetica_para_Float(const char* contexto, AST *expr);
+void expressaoAritmetica_para_Int(const char *contexto, AST *expr);
 enum TipoDado descobrir_tipo_expressao(AST *expr);
 enum TipoDado descobrir_tipo_expressao_com_contexto(const char *contexto, AST *expr);
 #endif

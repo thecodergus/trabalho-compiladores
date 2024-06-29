@@ -290,17 +290,49 @@ void constantFloat_para_constantInt(AST *constant) {
   }
 }
 
-void expressaoAritmetica_para_Float(AST *expr) {
+void expressaoAritmetica_para_Float(const char *contexto, AST *expr) {
   if (expr && expr->tipo == ExpressaoAritmetica) {
+    char msg[1000];
     percorrer(expr, lambda(void, (AST * no), {
-                if (no && no->tipo == ConsanteInt) {
-                  constantInt_para_constantFloat(no);
+                if (no) {
+                  switch (no->tipo) {
+                    case ConsanteInt: {
+                      constantInt_para_constantFloat(no);
+                    } break;
+                    case Id: {
+                      if (!id_sendo_usado_por_variavel(contexto, no->id)) {
+                        sprintf(msg, "A variavel '%s' não existe! Erro ocorreu no escopo da função '%s'.", no->id, contexto);
+                        exibir_erro(msg);
+                      } else {
+                        enum TipoDado id_tipo = get_tipo_dado_variavel(contexto, no->id);
+
+                        if (id_tipo != Float) {
+                          sprintf(msg, "Impossivel converter a variavel '%s' que tem tipo '%s' para 'Float' na função '%s'!", no->id,
+                                  tipo_para_str(id_tipo), contexto);
+                          exibir_erro(msg);
+                        }
+                      }
+                    } break;
+                    case ChamadaFuncao: {
+                      if (!id_sendo_usado_por_funcao(no->chamada_funcao.id)) {
+                        sprintf(msg, "A função '%s' não existe! Erro ocorreu no escopo da função '%s'.", no->chamada_funcao.id, contexto);
+                        exibir_erro(msg);
+                      } else {
+                        enum TipoDado id_tipo = get_tipo_dado_funcao(no->chamada_funcao.id);
+
+                        if (id_tipo != Float) {
+                        }
+                      }
+                    } break;
+                    default:
+                      break;
+                  }
                 }
               }));
   }
 }
 
-void expressaoAritmetica_para_Int(AST *expr) {
+void expressaoAritmetica_para_Int(const char *contexto, AST *expr) {
   if (expr && expr->tipo == ExpressaoAritmetica) {
     percorrer(expr, lambda(void, (AST * no), {
                 if (no && no->tipo == ConsanteFloat) {

@@ -2,7 +2,7 @@ float maior (float a, float b)
 {
   int m;
   
-  if (a > b) {m = a;}
+  if (a > 2.5) {m = a;}
   else {m = b;}
   return m;
 }
