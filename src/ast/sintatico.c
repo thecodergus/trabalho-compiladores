@@ -107,7 +107,7 @@ AST *criar_print(AST *instancia) {
 AST *criar_atribuicao(AST *id, AST *expr) {
   AST *aux = criar_ast(Atribuicao);
   aux->atribuicao.id = id->id;
-  aux->atribuicao.expressao = expr;
+  aux->atribuicao.expressao = expr ? expr : NULL;
 
   return aux;
 }
@@ -115,7 +115,7 @@ AST *criar_atribuicao(AST *id, AST *expr) {
 AST *criar_enquanto(AST *expr, AST *bloco) {
   AST *aux = criar_ast(While);
 
-  aux->while_.codicao = expr->logica;
+  aux->while_.codicao = expr ? expr : NULL;
   aux->while_.bloco = bloco ? bloco->transicao : NULL;
 
   return aux;
@@ -124,7 +124,7 @@ AST *criar_enquanto(AST *expr, AST *bloco) {
 AST *criar_if(AST *expr, AST *comandosIf, AST *comandosElse) {
   AST *aux = criar_ast(If);
 
-  aux->if_.codicao = expr->logica;
+  aux->if_.codicao = expr ? expr : NULL;
   aux->if_.comandosIf = comandosIf ? comandosIf->transicao : NULL;
   aux->if_.comandosElse = comandosElse ? comandosElse->transicao : NULL;
 

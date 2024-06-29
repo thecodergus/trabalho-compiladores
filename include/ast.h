@@ -76,12 +76,12 @@ struct Atribuicao {
   AST *expressao;
 };
 struct If {
-  struct ExpressaoLogica codicao;
+  AST *codicao;
   vector(AST *) comandosIf;
   vector(AST *) comandosElse;
 };
 struct While {
-  struct ExpressaoLogica codicao;
+  AST *codicao;
   vector(AST *) bloco;
 };
 struct Print {
@@ -168,6 +168,7 @@ void avaliar_atribuição(const char *contexto, AST *atribuicao);
 void avaliar_chamada_funcao(const char *contexto, AST *chamada);
 void avaliar_existencia_retorno_funcao(const char *id, AST *bloco);
 void avaliar_retorno(const char *id, AST *retorno);
+void avaliar_if(const char *contexto, AST *if_);
 
 // Utils
 void percorrer(AST *a, void (*fn)(AST *));

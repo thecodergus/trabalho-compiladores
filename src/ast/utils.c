@@ -35,6 +35,8 @@ void percorrer(AST *no, void (*fn)(AST *)) {
 
       } break;
       case If: {
+        percorrer(no->if_.codicao, fn);
+
         for (AST **it = cvector_begin(no->if_.comandosIf); it != cvector_end(no->if_.comandosIf); it++) {
           percorrer(*it, fn);
         }
@@ -45,6 +47,7 @@ void percorrer(AST *no, void (*fn)(AST *)) {
 
       } break;
       case While: {
+        percorrer(no->while_.codicao, fn);
         for (AST **it = cvector_begin(no->while_.bloco); it != cvector_end(no->while_.bloco); it++) {
           percorrer(*it, fn);
         }
@@ -204,6 +207,7 @@ void exibir_arvore(AST *no, int profundidade) {
 
       } break;
       case If: {
+        exibir_arvore(no->if_.codicao, profundidade + 1);
         for (AST **it = cvector_begin(no->if_.comandosIf); it != cvector_end(no->if_.comandosIf); it++) {
           exibir_arvore(*it, profundidade + 1);
         }
@@ -214,6 +218,7 @@ void exibir_arvore(AST *no, int profundidade) {
 
       } break;
       case While: {
+        exibir_arvore(no->while_.codicao, profundidade + 1);
         for (AST **it = cvector_begin(no->while_.bloco); it != cvector_end(no->while_.bloco); it++) {
           exibir_arvore(*it, profundidade + 1);
         }

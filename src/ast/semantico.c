@@ -94,6 +94,7 @@ void avaliar_comando(const char *contexto, AST *comando) {
         avaliar_atribuição(contexto, comando);
       } break;
       case If: {
+        avaliar_if(contexto, comando);
       } break;
       case While: {
       } break;
@@ -475,5 +476,11 @@ void avaliar_retorno(const char *id, AST *retorno) {
               tipo_para_str(retorno->retorno.tipo));
       exibir_erro(msg);
     }
+  }
+}
+
+void avaliar_if(const char *contexto, AST *if_) {
+  if (if_ && if_->tipo == If) {
+    // AST
   }
 }
