@@ -98,7 +98,7 @@ InicioPrograma:
     Programa FIM{
         $$ = $1;
         avaliar_programa($1);
-        exibir_arvore($1, 0);
+        // exibir_arvore($1, 0);
     }
     | FIM
     ;
@@ -254,6 +254,7 @@ ComandoSe:
     }
     | COMANDO_IF SIMBOLO_ABRE_PARENTESES ExpressaoLogica SIMBOLO_FECHA_PARENTESES Bloco COMANDO_ELSE Bloco{
         $$ = criar_if($3, $5, $7);
+        exibir_arvore($$, 0);
     }
     ;
 
@@ -328,10 +329,10 @@ ListaParametros:
 
 ExpressaoLogica:
     ExpressaoLogica LOGICA_AND TermoLogico{
-        $$ = criar_operacao_logica($1, $2, "&&");
+        $$ = criar_operacao_logica($1, $3, "&&");
     }
     | ExpressaoLogica LOGICA_OR TermoLogico{
-        $$ = criar_operacao_logica($1, $2, "||");
+        $$ = criar_operacao_logica($1, $3, "||");
     }
     | TermoLogico{
         $$ = $1;
