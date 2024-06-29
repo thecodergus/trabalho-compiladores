@@ -63,7 +63,7 @@ AST *criar_operacao_aritmetica(AST *a, AST *b, const char *simbolo) {
   return aux;
 }
 AST *criar_operacao_relacional(AST *a, AST *b, const char *simbolo) {
-  AST *aux = criar_ast(ExpressaoAritmetica);
+  AST *aux = criar_ast(ExpressaoRelacional);
 
   aux->aritmetica.simbolo = simbolo;
   aux->aritmetica.esquerda = a;
