@@ -391,48 +391,6 @@ enum TipoDado descobrir_tipo_expressao_com_contexto(const char *contexto, AST *e
                     default:
                       break;
                   }
-
-                  // if (no->tipo == ConsanteInt || no->tipo == ConsanteFloat) {
-                  //   if (no->tipo == ConsanteFloat && tipo != String) {
-                  //     tipo = Float;
-                  //   } else if (no->tipo == ConsanteInt && (tipo != Float && tipo != String)) {
-                  //     tipo = Int;
-                  //   } else if (no->tipo == ConsanteString) {
-                  //     exibir_erro("Proibido Strings em expressoes aritmeticas");
-                  //     tipo = String;
-                  //   }
-                  // } else if (no->tipo == Id) {
-                  //   char msg[1000];
-                  //   if (!id_sendo_usado_por_variavel(contexto, no->id)) {
-                  //     sprintf(msg, "A variavel '%s' que esta num expressao aritmetica nao existe!", contexto);
-                  //     exibir_erro(msg);
-                  //   } else {
-                  //     enum TipoDado tipo_var = get_tipo_dado_variavel(contexto, no->id);
-                  //     if (tipo == Int && tipo_var == Float) {
-                  //       tipo = Float;
-                  //     } else if (tipo_var == String) {
-                  //       sprintf(msg, "A variavel '%s' que esta numa expressao aritmetica tem tipo 'String' e isso eh proibido!", no->id);
-                  //       exibir_erro(msg);
-                  //       tipo = String;
-                  //     }
-                  //   }
-                  // } else if (no->tipo == ChamadaFuncao) {
-                  //   char msg[1000];
-                  //   if (!id_sendo_usado_por_funcao(no->chamada_funcao.id)) {
-                  //     sprintf(msg, "A função '%s' chamada na expressão aritmetica não existe!", no->chamada_funcao.id);
-                  //     exibir_erro(no->chamada_funcao.id);
-                  //   } else {
-                  //     enum TipoDado tipo_var = get_tipo_dado_funcao(no->chamada_funcao.id);
-                  //     if (tipo == Int && tipo_var == Float) {
-                  //       tipo = Float;
-                  //     } else if (tipo_var == String) {
-                  //       sprintf(msg, "A função chamada '%s' que esta numa expressao aritmetica tem tipo 'String' e isso eh proibido!",
-                  //               no->id);
-                  //       exibir_erro(msg);
-                  //       tipo = String;
-                  //     }
-                  //   }
-                  // }
                 }
               }));
   }
