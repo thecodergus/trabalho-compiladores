@@ -335,51 +335,104 @@ enum TipoDado descobrir_tipo_expressao(AST *expr) {
 
 enum TipoDado descobrir_tipo_expressao_com_contexto(const char *contexto, AST *expr) {
   enum TipoDado tipo = Void;
-
   if (expr) {
+    char msg[1000];
     percorrer(expr, lambda(void, (AST * no), {
                 if (no) {
-                  if (no->tipo == ConsanteInt || no->tipo == ConsanteFloat) {
-                    if (no->tipo == ConsanteFloat && tipo != String) {
-                      tipo = Float;
-                    } else if (no->tipo == ConsanteInt && (tipo != Float && tipo != String)) {
-                      tipo = Int;
-                    } else if (no->tipo == ConsanteString) {
-                      exibir_erro("Proibido Strings em expressoes aritmeticas");
+                  switch (no->tipo) {
+                    case ConsanteFloat: {
+                      if (tipo != String) {
+                        tipo = Float;
+                      }
+                    } break;
+                    case ConsanteInt: {
+                      if (tipo != String && tipo != Float) {
+                        tipo = Int;
+                      }
+                    } break;
+                    case ConsanteString: {
                       tipo = String;
-                    }
-                  } else if (no->tipo == Id) {
-                    char msg[1000];
-                    if (!id_sendo_usado_por_variavel(contexto, no->id)) {
-                      sprintf(msg, "A variavel '%s' que esta num expressao aritmetica nao existe!", contexto);
-                      exibir_erro(msg);
-                    } else {
-                      enum TipoDado tipo_var = get_tipo_dado_variavel(contexto, no->id);
-                      if (tipo == Int && tipo_var == Float) {
-                        tipo = Float;
-                      } else if (tipo_var == String) {
-                        sprintf(msg, "A variavel '%s' que esta numa expressao aritmetica tem tipo 'String' e isso eh proibido!", no->id);
+                    } break;
+                    case Id: {
+                      if (!id_sendo_usado_por_variavel(contexto, no->id)) {
+                        sprintf(msg, "A variavel '%s' não foi previamente declarada na função '%s'!", no->id, contexto);
                         exibir_erro(msg);
-                        tipo = String;
+                      } else {
+                        enum TipoDado id_tipo = get_tipo_dado_variavel(contexto, no->id);
+
+                        if (id_tipo == String) {
+                          tipo = String;
+                        } else if (tipo != String && tipo != Float) {
+                          tipo = Int;
+                        } else {
+                          tipo = id_tipo;
+                        }
                       }
-                    }
-                  } else if (no->tipo == ChamadaFuncao) {
-                    char msg[1000];
-                    if (!id_sendo_usado_por_funcao(no->chamada_funcao.id)) {
-                      sprintf(msg, "A função '%s' chamada na expressão aritmetica não existe!", no->chamada_funcao.id);
-                      exibir_erro(no->chamada_funcao.id);
-                    } else {
-                      enum TipoDado tipo_var = get_tipo_dado_funcao(no->chamada_funcao.id);
-                      if (tipo == Int && tipo_var == Float) {
-                        tipo = Float;
-                      } else if (tipo_var == String) {
-                        sprintf(msg, "A função chamada '%s' que esta numa expressao aritmetica tem tipo 'String' e isso eh proibido!",
-                                no->id);
+                    } break;
+                    case ChamadaFuncao: {
+                      if (!id_sendo_usado_por_funcao(no->chamada_funcao.id)) {
+                        sprintf(msg, "A função '%s' não foi previamente declarada!", no->chamada_funcao.id);
                         exibir_erro(msg);
-                        tipo = String;
+                      } else {
+                        enum TipoDado id_tipo = get_tipo_dado_funcao(no->chamada_funcao.id);
+
+                        if (id_tipo == String) {
+                          tipo = String;
+                        } else if (tipo != String && tipo != Float) {
+                          tipo = Int;
+                        } else {
+                          tipo = id_tipo;
+                        }
+
+                        avaliar_chamada_funcao(contexto, no);
                       }
-                    }
+                    } break;
+
+                    default:
+                      break;
                   }
+
+                  // if (no->tipo == ConsanteInt || no->tipo == ConsanteFloat) {
+                  //   if (no->tipo == ConsanteFloat && tipo != String) {
+                  //     tipo = Float;
+                  //   } else if (no->tipo == ConsanteInt && (tipo != Float && tipo != String)) {
+                  //     tipo = Int;
+                  //   } else if (no->tipo == ConsanteString) {
+                  //     exibir_erro("Proibido Strings em expressoes aritmeticas");
+                  //     tipo = String;
+                  //   }
+                  // } else if (no->tipo == Id) {
+                  //   char msg[1000];
+                  //   if (!id_sendo_usado_por_variavel(contexto, no->id)) {
+                  //     sprintf(msg, "A variavel '%s' que esta num expressao aritmetica nao existe!", contexto);
+                  //     exibir_erro(msg);
+                  //   } else {
+                  //     enum TipoDado tipo_var = get_tipo_dado_variavel(contexto, no->id);
+                  //     if (tipo == Int && tipo_var == Float) {
+                  //       tipo = Float;
+                  //     } else if (tipo_var == String) {
+                  //       sprintf(msg, "A variavel '%s' que esta numa expressao aritmetica tem tipo 'String' e isso eh proibido!", no->id);
+                  //       exibir_erro(msg);
+                  //       tipo = String;
+                  //     }
+                  //   }
+                  // } else if (no->tipo == ChamadaFuncao) {
+                  //   char msg[1000];
+                  //   if (!id_sendo_usado_por_funcao(no->chamada_funcao.id)) {
+                  //     sprintf(msg, "A função '%s' chamada na expressão aritmetica não existe!", no->chamada_funcao.id);
+                  //     exibir_erro(no->chamada_funcao.id);
+                  //   } else {
+                  //     enum TipoDado tipo_var = get_tipo_dado_funcao(no->chamada_funcao.id);
+                  //     if (tipo == Int && tipo_var == Float) {
+                  //       tipo = Float;
+                  //     } else if (tipo_var == String) {
+                  //       sprintf(msg, "A função chamada '%s' que esta numa expressao aritmetica tem tipo 'String' e isso eh proibido!",
+                  //               no->id);
+                  //       exibir_erro(msg);
+                  //       tipo = String;
+                  //     }
+                  //   }
+                  // }
                 }
               }));
   }

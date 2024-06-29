@@ -500,8 +500,12 @@ void avaliar_expressao_logica(const char *contexto, AST *expr) {
   if (expr) {
     switch (expr->tipo) {
       case ExpressaoLogica: {
-        avaliar_expressao_logica(contexto, expr->logica.esquerda);
-        avaliar_expressao_logica(contexto, expr->logica.direita);
+        if (strcmp(expr->logica.simbolo, "!") == 0) {
+          avaliar_expressao_logica(contexto, expr->logica.esquerda);
+        } else {
+          avaliar_expressao_logica(contexto, expr->logica.esquerda);
+          avaliar_expressao_logica(contexto, expr->logica.direita);
+        }
       } break;
       case ExpressaoRelacional: {
         avaliar_expressao_relacional(contexto, expr);
@@ -534,11 +538,48 @@ void avaliar_expressao_relacional(const char *contexto, AST *expr) {
             } break;
             case ChamadaFuncao: {
               if (!id_sendo_usado_por_funcao(no->chamada_funcao.id)) {
+                sprintf(msg, "A função '%s' não existe, ela esta sendo chamada numa expressão relacional na função '%s'!",
+                        no->chamada_funcao.id, contexto);
+                exibir_erro(msg);
+              } else {
+                enum TipoDado fn_tipo = get_tipo_dado_funcao(no->chamada_funcao.id);
+
+                if (tipo != fn_tipo) {
+                  sprintf(msg,
+                          "A função '%s' tem tipo '%s' e não tem como comparar com um valor do tipo '%s'! Problema ocorrido no escopo da "
+                          "função '%s'.",
+                          no->chamada_funcao.id, tipo_para_str(fn_tipo), tipo_para_str(tipo), contexto);
+                  exibir_erro(msg);
+                }
+
+                avaliar_chamada_funcao(contexto, no);
               }
             } break;
             case ConsanteFloat: {
+              if (tipo == String) {
+                sprintf(msg,
+                        "Não é possivel usar expressões relacionais entre um ponto flutuante e uma string! Problema ocorrido no escopo da "
+                        "função '%s'.",
+                        contexto);
+                exibir_erro(msg);
+              }
             };
             case ConsanteInt: {
+              if (tipo == Float) {
+                constantInt_para_constantFloat(no);
+                sprintf(
+                    msg,
+                    "Vamos transformar seu inteiro em ponto flutuante na expressão relacional! Ocasião ocorrida no escopo da função '%s'.",
+                    contexto);
+                exibir_warning(msg);
+
+              } else if (tipo == String) {
+                sprintf(msg,
+                        "Não é possivel usar expressões relacionais entre um inteiro e uma string! Problema ocorrido no escopo da "
+                        "função '%s'.",
+                        contexto);
+                exibir_erro(msg);
+              }
             } break;
             case ConsanteString: {
             } break;
