@@ -481,6 +481,71 @@ void avaliar_retorno(const char *id, AST *retorno) {
 
 void avaliar_if(const char *contexto, AST *if_) {
   if (if_ && if_->tipo == If) {
-    // AST
+    // Avaliar condição
+    avaliar_expressao_logica(contexto, if_->if_.codicao);
+
+    // Avaliar comando do If
+    for (AST **it = cvector_begin(if_->if_.comandosIf); it != cvector_end(if_->if_.comandosIf); it++) {
+      avaliar_comando(contexto, *it);
+    }
+
+    // Avaliar comando do Else
+    for (AST **it = cvector_begin(if_->if_.comandosElse); it != cvector_end(if_->if_.comandosElse); it++) {
+      avaliar_comando(contexto, *it);
+    }
+  }
+}
+
+void avaliar_expressao_logica(const char *contexto, AST *expr) {
+  if (expr) {
+    switch (expr->tipo) {
+      case ExpressaoLogica: {
+        avaliar_expressao_logica(contexto, expr->logica.esquerda);
+        avaliar_expressao_logica(contexto, expr->logica.direita);
+      } break;
+      case ExpressaoRelacional: {
+        avaliar_expressao_relacional(contexto, expr);
+      } break;
+      default:
+        break;
+    }
+  }
+}
+
+void avaliar_expressao_relacional(const char *contexto, AST *expr) {
+  if (expr) {
+    enum TipoDado tipo = descobrir_tipo_expressao_com_contexto(contexto, expr);
+    char msg[1000];
+    percorrer(
+        expr, lambda(void, (AST * no), {
+          switch (no->tipo) {
+            case Id: {
+              if (!id_sendo_usado_por_variavel(contexto, no->id)) {
+                sprintf(msg, "A variavel '%s' que se encontra numa expressão relacional na função '%s' não existe!", no->id, contexto);
+                exibir_erro(msg);
+              } else {
+                enum TipoDado var_tipo = get_tipo_dado_variavel(contexto, no->id);
+                if (tipo != var_tipo) {
+                  sprintf(msg, "A variavel '%s' tem tipo '%s' e não é compativel com o tipo '%s' da expressão relacional na função '%s'!",
+                          no->id, tipo_para_str(var_tipo), tipo_para_str(tipo), contexto);
+                  exibir_erro(msg);
+                }
+              }
+            } break;
+            case ChamadaFuncao: {
+              if (!id_sendo_usado_por_funcao(no->chamada_funcao.id)) {
+              }
+            } break;
+            case ConsanteFloat: {
+            };
+            case ConsanteInt: {
+            } break;
+            case ConsanteString: {
+            } break;
+
+            default:
+              break;
+          }
+        }));
   }
 }

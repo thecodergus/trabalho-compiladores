@@ -169,6 +169,8 @@ void avaliar_chamada_funcao(const char *contexto, AST *chamada);
 void avaliar_existencia_retorno_funcao(const char *id, AST *bloco);
 void avaliar_retorno(const char *id, AST *retorno);
 void avaliar_if(const char *contexto, AST *if_);
+void avaliar_expressao_logica(const char *contexto, AST *expr);
+void avaliar_expressao_relacional(const char *contexto, AST *expr);
 
 // Utils
 void percorrer(AST *a, void (*fn)(AST *));
