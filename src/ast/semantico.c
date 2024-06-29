@@ -257,13 +257,13 @@ void avaliar_chamada_funcao(const char *contexto, AST *chamada) {
               if (p_fn->tipo == Int) {
                 constantFloat_para_constantInt(*p_ch);
                 sprintf(msg,
-                        "A função '%s' tem como %dº argumento o tipo '%s' mas foi passado na chamada de função na função '%s' o tipo '%s' "
+                        "A função '%s' tem como %dº parametro o tipo '%s' mas foi passado na chamada de função na função '%s' o tipo '%s' "
                         "que será convertido para inteiro.",
                         id_funcao, i, tipo_para_str(p_fn->tipo), contexto, tipo_para_str(Float));
                 exibir_warning(msg);
               } else if (p_fn->tipo != Float) {
                 sprintf(msg,
-                        "A função '%s' tem como %dº argumento o tipo '%s' mas foi passado na chamada de função na função '%s' o tipo '%s'!",
+                        "A função '%s' tem como %dº parametro o tipo '%s' mas foi passado na chamada de função na função '%s' o tipo '%s'!",
                         id_funcao, i, tipo_para_str(p_fn->tipo), contexto, tipo_para_str(Float));
                 exibir_erro(msg);
               }
@@ -272,13 +272,13 @@ void avaliar_chamada_funcao(const char *contexto, AST *chamada) {
               if (p_fn->tipo == Float) {
                 constantInt_para_constantFloat(*p_ch);
                 sprintf(msg,
-                        "A função '%s' tem como %dº argumento o tipo '%s' mas foi passado na chamada de função na função '%s' o tipo '%s' "
+                        "A função '%s' tem como %dº parametro o tipo '%s' mas foi passado na chamada de função na função '%s' o tipo '%s' "
                         "que será convertido para flutuante.",
                         id_funcao, i, tipo_para_str(p_fn->tipo), contexto, tipo_para_str(Int));
                 exibir_warning(msg);
               } else if (p_fn->tipo != Int) {
                 sprintf(msg,
-                        "A função '%s' tem como %dº argumento o tipo '%s' mas foi passado na chamada de função na função '%s' o tipo '%s'!",
+                        "A função '%s' tem como %dº parametro o tipo '%s' mas foi passado na chamada de função na função '%s' o tipo '%s'!",
                         id_funcao, i, tipo_para_str(p_fn->tipo), contexto, tipo_para_str(Int));
                 exibir_erro(msg);
               }
@@ -286,12 +286,84 @@ void avaliar_chamada_funcao(const char *contexto, AST *chamada) {
 
             break;
             case ConsanteString: {
+              if (p_fn->tipo != String) {
+                sprintf(msg,
+                        "A função '%s' tem como %dº parametro o tipo '%s' mas foi passado na chamada de função na função '%s' o tipo '%s'!",
+                        id_funcao, i, tipo_para_str(p_fn->tipo), contexto, tipo_para_str(String));
+                exibir_erro(msg);
+              }
             } break;
             case Id: {
+              if (!id_sendo_usado_por_variavel(contexto, (*p_ch)->id)) {
+                sprintf(msg,
+                        "A função '%s' tem como %dº parametro o tipo '%s' mas foi passado na chamada de função na função '%s' a variavel "
+                        "'%s', que não existe!",
+                        id_funcao, i, tipo_para_str(p_fn->tipo), contexto, (*p_ch)->id);
+                exibir_erro(msg);
+              } else {
+                enum TipoDado id_tipo = get_tipo_dado_variavel(contexto, (*p_ch)->id);
+
+                if (p_fn->tipo != id_tipo) {
+                  sprintf(msg,
+                          "A função '%s' tem como %dº parametro o tipo '%s' mas foi passado na chamada de função na função '%s' a variavel "
+                          "'%s' que tem o tipo '%s'!",
+                          id_funcao, i, tipo_para_str(p_fn->tipo), contexto, (*p_ch)->id, tipo_para_str(id_tipo));
+                  exibir_erro(msg);
+                }
+              }
             } break;
             case ChamadaFuncao: {
+              if (!id_sendo_usado_por_funcao((*p_ch)->chamada_funcao.id)) {
+                sprintf(msg, "A função '%s', que foi chamada numa passagem de parametro da função '%s' na função '%s' não existe!",
+                        (*p_ch)->chamada_funcao.id, id_funcao, contexto);
+                exibir_erro(msg);
+              } else {
+                enum TipoDado funcao_chamada_tipo = get_tipo_dado_funcao((*p_ch)->chamada_funcao.id);
+
+                if (p_fn->tipo != funcao_chamada_tipo) {
+                  sprintf(msg,
+                          "A função '%s' tem como %dº parametro o tipo '%s' mas a função '%s' retornar o tipo '%s', a função foi chamada "
+                          "na função '%s'!",
+                          id_funcao, i, tipo_para_str(p_fn->tipo), (*p_ch)->chamada_funcao.id, tipo_para_str(funcao_chamada_tipo),
+                          contexto);
+                  exibir_erro(msg);
+                }
+
+                avaliar_chamada_funcao(contexto, *p_ch);
+              }
             } break;
             case ExpressaoAritmetica: {
+              if (p_fn->tipo == String) {
+                sprintf(msg,
+                        "A função '%s' tem como %dº parametro o tipo String mas na chamada de função na função '%s' há uma expressão "
+                        "Aritmetica! ",
+                        id_funcao, i, contexto);
+                exibir_erro(msg);
+              } else {
+                enum TipoDado expressao_tipo = descobrir_tipo_expressao_com_contexto(contexto, *p_ch);
+
+                if (p_fn->tipo == Int && expressao_tipo == Float) {
+                  expressaoAritmetica_para_Int(*p_ch);
+                  sprintf(msg,
+                          "A função '%s' tem como %dº parametro o tipo 'Inteiro' mas recebeu uma expressão do tipo 'Flutuante' na chamada "
+                          "de função na função '%s', iremos converter a expressão para Flutuante",
+                          id_funcao, i, contexto);
+                  exibir_warning(msg);
+                } else if ((p_fn->tipo == Float && expressao_tipo == Int)) {
+                  expressaoAritmetica_para_Float(*p_ch);
+                  sprintf(msg,
+                          "A função '%s' tem como %dº parametro o tipo 'Flutuante' mas recebeu uma expressão do tipo 'Inteiro' na chamada "
+                          "de função na função '%s', iremos converter a expressão para Flutuante",
+                          id_funcao, i, contexto);
+                  exibir_warning(msg);
+                } else {
+                  sprintf(msg,
+                          "A função '%s' tem como %dº parametro o tipo '%s' mas recebeu uma expressão Aritmetica com o tipo '%s' na função "
+                          "'%s'",
+                          id_funcao, i, tipo_para_str(p_fn->tipo), tipo_para_str(expressao_tipo), contexto);
+                  exibir_erro(msg);
+                }
+              }
             } break;
 
             default:
@@ -389,6 +461,8 @@ void avaliar_retorno(const char *id, AST *retorno) {
               exibir_warning(msg);
             }
           } else if (tipo_expr == String) {
+            sprintf(msg, "É estritamente proibido uso de Strings em Operações Aritmeticas!");
+            exibir_erro(msg);
           }
 
         } break;
