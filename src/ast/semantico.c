@@ -148,7 +148,7 @@ void avaliar_atribuição(const char *contexto, AST *atribuicao) {
           case ConsanteFloat: {
             if (variavel_tipo == Int) {
               constantInt_para_constantFloat(valor_atribuido);
-              sprintf(msg, "A variavel '%s' da função '%s' tem tipo '%s', logo, iremos converter a atribuição de 'Float' para 'Int'!",
+              sprintf(msg, "A variavel '%s' da função '%s' tem tipo '%s', logo, iremos converter a expressão aritmetica atribuida de 'Float' para 'Int'!",
                       variavel_id, contexto, tipo_para_str(variavel_tipo));
               exibir_warning(msg);
             } else if (variavel_tipo == String || variavel_tipo == Void) {
@@ -196,7 +196,7 @@ void avaliar_atribuição(const char *contexto, AST *atribuicao) {
                         variavel_id, contexto);
                 exibir_warning(msg);
               }
-            } else {
+            } else if (variavel_tipo != expressao_tipo) {
               sprintf(msg, "A variavel '%s' tem tipo '%s' mas recebeu uma expressão aritmetica do tipo '%s'!", variavel_id,
                       tipo_para_str(variavel_tipo), tipo_para_str(expressao_tipo));
               exibir_erro(msg);
@@ -606,8 +606,6 @@ void avaliar_expressao_relacional(const char *contexto, AST *expr) {
             case ExpressaoRelacional: {
               switch (tipo) {
                 case Int: {
-                  sprintf(msg, "Convertendo os valores da expressão relacional para 'Inteiros' e deixar os tipos em comum tipiagem!");
-                  exibir_warning(msg);
                 } break;
                 case Float: {
                   expressaoAritmetica_para_Float(contexto, no);
