@@ -68,13 +68,23 @@ void avaliar_main(AST *nodo) {}
 
 void avaliar_bloco(const char *contexto, AST *bloco) {
   if (bloco && bloco->tipo == Bloco) {
+    char msg[1000];
     // Jogar para a tabela de simbolos as declarações de variaveis
     for (AST **declaracao = cvector_begin(bloco->bloco.declaracoes); declaracao != cvector_end(bloco->bloco.declaracoes); declaracao++) {
       if (*declaracao && (*declaracao)->tipo == Variavel) {
         enum TipoDado tipo_variavel = (*declaracao)->variavel.tipo;
         for (AST **id_variavel = cvector_begin((*declaracao)->variavel.ids); id_variavel != cvector_end((*declaracao)->variavel.ids);
              id_variavel++) {
-          adicionar_variavel(contexto, tipo_variavel, (*id_variavel)->id);
+          if (id_sendo_usado_por_variavel(contexto, (*id_variavel)->id)) {
+            sprintf(msg, "A variavel '%s' já foi previamente delcarada na função '%s'!", (*id_variavel)->id, contexto);
+            exibir_erro(msg);
+          } else if (id_sendo_usado_por_funcao((*id_variavel)->id)) {
+            sprintf(msg, "O ID '%s' já esta sendo usado por uma função! Erro ocorreu dentro do escopo da função '%s'.", (*id_variavel)->id,
+                    contexto);
+            exibir_erro(msg);
+          } else {
+            adicionar_variavel(contexto, tipo_variavel, (*id_variavel)->id);
+          }
         }
       }
     }
@@ -97,13 +107,16 @@ void avaliar_comando(const char *contexto, AST *comando) {
         avaliar_if(contexto, comando);
       } break;
       case While: {
+        avaliar_while(contexto, comando);
       } break;
       case Retorno: {
         avaliar_retorno(contexto, comando);
       } break;
       case Print: {
+        avaliar_print(contexto, comando);
       } break;
       case Read: {
+        avaliar_read(contexto, comando);
       } break;
       case ChamadaFuncao: {
         avaliar_chamada_funcao(contexto, comando);
@@ -244,7 +257,7 @@ void avaliar_chamada_funcao(const char *contexto, AST *chamada) {
       vector(AST *) parametros_chamada_funcao = chamada->chamada_funcao.parametros;
 
       if (cvector_size(parametros_funcao) != cvector_size(parametros_chamada_funcao)) {
-        sprintf(msg, "A função '%s' tem %ld parametros mas foram passados apenas %ld na chamada de função na função '%s'!", id_funcao,
+        sprintf(msg, "A função '%s' tem %ld parametros mas foram passados %ld na chamada de função na função '%s'!", id_funcao,
                 cvector_size(parametros_funcao), cvector_size(parametros_chamada_funcao), contexto);
         exibir_erro(msg);
       } else {
@@ -612,5 +625,96 @@ void avaliar_expressao_relacional(const char *contexto, AST *expr) {
               break;
           }
         }));
+  }
+}
+
+void avaliar_while(const char *contexto, AST *comando) {
+  if (comando && comando->tipo == While) {
+    // Avaliar condição
+    avaliar_expressao_logica(contexto, comando->while_.codicao);
+
+    // Avaliar Bloco
+    for (AST **it = cvector_begin(comando->while_.bloco); it != cvector_end(comando->while_.bloco); it++) {
+      avaliar_comando(contexto, *it);
+    }
+  }
+}
+
+void avaliar_print(const char *contexto, AST *print) {
+  if (print && print->tipo == Print) {
+    if (print->print.parametro) {
+      char msg[1000];
+      switch (print->print.parametro->tipo) {
+        case ExpressaoAritmetica: {
+          avaliar_expressao_aritmetica(contexto, print->print.parametro);
+        } break;
+        case Id: {
+          if (!id_sendo_usado_por_variavel(contexto, print->print.parametro->id)) {
+            sprintf(msg, "A variavel '%s' chamada dentro de um print no escopo da função '%s' não existe!", contexto,
+                    print->print.parametro->id, contexto);
+            exibir_erro(msg);
+          } else if (get_tipo_dado_variavel(contexto, print->print.parametro->id) == Void) {
+            sprintf(msg, "Impossivel printar o tipo 'Void'! Problema ocorrido dentro do escopo da função '%s'.", contexto);
+            exibir_erro(msg);
+          }
+        } break;
+        case ChamadaFuncao: {
+          if (!id_sendo_usado_por_funcao(print->print.parametro->chamada_funcao.id)) {
+            sprintf(msg, "A função '%s' chamada dentro de um print no escopo da função '%s' não existe!",
+                    print->print.parametro->chamada_funcao.id, contexto);
+            exibir_erro(msg);
+          } else if (get_tipo_dado_funcao(print->print.parametro->chamada_funcao.id) == Void) {
+            sprintf(msg,
+                    "Impossivel printar o retorno da função '%s' que tem tipo 'Void'! Problema ocorrido dentro do escopo da função '%s'.",
+                    print->print.parametro->chamada_funcao.id, contexto);
+            exibir_erro(msg);
+          }
+          avaliar_chamada_funcao(contexto, print->print.parametro);
+        } break;
+        case ConsanteFloat:
+        case ConsanteInt:
+        case ConsanteString: {
+        } break;
+
+        default: {
+          sprintf(msg, "Probida uso de '%s' dentro de um comando print! Problema ocorrido dentro do escopo da função '%s'.",
+                  tipoToken_para_str(print->print.parametro->tipo), contexto);
+          exibir_erro(msg);
+        } break;
+      }
+    }
+  }
+}
+
+void avaliar_read(const char *contexto, AST *read) {
+  if (read && read->tipo == Read) {
+    if (!id_sendo_usado_por_variavel(contexto, read->read.id)) {
+      char msg[1000];
+      sprintf(msg, "A variavel '%s' não é existe! Problema ocorrido no escopo da função '%s'.", read->read.id, contexto);
+      exibir_erro(msg);
+    }
+  }
+}
+
+void avaliar_expressao_aritmetica(const char *contexto, AST *expr) {
+  if (expr && expr->tipo == ExpressaoAritmetica) {
+    char msg[1000];
+    enum TipoDado expr_tipo = descobrir_tipo_expressao_com_contexto(contexto, expr);
+
+    if (expr_tipo == String) {
+      sprintf(msg,
+              "Houve a ocorrencia de um tipo String dentro de uma função aritmetica e isto é estritamente proibido! Problema ocorreu "
+              "dentro do escopo da função '%s'.",
+              contexto);
+      exibir_erro(msg);
+    } else if (expr_tipo == Float) {
+      sprintf(msg,
+              "Convertendo os itens de uma expressão para o tipo 'Flutuante' para comum acordo de tipagens! Fato ocorrido dentro do escopo "
+              "da função '%s'.",
+              contexto);
+      exibir_warning(msg);
+
+      expressaoAritmetica_para_Float(contexto, expr);
+    }
   }
 }

@@ -171,6 +171,10 @@ void avaliar_retorno(const char *id, AST *retorno);
 void avaliar_if(const char *contexto, AST *if_);
 void avaliar_expressao_logica(const char *contexto, AST *expr);
 void avaliar_expressao_relacional(const char *contexto, AST *expr);
+void avaliar_while(const char *contexto, AST *comando);
+void avaliar_print(const char *contexto, AST *print);
+void avaliar_read(const char *contexto, AST *read);
+void avaliar_expressao_aritmetica(const char *contexto, AST *expr);
 
 // Utils
 void percorrer(AST *a, void (*fn)(AST *));
@@ -179,7 +183,7 @@ const char *tipoToken_para_str(enum TipoToken token);
 char *repeat_char(int n);
 void constantInt_para_constantFloat(AST *constant);
 void constantFloat_para_constantInt(AST *constant);
-void expressaoAritmetica_para_Float(const char* contexto, AST *expr);
+void expressaoAritmetica_para_Float(const char *contexto, AST *expr);
 void expressaoAritmetica_para_Int(const char *contexto, AST *expr);
 enum TipoDado descobrir_tipo_expressao(AST *expr);
 enum TipoDado descobrir_tipo_expressao_com_contexto(const char *contexto, AST *expr);

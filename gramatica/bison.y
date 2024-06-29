@@ -356,8 +356,8 @@ ExpressaoRelacional:
         
     }
     | CONSTANTE_STRING LOGICA_EQ ExpressaoAritmetica{
-        exibir_erro("Strings nao se misturam com expressoes aritmeticas!");
-        $$ = NULL;        
+        exibir_erro("Strings não se misturam com expressoes aritmeticas!");
+        $$ = criar_operacao_relacional($1, $2, "==");      
     }
     | ExpressaoAritmetica LOGICA_EQ ExpressaoAritmetica{
         $$ = criar_operacao_relacional($1, $2, "==");
