@@ -254,7 +254,6 @@ ComandoSe:
     }
     | COMANDO_IF SIMBOLO_ABRE_PARENTESES ExpressaoLogica SIMBOLO_FECHA_PARENTESES Bloco COMANDO_ELSE Bloco{
         $$ = criar_if($3, $5, $7);
-        exibir_arvore($$, 0);
     }
     ;
 
