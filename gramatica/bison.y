@@ -97,8 +97,9 @@ int yylex();
 InicioPrograma:
     Programa FIM{
         $$ = $1;
-        avaliar_programa($1);
+        // avaliar_programa($1);
         // exibir_arvore($1, 0);
+        reescrever_codigo($1);
     }
     | FIM
     ;

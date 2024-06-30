@@ -55,9 +55,15 @@ string          { return TIPO_STRING; }
 "^"             { return OPERADOR_POTENCIA; }
 ","             { return SIMBOLO_VIRGULA; }
 {inteito}       { yylval = criar_int(atoi(yytext)); return CONSTANTE_INT; }
-{float}         { yylval = criar_float(atof(yytext)); return CONSTANTE_FLOAT; }
+{float}         { 
+        // Gambiarra de ultima hora
+        const char* aux = strdup(yytext);
+        replace_char(aux, '.', ',');
+        yylval = criar_float(atof(aux));  
+        return CONSTANTE_FLOAT; 
+    }
 {id}            { yylval = criar_id(strdup(yytext)); return ID; }
-{string}        { yylval = criar_string((strdup(yytext + 1))); return CONSTANTE_STRING; }
+{string}        { yylval = criar_string((strdup(yytext))); return CONSTANTE_STRING; }
 {delim}         {}
 #*              {}
 .               { printf("Caractere invalido: %c\\n", yytext[0]); return ERRO; }

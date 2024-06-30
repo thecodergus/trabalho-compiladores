@@ -176,7 +176,7 @@ const char *tipoToken_para_str(enum TipoToken token) {
 
 void exibir_arvore(AST *no, int profundidade) {
   if (no) {
-    printf("{%d}%s{%s}\n", profundidade, repeat_char(profundidade), tipoToken_para_str(no->tipo));
+    printf("{%d}%s{%s}\n", profundidade, repeat_char('-', profundidade), tipoToken_para_str(no->tipo));
 
     switch (no->tipo) {
       case Programa: {
@@ -256,7 +256,7 @@ void exibir_arvore(AST *no, int profundidade) {
   }
 }
 
-char *repeat_char(int n) {
+char *repeat_char(int c, int n) {
   if (n <= 0) {
     return "";
   }
@@ -266,7 +266,7 @@ char *repeat_char(int n) {
     return NULL;  // Failed to allocate memory
   }
 
-  memset(str, '-', n);
+  memset(str, c, n);
   str[n] = '\0';  // Null terminate the string
 
   return str;
@@ -428,4 +428,12 @@ enum TipoDado descobrir_tipo_expressao_com_contexto(const char *contexto, AST *e
   }
 
   return tipo;
+}
+
+void replace_char(char *str, char find, char replace) {
+  for (int i = 0; i < strlen(str); i++) {
+    if (str[i] == find) {
+      str[i] = replace;
+    }
+  }
 }
