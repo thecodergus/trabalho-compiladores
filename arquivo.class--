@@ -1,0 +1,98 @@
+.class public Main
+.super java/lang/Object
+
+.method public <init>()V
+	aload_0
+	invokenonvirtual java/lang/Object/<init>()V
+	return
+.end method
+
+.method public static maior(F F) F
+	.limit stack 4
+	.limit locals 8
+
+	iload 0
+	fload 0
+	fload 0
+	l3:
+	fload 0
+	istore 0
+	goto l3:
+	l2:
+	fload 0
+	istore 0
+	l3:
+	iload 0
+.end method
+
+.method public static fat(I) I
+	.limit stack 4
+	.limit locals 8
+
+	iload 0
+	iconst_0
+	istore 0
+	l4:
+	iload 0
+	iload 0
+	l5:
+	iload 0
+	iload 0
+	imul
+	istore 0
+	iload 0
+	iconst_1
+	isub
+	istore 0
+	goto 4
+	l6:
+	iload 0
+.end method
+
+.method public static somatorio(I) I
+	.limit stack 4
+	.limit locals 8
+
+	iload 0
+	fload 0
+	iconst_0
+	fstore 0
+	fload 0
+.end method
+
+.method public static imprimir(Ljava/lang/String; F) V
+	.limit stack 4
+	.limit locals 8
+
+	aload 0
+	aload 0
+	fload 0
+	iconst_0
+.end method
+
+.method public static testar_return_int_string() I
+	.limit stack 4
+	.limit locals 8
+
+	ldc "string"
+.end method
+
+.method public static main(Ljava/lang/String;)V
+	.limit stack 4
+	.limit locals 8
+
+	iload 0
+	iload 0
+	fload 0
+	ldc "Numero:"
+	iconst_4
+	istore 0
+	ldc 2.500000
+	ldc 10.000000
+	fstore 0
+	iconst_1
+	ldc "teste:"
+	iconst_2
+	iconst_0
+.end method
+

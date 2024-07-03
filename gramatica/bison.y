@@ -100,6 +100,7 @@ InicioPrograma:
         avaliar_programa($1);
         // exibir_arvore($1, 0);
         reescrever_codigo($1);
+        criar_arquivo_class("../arquivo.class--", $1);
     }
     | FIM
     ;

@@ -9,6 +9,7 @@ void adicionar_funcao(enum TipoDado tipo, const char *id, cvector_vector_type(st
   aux.tipo_item = Fn;
   aux.tipo_declarado = tipo;
   aux.parametros = parametros;
+  aux.posicao_pilha = get_numero_posicoes_funcao_total();
 
   cvector_push_back(tabela_simbolos, aux);
 }
@@ -20,6 +21,7 @@ void adicionar_variavel(const char *fn_id, enum TipoDado tipo, const char *id) {
   aux.tipo_item = Var;
   aux.id = strdup(id);
   aux.parametros = NULL;
+  aux.posicao_pilha = get_numero_posicoes_variavel_total(fn_id);
 
   cvector_push_back(tabela_simbolos, aux);
 }
@@ -72,4 +74,44 @@ cvector_vector_type(struct Par) get_parametros_funcao(const char *id) {
   }
 
   return NULL;
+}
+
+int get_numero_posicoes_variavel_total(const char *contexto) {
+  int ultima_posicao = 0;
+
+  for (Linha *l = cvector_begin(tabela_simbolos); l != cvector_end(tabela_simbolos); l++) {
+    if (strcmp(l->id, contexto) == 0 && l->tipo_item == Var) {
+      ultima_posicao++;
+    }
+  }
+
+  return ultima_posicao;
+}
+int get_numero_variavel_posicao(const char *contexto, const char *id) {
+  for (Linha *l = cvector_begin(tabela_simbolos); l != cvector_end(tabela_simbolos); l++) {
+    if (strcmp(l->id, id) == 0 && l->tipo_item == Var && strcmp(l->escopo, contexto) == 0) {
+      return l->posicao_pilha;
+    }
+  }
+}
+int get_numero_posicoes_funcao_total() {
+  int ultima_posicao = 0;
+
+  for (Linha *l = cvector_begin(tabela_simbolos); l != cvector_end(tabela_simbolos); l++) {
+    if (l->tipo_item == Fn) {
+      ultima_posicao++;
+    }
+  }
+
+  return ultima_posicao;
+}
+
+int get_numero_funcao_posicao(const char *id) {
+  for (Linha *l = cvector_begin(tabela_simbolos); l != cvector_end(tabela_simbolos); l++) {
+    if (l->tipo_item == Fn && strcmp(l->id, id) == 0) {
+      return l->posicao_pilha;
+    }
+  }
+
+  return -1;
 }

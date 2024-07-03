@@ -1,130 +1,251 @@
 #include "ast.h"
 
-void gerar_bytecode(AST* no) {
+int LABEL_NUM = 1;
+
+void criar_arquivo_class(const char* nome, AST* programa) {
+  FILE* arquivo;
+  arquivo = fopen(nome, "w");
+
+  gerar_bytecode(arquivo, programa, NULL);
+
+  fclose(arquivo);
+
+  printf("Arquivo criado com sucesso!\n");
+}
+
+void gerar_bytecode(FILE* arquivo, AST* no, const char* contexto) {
   // TODO
   // Implementar a geração de bytecode
   // para a linguagem de máquina virtual Java
   // Dica: use a função reescrever_codigo
   // para reescrever a AST em código de máquina
-  if (no) {
+  if (arquivo && no) {
     switch (no->tipo) {
       case Programa: {
+        fprintf(arquivo,
+                ".class public Main\n.super java/lang/Object\n\n.method public <init>()V\n\taload_0\n\tinvokenonvirtual "
+                "java/lang/Object/<init>()V\n\treturn\n.end method\n\n");
+
         for (AST** it = cvector_begin(no->programa.funcoes); it != cvector_end(no->programa.funcoes); it++) {
-          reescrever_codigo(*it);
+          gerar_bytecode(arquivo, *it, NULL);
         }
 
-        reescrever_codigo(no->programa.bloco);
+        fprintf(arquivo,
+                ".method public static main(Ljava/lang/String;)V\n\t.limit stack 4"
+                "\n\t.limit locals 8\n\n");
+        gerar_bytecode(arquivo, no->programa.bloco, "main");
+
+        fprintf(arquivo, ".end method\n\n");
 
       } break;
       case Funcao: {
+        fprintf(arquivo, ".method public static %s(", no->funcao.id);
+
         int i = 0;
         for (AST** it = cvector_begin(no->funcao.parametros); it != cvector_end(no->funcao.parametros); it++, i++) {
-          reescrever_codigo(*it);
+          gerar_bytecode(arquivo, *it, contexto);
           if (i < cvector_size(no->funcao.parametros) - 1) {
+            fprintf(arquivo, " ");
           }
         }
-        reescrever_codigo(no->funcao.bloco);
+
+        fprintf(arquivo, ") %s\n\t.limit stack 4\n\t.limit locals 8\n\n", tipo_para_java_argumento(no->funcao.retorno));
+
+        gerar_bytecode(arquivo, no->funcao.bloco, no->funcao.id);
+
+        fprintf(arquivo, ".end method\n\n");
       } break;
       case Parametro: {
+        fprintf(arquivo, "%s", tipo_para_java_argumento(no->parametro.tipo));
       } break;
       case Bloco: {
         // Declarações
         for (AST** it = cvector_begin(no->bloco.declaracoes); it != cvector_end(no->bloco.declaracoes); it++) {
-          reescrever_codigo(*it);
+          gerar_bytecode(arquivo, *it, contexto);
         }
 
         // Comandos
         for (AST** it = cvector_begin(no->bloco.comandos); it != cvector_end(no->bloco.comandos); it++) {
-          reescrever_codigo(*it);
+          gerar_bytecode(arquivo, *it, contexto);
         }
       } break;
       case Atribuicao: {
-        reescrever_codigo(no->atribuicao.expressao);
+        enum TipoDado id_tipo = get_tipo_dado_variavel(contexto, no->atribuicao.id);
+        gerar_bytecode(arquivo, no->atribuicao.expressao, contexto);
+
+        fprintf(arquivo, "\t%sstore %d\n", tipo_para_java(id_tipo), get_numero_variavel_posicao(contexto, no->atribuicao.id));
       } break;
       case If: {
-        reescrever_codigo(no->if_.codicao);
+        int label_bloco_else = LABEL_NUM++;
+        int label_final = LABEL_NUM++;
+        int label_condicao = LABEL_NUM++;
 
+        // Condicao
+        gerar_bytecode(arquivo, no->if_.codicao, contexto);
+
+        fprintf(arquivo, "\tl%d:\n", label_condicao);
         // Bloco If
         for (AST** it = cvector_begin(no->if_.comandosIf); it != cvector_end(no->if_.comandosIf); it++) {
-          reescrever_codigo(*it);
+          gerar_bytecode(arquivo, *it, contexto);
         }
 
-        // Bloco Else
-        if (no->if_.comandosElse) {
+        if (no->if_.comandosElse != NULL) {
+          fprintf(arquivo, "\tgoto l%d:\n\tl%d:\n", label_condicao, label_final);
+          // Bloco Else
           for (AST** it = cvector_begin(no->if_.comandosElse); it != cvector_end(no->if_.comandosElse); it++) {
-            reescrever_codigo(*it);
+            gerar_bytecode(arquivo, *it, contexto);
           }
+          fprintf(arquivo, "\tl%d:\n", label_condicao);
         } else {
+          fprintf(arquivo, "\tl%d:\n", label_final);
+        }
+      }
+
+      break;
+      case While: {
+        int label_condicional = LABEL_NUM++;
+        int label_bloco = LABEL_NUM++;
+        int label_final = LABEL_NUM++;
+
+        fprintf(arquivo, "\tl%d:\n", label_condicional);
+        gerar_bytecode(arquivo, no->while_.codicao, contexto);
+
+        fprintf(arquivo, "\tl%d:\n", label_bloco);
+        for (AST** it = cvector_begin(no->while_.bloco); it != cvector_end(no->while_.bloco); it++) {
+          gerar_bytecode(arquivo, *it, contexto);
         }
 
-      } break;
-      case While: {
-        reescrever_codigo(no->while_.codicao);
-        for (AST** it = cvector_begin(no->while_.bloco); it != cvector_end(no->while_.bloco); it++) {
-          reescrever_codigo(*it);
-        }
+        fprintf(arquivo, "\tgoto %d\n\tl%d:\n", label_condicional, label_final);
       } break;
       case Retorno: {
-        reescrever_codigo(no->retorno.ret);
+        gerar_bytecode(arquivo, no->retorno.ret, contexto);
       } break;
       case Print: {
-        reescrever_codigo(no->print.parametro);
+        gerar_bytecode(arquivo, no->print.parametro, contexto);
       } break;
       case Read: {
       } break;
       case ChamadaFuncao: {
         int i = 0;
-        printf("%s(", no->chamada_funcao.id);
         for (AST** it = cvector_begin(no->chamada_funcao.parametros); it != cvector_end(no->chamada_funcao.parametros); it++, i++) {
-          reescrever_codigo(*it);
+          gerar_bytecode(arquivo, *it, contexto);
 
           if (i < cvector_size(no->chamada_funcao.parametros) - 1) {
           }
         }
       } break;
       case ExpressaoRelacional: {
-        reescrever_codigo(no->relacional.esquerda);
-        reescrever_codigo(no->relacional.direita);
+        gerar_bytecode(arquivo, no->relacional.esquerda, contexto);
+        gerar_bytecode(arquivo, no->relacional.direita, contexto);
+
+        enum TipoDado esq_tipo = descobrir_tipo_expressao_com_contexto(contexto, no->relacional.esquerda),
+                      dir_tipo = descobrir_tipo_expressao_com_contexto(contexto, no->relacional.direita)
+
+                          if (strcmp(no->relacional.simbolo, "==") == 0) {
+          if (esq_tipo == String) {
+            fprintf(arquivo, "\tif_acmpeq");
+          } else {
+          }
+        }
+        else if (strcmp(no->relacional.simbolo, "/=") == 0) {
+          if (esq_tipo == String) {
+            fprintf(arquivo, "\tif_acmpne");
+          } else {
+          }
+        }
+        else if (strcmp(no->relacional.simbolo, "<") == 0) {
+          if (esq_tipo == String) {
+          } else {
+          }
+        }
+        else if (strcmp(no->relacional.simbolo, "<=") == 0) {
+          if (esq_tipo == String) {
+          } else {
+          }
+        }
+        else if (strcmp(no->relacional.simbolo, ">") == 0) {
+          if (esq_tipo == String) {
+          } else {
+          }
+        }
+        else if (strcmp(no->relacional.simbolo, ">=") == 0) {
+          if (esq_tipo == String) {
+          } else {
+          }
+        }
       } break;
       case ExpressaoLogica: {
         if (strcmp("!", no->logica.simbolo) == 0) {
-          reescrever_codigo(no->logica.esquerda);
+          gerar_bytecode(arquivo, no->logica.esquerda, contexto);
         } else {
-          reescrever_codigo(no->logica.esquerda);
-          reescrever_codigo(no->logica.direita);
+          gerar_bytecode(arquivo, no->logica.esquerda, contexto);
+          gerar_bytecode(arquivo, no->logica.direita, contexto);
         }
       } break;
       case ExpressaoAritmetica: {
-        reescrever_codigo(no->aritmetica.esquerda);
-        reescrever_codigo(no->aritmetica.direita);
+        enum TipoDado expr_tipo = descobrir_tipo_expressao_com_contexto(contexto, no->aritmetica.esquerda);
+
+        gerar_bytecode(arquivo, no->aritmetica.esquerda, contexto);
+        gerar_bytecode(arquivo, no->aritmetica.direita, contexto);
+
+        fprintf(arquivo, "\t%s", tipo_para_java(expr_tipo));
+        if (strchr(no->aritmetica.simbolo, '+') != NULL) {
+          fprintf(arquivo, "add\n");
+        } else if (strchr(no->aritmetica.simbolo, '-') != NULL) {
+          fprintf(arquivo, "sub\n");
+        } else if (strchr(no->aritmetica.simbolo, '*') != NULL) {
+          fprintf(arquivo, "mul\n");
+        } else if (strchr(no->aritmetica.simbolo, '/') != NULL) {
+          fprintf(arquivo, "div\n");
+        }
+
       } break;
       case ExpressaoAritmeticaConvertida: {
-        reescrever_codigo(no->aritmetica_convertida.expr);
+        fprintf(arquivo, "\t%s2%s\n", tipo_para_java(no->aritmetica_convertida.de), tipo_para_java(no->aritmetica_convertida.para));
+
+        gerar_bytecode(arquivo, no->aritmetica_convertida.expr, contexto);
+        fprintf(arquivo, "\n");
       } break;
       case Tipo: {
       } break;
       case ConsanteInt: {
+        if (no->inteiro < 6) {
+          fprintf(arquivo, "\ticonst_%d\n", no->inteiro);
+        } else if (no->inteiro < 128) {
+          fprintf(arquivo, "\ttbipush %d\n", no->inteiro);
+        } else {
+          fprintf(arquivo, "\tldc %d\n", no->inteiro);
+        }
       } break;
       case ConsanteFloat: {
+        char fl[1000];
+        sprintf(fl, "%f", no->flutuante);
+        replace_char(fl, ',', '.');
+        fprintf(arquivo, "\tldc %s\n", fl);
       } break;
       case ConsanteString: {
+        fprintf(arquivo, "\tldc %s\n", no->string);
       } break;
       case Id: {
+        enum TipoDado id_tipo = get_tipo_dado_variavel(contexto, no->id);
+        int id_posicao_pilha = get_numero_variavel_posicao(contexto, no->id);
+        fprintf(arquivo, "\t%sload %d\n", tipo_para_java(id_tipo), id_posicao_pilha);
       } break;
       case Variavel: {
         int i = 0;
         for (AST** it = cvector_begin(no->variavel.ids); it != cvector_end(no->variavel.ids); it++, i++) {
-          reescrever_codigo(*it);
+          gerar_bytecode(arquivo, *it, contexto);
 
           if (i < cvector_size(no->variavel.ids) - 1) {
           }
         }
       } break;
       case Desconhecido: {
+        fprintf(arquivo, "(NULL)");
       } break;
 
-      default:
-        break;
+      default: {
+      } break;
     }
   }
 }

@@ -187,7 +187,9 @@ void avaliar_expressao_aritmetica(const char *contexto, AST *expr);
 void reescrever_codigo(AST *programa);
 
 // Gerar bytecode
-void gerar_bytecode(AST *programa);
+void criar_arquivo_class(const char *nome, AST *programa);
+void gerar_bytecode(FILE *arquivo, AST *programa, const char *contexto);
+extern int LABEL_NUM;
 
 // Utils
 void percorrer(AST *a, void (*fn)(AST *));
