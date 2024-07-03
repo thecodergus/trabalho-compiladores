@@ -33,6 +33,7 @@ void            { return TIPO_VOID; }
 int             { return TIPO_INT; }
 float           { return TIPO_FLOAT; }
 string          { return TIPO_STRING; }
+"+="            { return MAIS_IGUAL; }
 "=="            { return LOGICA_EQ; }
 "!="            { return LOGICA_NE; }
 "<="            { return LOGICA_LE; }

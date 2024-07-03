@@ -68,6 +68,7 @@ int yylex();
 
 // Simbolo de atribuicao
 %token SIMBOLO_ATRIBUICAO "="
+%token MAIS_IGUAL "+="
 
 // Simbolocos de abre e fecha parenteses
 %token SIMBOLO_ABRE_PARENTESES "("
@@ -274,6 +275,9 @@ ComandoAtribuicao:
     }
     | ID SIMBOLO_ATRIBUICAO ID{
         $$ = criar_atribuicao($1, $3);
+    }
+    | ID MAIS_IGUAL ExpressaoAritmetica{
+        $$ = criar_atribuicao($1, criar_operacao_aritmetica($1, $3, "+"));
     }
     ;
 
