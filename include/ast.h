@@ -190,6 +190,8 @@ void reescrever_codigo(AST *programa);
 void criar_arquivo_class(const char *nome, AST *programa);
 void gerar_bytecode(FILE *arquivo, AST *programa, const char *contexto);
 extern int LABEL_NUM;
+void gerar_expressao_logica(FILE*arquivo, AST*no, const char* contexto, int f, int v);
+void gerar_expressao_relacional(FILE*arquivo, AST*no, const char* contexto, int f, int v);
 
 // Utils
 void percorrer(AST *a, void (*fn)(AST *));
