@@ -148,7 +148,9 @@ void avaliar_atribuição(const char *contexto, AST *atribuicao) {
           case ConsanteFloat: {
             if (variavel_tipo == Int) {
               constantInt_para_constantFloat(valor_atribuido);
-              sprintf(msg, "A variavel '%s' da função '%s' tem tipo '%s', logo, iremos converter a expressão aritmetica atribuida de 'Float' para 'Int'!",
+              sprintf(msg,
+                      "A variavel '%s' da função '%s' tem tipo '%s', logo, iremos converter a expressão aritmetica atribuida de 'Float' "
+                      "para 'Int'!",
                       variavel_id, contexto, tipo_para_str(variavel_tipo));
               exibir_warning(msg);
             } else if (variavel_tipo == String || variavel_tipo == Void) {
@@ -357,14 +359,14 @@ void avaliar_chamada_funcao(const char *contexto, AST *chamada) {
                 enum TipoDado expressao_tipo = descobrir_tipo_expressao_com_contexto(contexto, *p_ch);
 
                 if (p_fn->tipo == Int && expressao_tipo == Float) {
-                  expressaoAritmetica_para_Int(contexto, *p_ch);
+                  // expressaoAritmetica_para_Int(contexto, *p_ch);
                   sprintf(msg,
                           "A função '%s' tem como %dº parametro o tipo 'Inteiro' mas recebeu uma expressão do tipo 'Flutuante' na chamada "
                           "de função na função '%s', iremos converter a expressão para Flutuante",
                           id_funcao, i, contexto);
                   exibir_warning(msg);
                 } else if ((p_fn->tipo == Float && expressao_tipo == Int)) {
-                  expressaoAritmetica_para_Float(contexto, *p_ch);
+                  // expressaoAritmetica_para_Float(contexto, *p_ch);
                   sprintf(msg,
                           "A função '%s' tem como %dº parametro o tipo 'Flutuante' mas recebeu uma expressão do tipo 'Inteiro' na chamada "
                           "de função na função '%s', iremos converter a expressão para Flutuante",

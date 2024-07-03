@@ -39,3 +39,41 @@ const char *tipo_para_str_(enum TipoDado tipo) {
       break;
   }
 }
+
+const char *tipo_para_java_argumento(enum TipoDado t) {
+  switch (t) {
+    case Int:
+      return "I";
+      break;
+    case Float:
+      return "F";
+      break;
+    case String:
+      return "Ljava/lang/String;";
+      break;
+    case Void:
+      return "V";
+      break;
+    default:
+      return NULL;
+      break;
+  }
+}
+
+const char *tipo_para_java(enum TipoDado t) {
+  switch (t) {
+    case Int:
+      return "i";
+      break;
+    case Float:
+      return "f";
+      break;
+    case String:
+      return "a";
+      break;
+    case Void:
+    default:
+      return NULL;
+      break;
+  }
+}

@@ -27,6 +27,7 @@ enum TipoToken {
   ExpressaoRelacional,
   ExpressaoLogica,
   ExpressaoAritmetica,
+  ExpressaoAritmeticaConvertida,
   Tipo,
   ConsanteInt,
   ConsanteFloat,
@@ -102,6 +103,11 @@ struct Retorno {
   AST *ret;
 };
 
+struct ConverterExpressao {
+  enum TipoDado de, para;
+  AST *expr;
+};
+
 struct Variavel {
   enum TipoDado tipo;
   vector(AST *) ids;
@@ -126,6 +132,7 @@ struct AST {
     struct ExpressaoRelacional relacional;
     struct ExpressaoLogica logica;
     struct ExpressaoAritmetica aritmetica;
+    struct ConverterExpressao aritmetica_convertida;
     struct ChamadaFuncao chamada_funcao;
     struct Retorno retorno;
     enum TipoDado declaracao_tipo;
@@ -178,6 +185,9 @@ void avaliar_expressao_aritmetica(const char *contexto, AST *expr);
 
 // Extra
 void reescrever_codigo(AST *programa);
+
+// Gerar bytecode
+void gerar_bytecode(AST *programa);
 
 // Utils
 void percorrer(AST *a, void (*fn)(AST *));
