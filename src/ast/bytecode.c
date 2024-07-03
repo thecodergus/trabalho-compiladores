@@ -81,16 +81,15 @@ void gerar_bytecode(FILE* arquivo, AST* no, const char* contexto) {
         int label_condicao = LABEL_NUM++;
 
         // Condicao
-        gerar_bytecode(arquivo, no->if_.codicao, contexto);
-
         fprintf(arquivo, "\tl%d:\n", label_condicao);
+        gerar_expressao_logica(arquivo, no->if_.codicao, contexto, label_condicao, label_final);
         // Bloco If
         for (AST** it = cvector_begin(no->if_.comandosIf); it != cvector_end(no->if_.comandosIf); it++) {
           gerar_bytecode(arquivo, *it, contexto);
         }
 
         if (no->if_.comandosElse != NULL) {
-          fprintf(arquivo, "\tgoto l%d:\n\tl%d:\n", label_condicao, label_final);
+          fprintf(arquivo, "\tgoto l%d\n\tl%d:\n", label_condicao, label_final);
           // Bloco Else
           for (AST** it = cvector_begin(no->if_.comandosElse); it != cvector_end(no->if_.comandosElse); it++) {
             gerar_bytecode(arquivo, *it, contexto);
@@ -108,7 +107,7 @@ void gerar_bytecode(FILE* arquivo, AST* no, const char* contexto) {
         int label_final = LABEL_NUM++;
 
         fprintf(arquivo, "\tl%d:\n", label_condicional);
-        gerar_bytecode(arquivo, no->while_.codicao, contexto);
+        gerar_expressao_logica(arquivo, no->while_.codicao, contexto, label_bloco, label_final);
 
         fprintf(arquivo, "\tl%d:\n", label_bloco);
         for (AST** it = cvector_begin(no->while_.bloco); it != cvector_end(no->while_.bloco); it++) {
@@ -135,52 +134,15 @@ void gerar_bytecode(FILE* arquivo, AST* no, const char* contexto) {
         }
       } break;
       case ExpressaoRelacional: {
-        gerar_bytecode(arquivo, no->relacional.esquerda, contexto);
-        gerar_bytecode(arquivo, no->relacional.direita, contexto);
-
-        enum TipoDado esq_tipo = descobrir_tipo_expressao_com_contexto(contexto, no->relacional.esquerda),
-                      dir_tipo = descobrir_tipo_expressao_com_contexto(contexto, no->relacional.direita)
-
-                          if (strcmp(no->relacional.simbolo, "==") == 0) {
-          if (esq_tipo == String) {
-            fprintf(arquivo, "\tif_acmpeq");
-          } else {
-          }
-        }
-        else if (strcmp(no->relacional.simbolo, "/=") == 0) {
-          if (esq_tipo == String) {
-            fprintf(arquivo, "\tif_acmpne");
-          } else {
-          }
-        }
-        else if (strcmp(no->relacional.simbolo, "<") == 0) {
-          if (esq_tipo == String) {
-          } else {
-          }
-        }
-        else if (strcmp(no->relacional.simbolo, "<=") == 0) {
-          if (esq_tipo == String) {
-          } else {
-          }
-        }
-        else if (strcmp(no->relacional.simbolo, ">") == 0) {
-          if (esq_tipo == String) {
-          } else {
-          }
-        }
-        else if (strcmp(no->relacional.simbolo, ">=") == 0) {
-          if (esq_tipo == String) {
-          } else {
-          }
-        }
+       
       } break;
       case ExpressaoLogica: {
-        if (strcmp("!", no->logica.simbolo) == 0) {
-          gerar_bytecode(arquivo, no->logica.esquerda, contexto);
-        } else {
-          gerar_bytecode(arquivo, no->logica.esquerda, contexto);
-          gerar_bytecode(arquivo, no->logica.direita, contexto);
-        }
+        // if (strcmp("!", no->logica.simbolo) == 0) {
+        //   gerar_bytecode(arquivo, no->logica.esquerda, contexto);
+        // } else {
+        //   gerar_bytecode(arquivo, no->logica.esquerda, contexto);
+        //   gerar_bytecode(arquivo, no->logica.direita, contexto);
+        // }
       } break;
       case ExpressaoAritmetica: {
         enum TipoDado expr_tipo = descobrir_tipo_expressao_com_contexto(contexto, no->aritmetica.esquerda);
@@ -247,5 +209,110 @@ void gerar_bytecode(FILE* arquivo, AST* no, const char* contexto) {
       default: {
       } break;
     }
+  }
+}
+
+void gerar_expressao_logica(FILE *arquivo, AST *no, const char *contexto, int v, int f)
+{
+  if(no && no->tipo == ExpressaoLogica){
+    if (strcmp("!", no->logica.simbolo) == 0)
+    {
+      gerar_expressao_logica(arquivo, no->logica.esquerda, contexto, v, f);
+    }
+    else
+    {
+      if(strcmp("||", no->logica.simbolo) == 0){
+        int l1 = LABEL_NUM++;
+        gerar_expressao_logica(arquivo, no->logica.esquerda, contexto, v, l1);
+        fprintf(arquivo, "l%d:\n", l1);
+        gerar_expressao_logica(arquivo, no->logica.esquerda, contexto, v, f);
+      }
+      else if (strcmp("&&", no->logica.simbolo) == 0){
+        int l1 = LABEL_NUM++;
+        gerar_expressao_logica(arquivo, no->logica.esquerda, contexto, v, l1);
+        fprintf(arquivo, "l%d:\n", l1);
+        gerar_expressao_logica(arquivo, no->logica.esquerda, contexto, v, f);
+      }
+
+        gerar_bytecode(arquivo, no->logica.esquerda, contexto);
+      gerar_bytecode(arquivo, no->logica.direita, contexto);
+    }
+  }else{
+    gerar_expressao_relacional(arquivo, no, contexto, f, v);
+  }
+}
+
+void gerar_expressao_relacional(FILE *arquivo, AST *no, const char *contexto, int f, int v){
+  if(no && no->tipo == ExpressaoRelacional){
+    gerar_bytecode(arquivo, no->relacional.esquerda, contexto);
+    gerar_bytecode(arquivo, no->relacional.direita, contexto);
+
+    enum TipoDado esq_tipo = descobrir_tipo_expressao_com_contexto(contexto, no->relacional.esquerda),
+                  dir_tipo = descobrir_tipo_expressao_com_contexto(contexto, no->relacional.direita);
+
+    if (strcmp(no->relacional.simbolo, "==") == 0)
+    {
+      if (esq_tipo == String)
+      {
+        fprintf(arquivo, "\tif_acmpeq");
+      }
+      else
+      {
+        fprintf(arquivo, "\tif_icmpeq%d\n\tgoto l%d:\n", v, f);
+      }
+    }
+    else if (strcmp(no->relacional.simbolo, "/=") == 0)
+    {
+      if (esq_tipo == String)
+      {
+        fprintf(arquivo, "\tif_acmpne");
+      }
+      else
+      {
+        fprintf(arquivo, "\tif_icmpne%d\n\tgoto l%d:\n", v, f);
+      }
+    }
+    else if (strcmp(no->relacional.simbolo, "<") == 0)
+    {
+      if (esq_tipo == String)
+      {
+      }
+      else
+      {
+        fprintf(arquivo, "\tif_icmplt%d\n\tgoto l%d:\n", v, f);
+      }
+    }
+    else if (strcmp(no->relacional.simbolo, "<=") == 0)
+    {
+      if (esq_tipo == String)
+      {
+      }
+      else
+      {
+        fprintf(arquivo, "\tif_icmple%d\n\tgoto l%d:\n", v, f);
+      }
+    }
+    else if (strcmp(no->relacional.simbolo, ">") == 0)
+    {
+      if (esq_tipo == String)
+      {
+      }
+      else
+      {
+        fprintf(arquivo, "\tif_icmpgt%d\n\tgoto l%d:\n", v, f);
+      }
+    }
+    else if (strcmp(no->relacional.simbolo, ">=") == 0)
+    {
+      if (esq_tipo == String)
+      {
+      }
+      else
+      {
+        fprintf(arquivo, "\tif_icmpge%d\n\tgoto l%d:\n", v, f);
+      }
+    }
+  }else{
+    gerar_bytecode(arquivo, no, contexto);
   }
 }
